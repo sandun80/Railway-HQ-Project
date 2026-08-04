@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import LoginPage from "./pages/loginPage";
@@ -7,6 +7,11 @@ import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import SendingPage from "./pages/SendingPage";
 import ReceivingPage from "./pages/ReceivingPage";
+import Reports from "./pages/Reports";
+
+import RegisteredLetter from "./pages/registeredLetters";
+import NormalLetter from "./pages/NormalLetter";
+import Byhand from "./pages/ByhandLetter";
 
 function App(){
  return (
@@ -27,14 +32,21 @@ function App(){
             element={<Dashboard />} 
           />
 
+          <Route path="/letters/sending" element={<SendingPage />}>
+            <Route index element={<Navigate to="registered" replace />} />
+            <Route path="registered" element={<RegisteredLetter />} />
+            <Route path="normal" element={<NormalLetter />} />
+            <Route path="byhand" element={<Byhand />} />
+          </Route>
+
           <Route 
-            path="/letters/sending"
-            element={SendingPage}
+            path="/letters/receiving"
+            element={<ReceivingPage />}
           />
 
           <Route 
-          path="/letters/receiving"
-          element={ReceivingPage}
+            path="/reports"
+            element={<Reports />}
           />
 
       </Route>

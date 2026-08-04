@@ -1,0 +1,19 @@
+.button-group {
+    display: flex;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.button-group a {
+    text-decoration: none;
+    background: #2563eb;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.button-group a:hover {
+    background: #1d4ed8;
+}
