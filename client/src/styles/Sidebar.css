@@ -1,0 +1,92 @@
+.sidebar {
+    width: 250px;
+    height: calc(100vh - 70px);
+    background: linear-gradient(180deg, #1e3a8a, #2563eb);
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 25px 15px;
+
+    position: fixed;
+    left: 0;
+    bottom: 0;
+
+    box-shadow: 3px 0 10px rgba(0,0,0,0.15);
+}
+
+
+.sidebar a {
+    color: #e5efff;
+    text-decoration: none;
+
+    padding: 14px 18px;
+    margin-bottom: 12px;
+
+    border-radius: 10px;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    transition: 0.3s;
+}
+.sidebar #logout-btn:hover{
+}
+
+
+.sidebar a:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateX(5px);
+}
+
+
+.sidebar a:last-child {
+    margin-top: auto;
+}
+
+.dropdown {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.dropdown-btn {
+    width: 100%;
+    background: transparent;
+    border: none;
+
+    color: #e0ecff;
+
+    padding: 14px 18px;
+
+    text-align: left;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    border-radius: 10px;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.dropdown-btn:hover {
+    background: rgba(255,255,255,0.18);
+}
+
+
+.dropdown-menu {
+    display: flex;
+    flex-direction: column;
+
+    margin-left: 20px;
+}
+
+
+.dropdown-menu a {
+    font-size: 14px;
+    padding: 10px 15px;
+}
