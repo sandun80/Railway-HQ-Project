@@ -11,7 +11,10 @@ import Reports from "./pages/Reports";
 
 import RegisteredLetter from "./pages/registeredLetters";
 import NormalLetter from "./pages/NormalLetter";
+import RegisteredRecieve from "./pages/RegisteredRecieve";
 import Byhand from "./pages/ByhandLetter";
+import NormalReceive from "./pages/NormalReceive";
+import ByhandReceive from "./pages/ByhandRecieve";
 
 function App(){
  return (
@@ -37,6 +40,13 @@ function App(){
             <Route path="registered" element={<RegisteredLetter />} />
             <Route path="normal" element={<NormalLetter />} />
             <Route path="byhand" element={<Byhand />} />
+          </Route>
+
+          <Route path="/letters/receiving" element={<ReceivingPage />}>
+            <Route index element={<Navigate to="registered" replace />} />
+            <Route path="registered" element={<RegisteredRecieve />} />
+            <Route path="normal" element={<NormalReceive />}/>
+            <Route path="byhand" element={< ByhandReceive/>} />
           </Route>
 
           <Route 

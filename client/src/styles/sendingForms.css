@@ -1,0 +1,65 @@
+.letter-form-section {
+  background: #ffffff;
+  margin-top: 18px;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #d9e2ec;
+}
+
+.letter-form-section h3 {
+  color: #0f2e57;
+  margin-bottom: 14px;
+}
+
+.letter-form {
+  width: 100%;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #26415f;
+}
+
+.field-group input,
+.field-group select {
+  padding: 10px 12px;
+  border: 1px solid #c6d0da;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fff;
+}
+
+.field-group input:focus,
+.field-group select:focus {
+  border-color: #2563eb;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16);
+}
+
+.letter-form button {
+  margin-top: 16px;
+  background: #1f4fa3;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.letter-form button:hover {
+  background: #183e81;
+}

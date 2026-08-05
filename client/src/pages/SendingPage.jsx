@@ -3,7 +3,7 @@ import "../styles/sendingPage.css";
 
 function SendingLetters() {
   return (
-    <div>
+    <div className="letters-page letters-page-sending">
       <h2>Sending Letters</h2>
 
       <div className="button-group">
