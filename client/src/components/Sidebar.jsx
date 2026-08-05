@@ -49,6 +49,10 @@ function Sidebar() {
         Reports
       </Link>
 
+      <Link to="/allletters">
+        All Letters 
+      </Link>
+
       <Link to="/" id="logout-btn"> 
         Logout
       </Link>

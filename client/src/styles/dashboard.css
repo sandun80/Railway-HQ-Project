@@ -1,0 +1,11 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.dashboard-name{
+    width: 100vw;
+    height: 20vh;
+    background-color: rebeccapurple;
+}
