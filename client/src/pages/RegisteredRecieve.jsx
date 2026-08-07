@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import "../styles/receivingForms.css";
+import axios from "axios";
 
 function RegisteredRecieve() {
 
     const today = new Date().toISOString().split("T")[0];
 
     const [formData, setFormData] = useState({
+        letterNumber: "",
+        letterDate: "",
         sender: "",
         dateReceived: "",
         letterTitle: "",
@@ -15,6 +18,13 @@ function RegisteredRecieve() {
     });
     const [pdfFile, setPdfFile] = useState(null);
     const [pdfPreviewUrl, setPdfPreviewUrl] = useState("");
+
+    const convertPdfToBase64 = (file) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+    });
 
     useEffect(() => {
         if (!pdfFile) {
@@ -33,9 +43,32 @@ function RegisteredRecieve() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        alert("Registered post receiving details saved.");
+
+        try {
+            const pdfData = pdfFile ? await convertPdfToBase64(pdfFile) : "";
+
+            await axios.post("http://localhost:5000/api/letters", {
+                letterNumber: formData.letterNumber,
+                flow: "receiving",
+                category: "registered",
+                sender: formData.sender,
+                title: formData.letterTitle,
+                destination: formData.destinationBranch,
+                letterDate: formData.letterDate,
+                dateRecived: formData.dateReceived,
+                registeredPostNumber: formData.registeredPostNumber,
+                status: "Received",
+                pdf: pdfData,
+            });
+
+            alert("Registered post receiving details saved.");
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message || "Failed to save registered receiving letter.";
+            alert(errorMessage);
+            console.log(error);
+        }
     };
 
     const handlePdfChange = (event) => {
@@ -50,6 +83,19 @@ function RegisteredRecieve() {
                 <form className="letter-form" onSubmit={handleSubmit}>
                     <div className="form-grid">
                         <div className="field-group">
+
+                            <div className="field-group">
+                            <label htmlFor="rec-reg-number">Letter Number</label>
+                            <input
+                                id="rec-reg-letter-number"
+                                name="letterNumber"
+                                type="text"
+                                value={formData.letterNumber}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+
                             <label htmlFor="rec-reg-sender">Sender</label>
                             <input
                                 id="rec-reg-sender"
@@ -118,19 +164,6 @@ function RegisteredRecieve() {
                                 type="text"
                                 value={formData.destinationBranch}
                                 onChange={handleChange}
-                                required
-                            />
-                        </div>
-
-                        <div className="field-group">
-                            <label htmlFor="rec-reg-confirm">Receiving Confirmation</label>
-                            <input
-                                id="rec-reg-confirm"
-                                name="receivingConfirmation"
-                                type="text"
-                                value={formData.receivingConfirmation}
-                                onChange={handleChange}
-                                placeholder="Name / acknowledgement"
                                 required
                             />
                         </div>

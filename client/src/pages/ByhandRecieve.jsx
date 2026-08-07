@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "../styles/receivingForms.css";
+import axios from "axios";
 
 function ByhandReceive() {
     const specialRegisterOptions = [
@@ -12,6 +13,7 @@ function ByhandReceive() {
 
     const [routingForm, setRoutingForm] = useState({
         letterNumber: "",
+        letterDate: "",
         letterTitle: "",
         registerType: "subject",
         subjectOrOfficer: "",
@@ -62,6 +64,13 @@ function ByhandReceive() {
         publicAdministration: "",
         transportMinistry: "",
         publicServiceCommission: "",
+    });
+
+    const convertPdfToBase64 = (file) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
     });
 
     useEffect(() => {
@@ -115,9 +124,30 @@ function ByhandReceive() {
         }));
     };
 
-    const handleRoutingSubmit = (event) => {
+    const handleRoutingSubmit = async (event) => {
         event.preventDefault();
-        alert("By-hand receiving routing details saved.");
+
+        try {
+            const pdfData = routingPdfFile ? await convertPdfToBase64(routingPdfFile) : "";
+
+            await axios.post("http://localhost:5000/api/letters", {
+                letterNumber: routingForm.letterNumber,
+                flow: "receiving",
+                category: "byhand",
+                title: routingForm.letterTitle,
+                destination: routingForm.subjectOrOfficer,
+                subject_department_or_officer: routingForm.subjectOrOfficer,
+                letterDate: routingForm.letterDate,
+                status: "Received",
+                pdf: pdfData,
+            });
+
+            alert("By-hand receiving routing details saved.");
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message || "Failed to save by-hand receiving letter.";
+            alert(errorMessage);
+            console.log(error);
+        }
     };
 
     const handleSpecialSubmit = (event) => {
@@ -125,7 +155,7 @@ function ByhandReceive() {
         const activeLabel = specialRegisterOptions.find(
             (option) => option.key === activeSpecialRegister
         )?.label;
-        alert(`${activeLabel} special register details saved.`);
+        alert(`${activeLabel} special register save is frontend-only.`);
     };
 
     const handleRoutingPdfChange = (event) => {
@@ -168,6 +198,8 @@ function ByhandReceive() {
                                 id="recieveByhand-letter-date"
                                 name="letterDate"
                                 type="date"
+                                value={routingForm.letterDate}
+                                onChange={handleRoutingChange}
                                 required
                             />
                         </div>
@@ -186,19 +218,6 @@ function ByhandReceive() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="rec-byhand-register-type">Register Type</label>
-                            <select
-                                id="rec-byhand-register-type"
-                                name="registerType"
-                                value={routingForm.registerType}
-                                onChange={handleRoutingChange}
-                            >
-                                <option value="subject">Subject / Department Register</option>
-                                <option value="officer">Direct Officer Register</option>
-                            </select>
-                        </div>
-
-                        <div className="field-group">
                             <label htmlFor="rec-byhand-subject-officer">
                                 Subject / Department or Officer
                             </label>
@@ -208,19 +227,6 @@ function ByhandReceive() {
                                 type="text"
                                 value={routingForm.subjectOrOfficer}
                                 onChange={handleRoutingChange}
-                                required
-                            />
-                        </div>
-
-                        <div className="field-group">
-                            <label htmlFor="rec-byhand-confirm">Receiving Confirmation</label>
-                            <input
-                                id="rec-byhand-confirm"
-                                name="receivingConfirmation"
-                                type="text"
-                                value={routingForm.receivingConfirmation}
-                                onChange={handleRoutingChange}
-                                placeholder="Recipient name / acknowledgement"
                                 required
                             />
                         </div>
@@ -366,20 +372,6 @@ function ByhandReceive() {
                                 name="receivingOffice"
                                 type="text"
                                 value={activeSpecialForm.receivingOffice}
-                                onChange={handleSpecialChange}
-                                required
-                            />
-                        </div>
-
-                        <div className="field-group">
-                            <label htmlFor="special-responsible-date">
-                                Date Received by Responsible Officer
-                            </label>
-                            <input
-                                id="special-responsible-date"
-                                name="dateReceivedByResponsibleOfficer"
-                                type="date"
-                                value={activeSpecialForm.dateReceivedByResponsibleOfficer}
                                 onChange={handleSpecialChange}
                                 required
                             />

@@ -1,16 +1,25 @@
 import { useEffect, useState } from "react";
 import "../styles/sendingForms.css";
+import axios from "axios";
 
 function NormalLetter() {
     const today = new Date().toISOString().split("T")[0];
 
     const [formData, setFormData] = useState({
         letterNumber: "",
+        letterDate: "",
         letterTitle: "",
         destination: "",
     });
     const [pdfFile, setPdfFile] = useState(null);
     const [pdfPreviewUrl, setPdfPreviewUrl] = useState("");
+
+    const convertPdfToBase64 = (file) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+    });
 
     useEffect(() => {
         if (!pdfFile) {
@@ -29,9 +38,35 @@ function NormalLetter() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        alert("Normal post sending details saved.");
+        
+        try{
+            const pdfData = pdfFile ? await convertPdfToBase64(pdfFile) : "";
+
+            const response = await axios.post(
+                "http://localhost:5000/api/letters",
+                {
+                    letterNumber: formData.letterNumber,
+                    flow: "sending",
+                    category: "normal",
+                    letterDate: formData.letterDate,
+                    title: formData.letterTitle,
+                    destination: formData.destination,
+                    status: "Sent",
+                    pdf: pdfData,
+
+                }
+            )
+
+            alert("Normal post sending details saved.");
+
+        }catch(error){
+            const errorMessage = error?.response?.data?.message || "Failed to save normal sending letter.";
+            alert(errorMessage);
+            console.log(error);
+            
+        }
     };
 
     const handlePdfChange = (event) => {

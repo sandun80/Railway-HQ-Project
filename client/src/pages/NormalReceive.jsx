@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import "../styles/receivingForms.css";
+import axios from "axios";
 
 function NormalReceive() {
 
     const today = new Date().toISOString().split("T")[0];
 
     const [formData, setFormData] = useState({
+        letterNumber: "",
+        letterDate: "",
         sender: "",
         dateReceived: "",
         letterTitle: "",
@@ -14,6 +17,13 @@ function NormalReceive() {
     });
     const [pdfFile, setPdfFile] = useState(null);
     const [pdfPreviewUrl, setPdfPreviewUrl] = useState("");
+
+    const convertPdfToBase64 = (file) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+    });
 
     useEffect(() => {
         if (!pdfFile) {
@@ -32,9 +42,31 @@ function NormalReceive() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        alert("Normal post receiving details saved.");
+
+        try {
+            const pdfData = pdfFile ? await convertPdfToBase64(pdfFile) : "";
+
+            await axios.post("http://localhost:5000/api/letters", {
+                letterNumber: formData.letterNumber,
+                flow: "receiving",
+                category: "normal",
+                sender: formData.sender,
+                title: formData.letterTitle,
+                destination: formData.destinationBranch,
+                letterDate: formData.letterDate,
+                dateRecived: formData.dateReceived,
+                status: "Received",
+                pdf: pdfData,
+            });
+
+            alert("Normal post receiving details saved.");
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message || "Failed to save normal receiving letter.";
+            alert(errorMessage);
+            console.log(error);
+        }
     };
 
     const handlePdfChange = (event) => {
@@ -48,6 +80,19 @@ function NormalReceive() {
             <div className="form-preview-layout">
                 <form className="letter-form" onSubmit={handleSubmit}>
                     <div className="form-grid">
+
+                        <div className="field-group">
+                            <label htmlFor="rec-normal-number">Letter Number</label>
+                            <input
+                                id="rec-normal-number"
+                                name="letterNumber"
+                                type="text"
+                                value={formData.letterNumber}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+
                         <div className="field-group">
                             <label htmlFor="rec-normal-sender">Sender</label>
                             <input
@@ -105,19 +150,6 @@ function NormalReceive() {
                                 type="text"
                                 value={formData.destinationBranch}
                                 onChange={handleChange}
-                                required
-                            />
-                        </div>
-
-                        <div className="field-group">
-                            <label htmlFor="rec-normal-confirm">Receiving Confirmation</label>
-                            <input
-                                id="rec-normal-confirm"
-                                name="receivingConfirmation"
-                                type="text"
-                                value={formData.receivingConfirmation}
-                                onChange={handleChange}
-                                placeholder="Name / acknowledgement"
                                 required
                             />
                         </div>

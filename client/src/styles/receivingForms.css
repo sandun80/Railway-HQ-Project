@@ -24,41 +24,6 @@
   border-top: 1px dashed #b8c6d6;
 }
 
-.special-switch-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-
-.special-switch-btn {
-  border: 1px solid #b8c9dc;
-  background: #edf4fb;
-  color: #1a4f7a;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.special-switch-btn:hover {
-  background: #dfeefb;
-}
-
-.special-switch-btn.active {
-  background: #1b5f8f;
-  border-color: #1b5f8f;
-  color: #ffffff;
-}
-
-.special-register-title {
-  margin-bottom: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #1d4f76;
-}
-
 .letter-form {
   width: 100%;
   max-width: 420px;

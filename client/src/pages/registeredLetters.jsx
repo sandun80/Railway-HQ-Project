@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "../styles/sendingForms.css";
+import axios from "axios";
 
 function RegisteredLetters() {
     const today = new Date().toISOString().split("T")[0];
@@ -9,9 +10,17 @@ function RegisteredLetters() {
         letterTitle: "",
         destination: "",
         registeredPostNumber: "",
+        letterDate:"",
     });
     const [pdfFile, setPdfFile] = useState(null);
     const [pdfPreviewUrl, setPdfPreviewUrl] = useState("");
+
+    const convertPdfToBase64 = (file) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+    });
 
     useEffect(() => {
         if (!pdfFile) {
@@ -30,9 +39,98 @@ function RegisteredLetters() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event, status) => {
         event.preventDefault();
-        alert("Registered post sending details saved.");
+
+        try{
+            const pdfData = pdfFile ? await convertPdfToBase64(pdfFile) : "";
+
+            const response = await axios.put(
+                `http://localhost:5000/api/letters/${formData.letterNumber}`,
+                {
+                    letterNumber: formData.letterNumber,
+                    flow: "sending",
+                    category: "registered",
+                    title: formData.letterTitle,
+                    destination: formData.destination,
+                    letterDate: formData.letterDate,
+                    registeredPostNumber: formData.registeredPostNumber,
+                    status: "Sent",
+                    pdf: pdfData,
+
+                }
+            )
+
+            alert("Registered post sending details saved.");
+
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Failed to save registered letter.";
+            alert(errorMessage);
+            console.log(e);
+
+        }
+    };
+
+    const handleDraftSave = async () => {
+        
+        try{
+            const pdfData = pdfFile ? await convertPdfToBase64(pdfFile) : "";
+
+            const response = await axios.post(
+                "http://localhost:5000/api/letters",
+                {
+                    letterNumber: formData.letterNumber,
+                    flow: "sending",
+                    category: "registered",
+                    title: formData.letterTitle,
+                    destination: formData.destination,
+                    letterDate: formData.letterDate,
+                    registeredPostNumber: formData.registeredPostNumber,
+                    status: "Draft",
+                    pdf: pdfData,
+                }
+            )
+
+            alert("Draft saved successfully.");
+
+        }catch(error){
+            const errorMessage = error?.response?.data?.message || "Failed to save draft.";
+            alert(errorMessage);
+            console.log(error);
+            
+        }
+    };
+
+    const handleSearchFromLetterNumber = async () => {
+        
+        try{
+
+            const response = await axios.get(
+            `http://localhost:5000/api/letters/${formData.letterNumber}`
+        );
+
+        const letter = response.data;
+
+         setFormData({
+            letterNumber: letter.letterNumber || "",
+            letterTitle: letter.title || "",
+            destination: letter.destination || "",
+            registeredPostNumber: letter.registeredPostNumber || "",
+            letterDate: letter.letterDate
+                ? letter.letterDate.split("T")[0]
+                : ""
+        });
+
+        setPdfPreviewUrl(letter.pdf || "");
+
+        alert("Letter data loaded successfully.");
+
+        }catch(error){
+            const errorMessage = error?.response?.data?.message || "Letter search failed.";
+            alert(errorMessage);
+            console.log(error);
+            
+        }
     };
 
     const handlePdfChange = (event) => {
@@ -48,14 +146,23 @@ function RegisteredLetters() {
                     <div className="form-grid">
                         <div className="field-group">
                             <label htmlFor="reg-letter-number">Letter Number</label>
-                            <input
-                                id="reg-letter-number"
-                                name="letterNumber"
-                                type="text"
-                                value={formData.letterNumber}
-                                onChange={handleChange}
-                                required
-                            />
+                            <div className="inline-input-action">
+                                <input
+                                    id="reg-letter-number"
+                                    name="letterNumber"
+                                    type="text"
+                                    value={formData.letterNumber}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    className="small-search-btn"
+                                    onClick={handleSearchFromLetterNumber}
+                                >
+                                    Search
+                                </button>
+                            </div>
                         </div>
 
                         <div className="field-group">
@@ -118,7 +225,16 @@ function RegisteredLetters() {
                         </div>
                     </div>
 
-                    <button type="submit">Save Registered Sending Entry</button>
+                    <div className="form-actions">
+                        <button
+                            type="button"
+                            className="draft-save-btn"
+                            onClick={handleDraftSave}
+                        >
+                            Draft Save
+                        </button>
+                        <button type="submit">Save Registered Sending Entry</button>
+                    </div>
                 </form>
 
                 <aside className="pdf-preview-panel" aria-label="Registered PDF preview">

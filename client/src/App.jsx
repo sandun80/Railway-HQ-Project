@@ -15,6 +15,7 @@ import RegisteredRecieve from "./pages/RegisteredRecieve";
 import Byhand from "./pages/ByhandLetter";
 import NormalReceive from "./pages/NormalReceive";
 import ByhandReceive from "./pages/ByhandRecieve";
+import AllLetters from "./pages/AllLetter";
 
 function App(){
  return (
@@ -57,6 +58,11 @@ function App(){
           <Route 
             path="/reports"
             element={<Reports />}
+          />
+          
+          <Route 
+            path="/allletters"
+            element={<AllLetters />}
           />
 
       </Route>
