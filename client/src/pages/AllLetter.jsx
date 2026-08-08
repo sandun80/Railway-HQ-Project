@@ -1,36 +1,29 @@
+import { useEffect } from "react";
 import "../styles/allLetter.css";
+import { useState } from "react";
+import axios from "axios";
 
 function AllLetter() {
 
-    const letters = [
-        {
-            id: 1,
-            letterNo: "RL001",
-            category: "Registered",
-            title: "Budget Report",
-            destination: "Colombo",
-            date: "2026-08-06",
-            status: "Sent"
-        },
-        {
-            id: 2,
-            letterNo: "RL002",
-            category: "Normal",
-            title: "Transfer Letter",
-            destination: "Kandy",
-            date: "2026-08-05",
-            status: "Pending"
-        },
-        {
-            id: 3,
-            letterNo: "RL003",
-            category: "By Hand",
-            title: "Meeting Notice",
-            destination: "Galle",
-            date: "2026-08-04",
-            status: "Delivered"
+    const [letters, setLetters] = useState([]);
+
+    useEffect(() => {
+        getLetters();
+    }, []);
+
+    const getLetters = async() =>{
+        try{
+
+            const response = await axios.get(
+                 "http://localhost:5000/api/letters/getallletters"
+            );
+
+            setLetters(response.data);
+
+        }catch(e){
+            console.log(e);
         }
-    ];
+    }
 
     return (
         <div className="all-letter-page">
@@ -73,6 +66,7 @@ function AllLetter() {
 
                         <tr>
                             <th>Letter No.</th>
+                            <th>Flow</th>
                             <th>Category</th>
                             <th>Title</th>
                             <th>Destination</th>
@@ -87,13 +81,14 @@ function AllLetter() {
 
                         {letters.map((letter) => (
 
-                            <tr key={letter.id}>
+                             <tr key={letter._id || letter.letterNo}>
 
-                                <td>{letter.letterNo}</td>
+                                <td>{letter.letterNumber}</td>
+                                <td>{letter.flow}</td>
                                 <td>{letter.category}</td>
                                 <td>{letter.title}</td>
                                 <td>{letter.destination}</td>
-                                <td>{letter.date}</td>
+                                <td>{new Date(letter.letterDate).toLocaleDateString()}</td>
                                 <td>{letter.status}</td>
 
                                 <td>

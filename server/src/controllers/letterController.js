@@ -97,3 +97,20 @@ export const searchLetterByNumber = async(req, res) => {
         
     }
 }
+
+export const getAllLetters = async(req, res) => {
+    try{
+
+        const letters = await Letter.find().sort({ createdAt: -1 });
+
+        res.status(200).json(letters);
+
+    }catch(error){
+        console.log(error);
+
+         res.status(500).json({
+            message: error.message
+        });
+        
+    }
+}
