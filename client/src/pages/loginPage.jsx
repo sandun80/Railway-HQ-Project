@@ -1,56 +1,142 @@
 import Navbar from "../components/Navbar";
 import "../styles/LoginPage.css";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 function LoginPage() {
 
     const navigate = useNavigate();
 
-    function handleLogin(e){
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
+    const handleLogin = async (e) => {
         e.preventDefault();
 
- // later check username/password
+        setError("");
 
-        navigate("/dashboard");
+        try {
 
-    }
+            const response = await axios.post(
+                "http://localhost:5000/api/auth/login",
+                {
+                    username,
+                    password
+                }
+            );
 
-  return (
-    <>
-    <Navbar />
-    <div className="login-container">
-      <div className="login-card">
-        <h1>Welcome Back</h1>
-        <p>Please sign in to continue</p>
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("role", response.data.user.role);
 
-        <form onSubmit={handleLogin}>
-          <div className="input-group">
-            <label>Username</label>
-            <input
-              type="text"
-              placeholder="Enter your username"
-            />
-          </div>
+            // Save JWT
+            localStorage.setItem(
+                "token",
+                response.data.token
+            );
 
-          <div className="input-group">
-            <label>Password</label>
-            <input
-              type="password"
-              placeholder="Enter your password"
-            />
-          </div>
+            // Save user information
+            localStorage.setItem(
+                "user",
+                JSON.stringify(response.data.user)
+            );
 
-          <button type="submit" className="login-btn">
-            Login
-          </button>
+            // Get role
+            const role = response.data.user.role;    
+            
+            // Navigate based on role
+            if (role === "officer") {          
+                navigate("/dashboard");
+            } 
+            else if (role === "role2") {
+                // navigate("/dashboard");
+                alert("This user not defined");
+            } 
+            else if (role === "role3") {
+                // navigate("/dashboard");
+                alert("This user not defined");
+            }
 
-          
-        </form>
-      </div>
-    </div>
-    </>
-  );
+        } catch (error) {
+
+            console.error(error);
+
+            setError(
+                error.response?.data?.message ||
+                "Login failed"
+            );
+        }
+    };
+
+    return (
+        <>
+            <Navbar />
+
+            <div className="login-container">
+
+                <div className="login-card">
+
+                    <h1>Welcome Back</h1>
+
+                    <p>
+                        Please sign in to continue
+                    </p>
+
+                    {error && (
+                        <p className="login-error">
+                            {error}
+                        </p>
+                    )}
+
+                    <form onSubmit={handleLogin}>
+
+                        <div className="input-group">
+
+                            <label>Username</label>
+
+                            <input
+                                type="text"
+                                placeholder="Enter your username"
+                                value={username}
+                                onChange={(e) =>
+                                    setUsername(e.target.value)
+                                }
+                                required
+                            />
+
+                        </div>
+
+                        <div className="input-group">
+
+                            <label>Password</label>
+
+                            <input
+                                type="password"
+                                placeholder="Enter your password"
+                                value={password}
+                                onChange={(e) =>
+                                    setPassword(e.target.value)
+                                }
+                                required
+                            />
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="login-btn"
+                        >
+                            Login
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </>
+    );
 }
 
 export default LoginPage;

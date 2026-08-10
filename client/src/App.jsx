@@ -16,6 +16,7 @@ import Byhand from "./pages/ByhandLetter";
 import NormalReceive from "./pages/NormalReceive";
 import ByhandReceive from "./pages/ByhandRecieve";
 import AllLetters from "./pages/AllLetter";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App(){
  return (
@@ -29,7 +30,10 @@ function App(){
       />
 
 
-      <Route element={<Layout />}>
+      <Route element={<ProtectedRoute>
+          <Layout />
+        </ProtectedRoute>
+        }>
 
           <Route 
             path="/dashboard" 

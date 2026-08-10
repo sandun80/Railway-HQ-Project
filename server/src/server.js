@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 
 import connectDB from "./config/db.js";
 import letterRoutes from "./routes/letterRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ extended: true, limit: "20mb" }));
 
 app.use("/api/letters", letterRoutes);
+app.use("/api/auth", authRoutes);
 
 
 // Test route
