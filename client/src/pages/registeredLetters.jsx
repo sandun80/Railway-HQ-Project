@@ -14,6 +14,7 @@ function RegisteredLetters() {
     });
     const [pdfFile, setPdfFile] = useState(null);
     const [pdfPreviewUrl, setPdfPreviewUrl] = useState("");
+    const [isLetterLoaded, setIsLetterLoaded] = useState(false);
 
     const convertPdfToBase64 = (file) => new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -43,20 +44,13 @@ function RegisteredLetters() {
         event.preventDefault();
 
         try{
-            const pdfData = pdfFile ? await convertPdfToBase64(pdfFile) : "";
-
+            
             const response = await axios.put(
                 `http://localhost:5000/api/letters/${formData.letterNumber}`,
                 {
-                    letterNumber: formData.letterNumber,
-                    flow: "sending",
-                    category: "registered",
-                    title: formData.letterTitle,
-                    destination: formData.destination,
-                    letterDate: formData.letterDate,
+                    
                     registeredPostNumber: formData.registeredPostNumber,
                     status: "Sent",
-                    pdf: pdfData,
 
                 }
             )
@@ -123,6 +117,8 @@ function RegisteredLetters() {
 
         setPdfPreviewUrl(letter.pdf || "");
 
+        setIsLetterLoaded(true);
+
         alert("Letter data loaded successfully.");
 
         }catch(error){
@@ -154,6 +150,7 @@ function RegisteredLetters() {
                                     value={formData.letterNumber}
                                     onChange={handleChange}
                                     required
+                                    readOnly={isLetterLoaded}
                                 />
                                 <button
                                     type="button"
@@ -174,6 +171,7 @@ function RegisteredLetters() {
                                 value={formData.letterDate}
                                 onChange={handleChange}
                                 required
+                                readOnly={isLetterLoaded}
                             />
                         </div>
 
@@ -186,6 +184,7 @@ function RegisteredLetters() {
                                 value={formData.letterTitle}
                                 onChange={handleChange}
                                 required
+                                readOnly={isLetterLoaded}
                             />
                         </div>
 
@@ -198,6 +197,7 @@ function RegisteredLetters() {
                                 value={formData.destination}
                                 onChange={handleChange}
                                 required
+                                readOnly={isLetterLoaded}
                             />
                         </div>
 
@@ -221,6 +221,7 @@ function RegisteredLetters() {
                                 type="file"
                                 accept="application/pdf"
                                 onChange={handlePdfChange}
+                                readOnly={isLetterLoaded}
                             />
                         </div>
                     </div>
