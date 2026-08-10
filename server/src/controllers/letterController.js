@@ -114,3 +114,139 @@ export const getAllLetters = async(req, res) => {
         
     }
 }
+
+export const getDashboardCounts = async (req, res) => {
+    try {
+
+        const counts = await Letter.aggregate([
+            {
+                $group: {
+                    _id: null,
+
+                    registered: {
+                        $sum: {
+                            $cond: [
+                                { $eq: ["$category", "registered"] },
+                                1,
+                                0
+                            ]
+                        }
+                    },
+
+                    normal: {
+                        $sum: {
+                            $cond: [
+                                { $eq: ["$category", "normal"] },
+                                1,
+                                0
+                            ]
+                        }
+                    },
+
+                    byhand: {
+                        $sum: {
+                            $cond: [
+                                { $eq: ["$category", "byhand"] },
+                                1,
+                                0
+                            ]
+                        }
+                    },
+
+                    draft: {
+                        $sum: {
+                            $cond: [
+                                { $eq: ["$status", "Draft"] },
+                                1,
+                                0
+                            ]
+                        }
+                    }
+                }
+            }
+        ]);
+
+        const result = counts[0] || {
+            registered: 0,
+            normal: 0,
+            byhand: 0,
+            draft: 0
+        };
+
+        res.status(200).json(result);
+
+    } catch (error) {
+
+        console.error("Dashboard count error:", error);
+
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+
+export const filterLetters = async (req, res) => {
+
+    try {
+
+        const {
+            letterNumber,
+            sentTo,
+            receivedFrom,
+            date
+        } = req.query;
+
+        const query = {};
+
+        // Letter Number
+        if (letterNumber?.trim()) {
+            query.letterNumber = {
+                $regex: letterNumber.trim(),
+                $options: "i"
+            };
+        }
+
+        // Sent To
+        if (sentTo?.trim()) {
+            query.destination = {
+                $regex: sentTo.trim(),
+                $options: "i"
+            };
+        }
+
+        // Received From
+        if (receivedFrom?.trim()) {
+            query.sender = {
+                $regex: receivedFrom.trim(),
+                $options: "i"
+            };
+        }
+
+        // Date
+        if (date) {
+
+            const startDate = new Date(`${date}T00:00:00`);
+            const endDate = new Date(`${date}T23:59:59.999`);
+
+            query.letterDate = {
+                $gte: startDate,
+                $lte: endDate
+            };
+        }
+
+        const letters = await Letter
+            .find(query)
+            .sort({ createdAt: -1 });
+
+        res.status(200).json(letters);
+
+    } catch (error) {
+
+        console.error("Filter letters error:", error);
+
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};

@@ -7,6 +7,13 @@ function AllLetter() {
 
     const [letters, setLetters] = useState([]);
 
+    const [filters, setFilters] = useState({
+        letterNumber: "",
+        sentTo: "",
+        receivedFrom: "",
+        date: ""
+    });
+
     useEffect(() => {
         getLetters();
     }, []);
@@ -25,6 +32,53 @@ function AllLetter() {
         }
     }
 
+    const handleFilterChange = (event) => {
+    const { name, value } = event.target;
+
+        setFilters((prev) => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+
+
+    const handleSearch = async () => {
+
+    try {
+
+        const response = await axios.get(
+            "http://localhost:5000/api/letters/filter",
+            {
+                params: filters
+            }
+        );
+
+        setLetters(response.data);
+
+    } catch (error) {
+
+        console.error("Search failed:", error);
+
+        }
+    };
+
+
+    const handleReset = async () => {
+
+    setFilters({
+        letterNumber: "",
+        sentTo: "",
+        receivedFrom: "",
+        date: ""
+    });
+
+    getLetters();
+
+    };
+
+
+
     return (
         <div className="all-letter-page">
 
@@ -33,27 +87,39 @@ function AllLetter() {
                 <input
                     type="text"
                     placeholder="Letter No."
+                    name="letterNumber"
+                    value={filters.letterNumber}
+                    onChange={handleFilterChange}
                 />
 
                 <input
                     type="text"
-                    placeholder="Sender"
+                    placeholder="Sent To"
+                    name="sentTo"
+                    value={filters.sentTo}
+                    onChange={handleFilterChange}
                 />
 
                 <input
                     type="text"
-                    placeholder="Receiver"
+                    placeholder="Received From"
+                    name="receivedFrom"
+                    value={filters.receivedFrom}
+                    onChange={handleFilterChange}
                 />
 
                 <input
                     type="date"
+                    name="date"
+                    value={filters.date}
+                    onChange={handleFilterChange}
                 />
 
-                <button className="search-btn">
+                <button className="search-btn" onClick={handleSearch}>
                     Search
                 </button>
 
-                <button className="reset-btn">
+                <button className="reset-btn" onClick={handleReset}>
                     Reset
                 </button>
 
