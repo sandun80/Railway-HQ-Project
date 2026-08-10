@@ -41,6 +41,7 @@ function LoginPage() {
                 "user",
                 JSON.stringify(response.data.user)
             );
+            
 
             // Get role
             const role = response.data.user.role;    

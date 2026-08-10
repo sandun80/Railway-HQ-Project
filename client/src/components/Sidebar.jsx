@@ -1,65 +1,84 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../styles/Sidebar.css";
 
 function Sidebar() {
 
-  const [lettersOpen, setLettersOpen] = useState(false);
+    const [lettersOpen, setLettersOpen] = useState(false);
 
-  return (
-    <aside className="sidebar">
+    const navigate = useNavigate();
 
-      <Link to="/dashboard">
-        Dashboard
-      </Link>
+    function clearTokens() {
+      
+        localStorage.setItem("isLoggedIn", "false");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.removeItem("role");
 
+        navigate("/", { replace: true });    
 
-      {/* Letters Dropdown */}
-      <div className="dropdown">
+    }
 
-        <button 
-          className="dropdown-btn"
-          onClick={() => setLettersOpen(!lettersOpen)}
-        >
-          Letters
-          <span>
-            {lettersOpen ? "▲" : "▼"}
-          </span>
-        </button>
+    return (
+        <aside className="sidebar">
 
-
-        {lettersOpen && (
-          <div className="dropdown-menu">
-
-            <Link to="/letters/sending">
-              Sending
+            <Link to="/dashboard">
+                Dashboard
             </Link>
 
-            <Link to="/letters/receiving">
-              Receiving
+
+            {/* Letters Dropdown */}
+            <div className="dropdown">
+
+                <button
+                    className="dropdown-btn"
+                    onClick={() => setLettersOpen(!lettersOpen)}
+                >
+                    Letters
+
+                    <span>
+                        {lettersOpen ? "▲" : "▼"}
+                    </span>
+                </button>
+
+
+                {lettersOpen && (
+                    <div className="dropdown-menu">
+
+                        <Link to="/letters/sending">
+                            Sending
+                        </Link>
+
+                        <Link to="/letters/receiving">
+                            Receiving
+                        </Link>
+
+                    </div>
+                )}
+
+            </div>
+
+
+            <Link to="/reports">
+                Reports
             </Link>
 
-          </div>
-        )}
 
-      </div>
-
-
-      <Link to="/reports">
-        Reports
-      </Link>
-
-      <Link to="/allletters">
-        All Letters 
-      </Link>
-
-      <Link to="/" id="logout-btn"> 
-        Logout
-      </Link>
+            <Link to="/allletters">
+                All Letters
+            </Link>
 
 
-    </aside>
-  );
+            <button
+                type="button"
+                id="logout-btn"
+                onClick={clearTokens}
+            >
+                Logout
+            </button>
+
+        </aside>
+    );
 }
 
 export default Sidebar;

@@ -112,3 +112,119 @@
 .reset-btn:hover{
     background:#dc2626;
 }
+
+.letter-modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(15, 23, 42, 0.45);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:2000;
+    padding:18px;
+}
+
+.letter-modal{
+    width:min(900px, 100%);
+    max-height:92vh;
+    background:#ffffff;
+    border-radius:14px;
+    box-shadow:0 20px 50px rgba(15, 23, 42, 0.28);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+}
+
+.letter-modal-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 20px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.letter-modal-header h3{
+    margin:0;
+    font-size:18px;
+    color:#0f172a;
+}
+
+.letter-modal-close{
+    border:none;
+    background:transparent;
+    font-size:20px;
+    font-weight:700;
+    color:#475569;
+    cursor:pointer;
+    line-height:1;
+}
+
+.letter-modal-body{
+    overflow:auto;
+    padding:18px 20px;
+}
+
+.letter-modal-grid{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:14px;
+}
+
+.letter-modal-grid .field-group{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.letter-modal-grid .field-group label{
+    font-size:13px;
+    color:#334155;
+    font-weight:600;
+}
+
+.letter-modal-grid .field-group input,
+.letter-modal-grid .field-group select{
+    padding:10px 12px;
+    border:1px solid #d0d7de;
+    border-radius:8px;
+    font-size:14px;
+    outline:none;
+}
+
+.letter-modal-grid .field-group input:focus,
+.letter-modal-grid .field-group select:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.full-width-field{
+    grid-column:1 / -1;
+}
+
+.existing-pdf-link,
+.new-pdf-name{
+    grid-column:1 / -1;
+    margin:0;
+    font-size:14px;
+    color:#1d4ed8;
+    text-decoration:none;
+}
+
+.letter-modal-footer{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    padding:14px 20px 18px;
+    border-top:1px solid #e5e7eb;
+}
+
+.letter-modal-footer .search-btn,
+.letter-modal-footer .reset-btn{
+    margin:0;
+}
+
+@media (max-width: 768px){
+    .letter-modal-grid{
+        grid-template-columns:1fr;
+    }
+}
