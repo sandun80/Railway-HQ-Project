@@ -1,12 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "../styles/allLetter.css";
-import { useState } from "react";
 import axios from "axios";
 
 function AllLetter() {
-
     const [letters, setLetters] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [selectedLetter, setSelectedLetter] = useState(null);
     const [selectedLetterNumber, setSelectedLetterNumber] = useState("");
     const [editPdfFile, setEditPdfFile] = useState(null);
     const [isUpdating, setIsUpdating] = useState(false);
@@ -24,17 +24,15 @@ function AllLetter() {
         dateRecived: "",
         recivingOffice: "",
         status: "",
+        reply: "",
         pdf: ""
     });
-
     const [filters, setFilters] = useState({
         letterNumber: "",
         sentTo: "",
         receivedFrom: "",
         date: ""
     });
-
-    const username = localStorage.getItem("user").username;
 
     useEffect(() => {
         getLetters();
@@ -47,6 +45,22 @@ function AllLetter() {
         reader.onerror = (error) => reject(error);
     });
 
+    const user = JSON.parse(localStorage.getItem("user"));
+    const role = user?.role;
+
+    const formatDate = (value) => {
+        if (!value) {
+            return "-";
+        }
+
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) {
+            return "-";
+        }
+
+        return date.toLocaleDateString();
+    };
+
     const formatDateForInput = (value) => {
         if (!value) return "";
         const date = new Date(value);
@@ -54,22 +68,33 @@ function AllLetter() {
         return date.toISOString().split("T")[0];
     };
 
-    const getLetters = async() =>{
-        try{
-
-            const response = await axios.get(
-                 "http://localhost:5000/api/letters/getallletters"
-            );
-
-            setLetters(response.data);
-
-        }catch(e){
-            console.log(e);
+    const getReplyText = (reply) => {
+        if (!reply) {
+            return "No reply added.";
         }
-    }
+
+        if (typeof reply === "string") {
+            return reply;
+        }
+
+        if (typeof reply === "object") {
+            return JSON.stringify(reply, null, 2);
+        }
+
+        return String(reply);
+    };
+
+    const getLetters = async () => {
+        try {
+            const response = await axios.get("http://localhost:5000/api/letters/getallletters");
+            setLetters(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const handleFilterChange = (event) => {
-    const { name, value } = event.target;
+        const { name, value } = event.target;
 
         setFilters((prev) => ({
             ...prev,
@@ -77,25 +102,15 @@ function AllLetter() {
         }));
     };
 
-
-
     const handleSearch = async () => {
-
-    try {
-
-        const response = await axios.get(
-            "http://localhost:5000/api/letters/filter",
-            {
+        try {
+            const response = await axios.get("http://localhost:5000/api/letters/filter", {
                 params: filters
-            }
-        );
+            });
 
-        setLetters(response.data);
-
-    } catch (error) {
-
-        console.error("Search failed:", error);
-
+            setLetters(response.data);
+        } catch (error) {
+            console.error("Search failed:", error);
         }
     };
 
@@ -107,10 +122,9 @@ function AllLetter() {
         }));
     };
 
-    const openPopupPanel = (letter) => {
+    const openEditPanel = (letter) => {
         setSelectedLetterNumber(letter.letterNumber || "");
         setEditPdfFile(null);
-
         setEditForm({
             letterNumber: letter.letterNumber || "",
             flow: letter.flow || "",
@@ -125,16 +139,26 @@ function AllLetter() {
             dateRecived: formatDateForInput(letter.dateRecived),
             recivingOffice: letter.recivingOffice || "",
             status: letter.status || "",
+            reply: letter.reply || "",
             pdf: letter.pdf || ""
         });
-
-        setIsModalOpen(true);
+        setIsEditModalOpen(true);
     };
 
-    const closePopupPanel = () => {
-        setIsModalOpen(false);
+    const openViewPanel = (letter) => {
+        setSelectedLetter(letter);
+        setIsViewModalOpen(true);
+    };
+
+    const closeEditPanel = () => {
+        setIsEditModalOpen(false);
         setSelectedLetterNumber("");
         setEditPdfFile(null);
+    };
+
+    const closeViewPanel = () => {
+        setIsViewModalOpen(false);
+        setSelectedLetter(null);
     };
 
     const handleEditPdfChange = (event) => {
@@ -169,6 +193,7 @@ function AllLetter() {
                 dateRecived: editForm.dateRecived || null,
                 recivingOffice: editForm.recivingOffice,
                 status: editForm.status,
+                reply: editForm.reply,
                 pdf: nextPdf
             };
 
@@ -186,7 +211,7 @@ function AllLetter() {
             );
 
             alert("Letter updated successfully.");
-            closePopupPanel();
+            closeEditPanel();
         } catch (error) {
             const errorMessage = error?.response?.data?.message || "Failed to update letter.";
             alert(errorMessage);
@@ -196,27 +221,20 @@ function AllLetter() {
         }
     };
 
-
     const handleReset = async () => {
+        setFilters({
+            letterNumber: "",
+            sentTo: "",
+            receivedFrom: "",
+            date: ""
+        });
 
-    setFilters({
-        letterNumber: "",
-        sentTo: "",
-        receivedFrom: "",
-        date: ""
-    });
-
-    getLetters();
-
+        getLetters();
     };
-
-
 
     return (
         <div className="all-letter-page">
-
             <div className="search-filter">
-
                 <input
                     type="text"
                     placeholder="Letter No."
@@ -255,14 +273,11 @@ function AllLetter() {
                 <button className="reset-btn" onClick={handleReset}>
                     Reset
                 </button>
-
             </div>
+
             <div className="table-container">
-
                 <table className="letter-table">
-
                     <thead>
-
                         <tr>
                             <th>Letter No.</th>
                             <th>Flow</th>
@@ -273,48 +288,47 @@ function AllLetter() {
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
-
                     </thead>
 
                     <tbody>
-
                         {letters.map((letter) => (
-
-                             <tr key={letter._id || letter.letterNo}>
-
+                            <tr key={letter._id || letter.letterNumber}>
                                 <td>{letter.letterNumber}</td>
                                 <td>{letter.flow}</td>
                                 <td>{letter.category}</td>
                                 <td>{letter.title}</td>
                                 <td>{letter.destination}</td>
-                                <td>{letter.letterDate ? new Date(letter.letterDate).toLocaleDateString() : "-"}</td>
-                                <td>{letter.status}</td>
-
-                                <td>
-                                    <button
+                                <td>{formatDate(letter.letterDate)}</td>
+                                <td>{letter.status || "-"}</td>
+                                <td className="action-cell">
+                                    {role === "officer" && (
+                                        <button
                                         className="view-btn"
-                                        onClick={() => openPopupPanel(letter)}
+                                        onClick={() => openEditPanel(letter)}
+                                    >
+                                        Edit
+                                    </button>
+                                    )}
+                                    
+                                    <button
+                                        className="view-btn secondary-view-btn"
+                                        onClick={() => openViewPanel(letter)}
                                     >
                                         View
                                     </button>
                                 </td>
-
                             </tr>
-
                         ))}
-
                     </tbody>
-
                 </table>
-
             </div>
 
-            {isModalOpen && (
-                <div className="letter-modal-overlay" onClick={closePopupPanel}>
+            {isEditModalOpen && (
+                <div className="letter-modal-overlay" onClick={closeEditPanel}>
                     <div className="letter-modal" onClick={(event) => event.stopPropagation()}>
                         <div className="letter-modal-header">
-                            <h3>Letter Details</h3>
-                            <button type="button" className="letter-modal-close" onClick={closePopupPanel}>
+                            <h3>Edit Letter</h3>
+                            <button type="button" className="letter-modal-close" onClick={closeEditPanel}>
                                 x
                             </button>
                         </div>
@@ -461,8 +475,11 @@ function AllLetter() {
                                         name="status"
                                         value={editForm.status}
                                         onChange={handleEditFieldChange}
+                                        readOnly
                                     />
                                 </div>
+
+                                
 
                                 <div className="field-group full-width-field">
                                     <label htmlFor="edit-pdf">Replace PDF (optional)</label>
@@ -471,15 +488,6 @@ function AllLetter() {
                                         type="file"
                                         accept="application/pdf"
                                         onChange={handleEditPdfChange}
-                                    />
-                                </div>
-
-                                <div className="field-group">
-                                    <label htmlFor="view-reply">Reply</label>
-                                    <input
-                                        id="view-reply"
-                                        name="reply"
-                                        readOnly
                                     />
                                 </div>
 
@@ -501,7 +509,7 @@ function AllLetter() {
                         </div>
 
                         <div className="letter-modal-footer">
-                            <button type="button" className="reset-btn" onClick={closePopupPanel}>
+                            <button type="button" className="reset-btn" onClick={closeEditPanel}>
                                 Cancel
                             </button>
                             <button
@@ -517,6 +525,122 @@ function AllLetter() {
                 </div>
             )}
 
+            {isViewModalOpen && selectedLetter && (
+                <div className="letter-modal-overlay" onClick={closeViewPanel}>
+                    <div className="letter-modal readonly-modal" onClick={(event) => event.stopPropagation()}>
+                        <div className="letter-modal-header">
+                            <div>
+                                <p className="modal-kicker">Letter Details</p>
+                                <h3>{selectedLetter.letterNumber || "-"}</h3>
+                            </div>
+                            <button type="button" className="letter-modal-close" onClick={closeViewPanel}>
+                                ×
+                            </button>
+                        </div>
+
+                        <div className="letter-modal-summary">
+                            <span>{selectedLetter.flow || "-"}</span>
+                            <span>{selectedLetter.category || "-"}</span>
+                            <span>{selectedLetter.status || "-"}</span>
+                        </div>
+
+                        <div className="letter-modal-body">
+                            <div className="letter-readonly-grid">
+                                <div className="readonly-field">
+                                    <label>Letter Number</label>
+                                    <div>{selectedLetter.letterNumber || "-"}</div>
+                                </div>
+
+                                <div className="readonly-field">
+                                    <label>Flow</label>
+                                    <div>{selectedLetter.flow || "-"}</div>
+                                </div>
+
+                                <div className="readonly-field">
+                                    <label>Category</label>
+                                    <div>{selectedLetter.category || "-"}</div>
+                                </div>
+
+                                <div className="readonly-field">
+                                    <label>Title</label>
+                                    <div>{selectedLetter.title || "-"}</div>
+                                </div>
+
+                                <div className="readonly-field">
+                                    <label>Sender</label>
+                                    <div>{selectedLetter.sender || "-"}</div>
+                                </div>
+
+                                <div className="readonly-field">
+                                    <label>Receiver</label>
+                                    <div>{selectedLetter.receiver || "-"}</div>
+                                </div>
+
+                                <div className="readonly-field">
+                                    <label>Destination</label>
+                                    <div>{selectedLetter.destination || "-"}</div>
+                                </div>
+
+                                <div className="readonly-field">
+                                    <label>Letter Date</label>
+                                    <div>{formatDate(selectedLetter.letterDate)}</div>
+                                </div>
+
+                                <div className="readonly-field">
+                                    <label>Registered Post Number</label>
+                                    <div>{selectedLetter.registeredPostNumber || "-"}</div>
+                                </div>
+
+                                <div className="readonly-field">
+                                    <label>Subject / Department / Officer</label>
+                                    <div>{selectedLetter.subject_department_or_officer || "-"}</div>
+                                </div>
+
+                                <div className="readonly-field">
+                                    <label>Date Received</label>
+                                    <div>{formatDate(selectedLetter.dateRecived)}</div>
+                                </div>
+
+                                <div className="readonly-field">
+                                    <label>Receiving Office</label>
+                                    <div>{selectedLetter.recivingOffice || "-"}</div>
+                                </div>
+
+                                <div className="readonly-field">
+                                    <label>Status</label>
+                                    <div>{selectedLetter.status || "-"}</div>
+                                </div>
+
+                                <div className="readonly-field full-width-field reply-field">
+                                    <label>Reply</label>
+                                    <pre>{getReplyText(selectedLetter.reply)}</pre>
+                                </div>
+
+                                <div className="readonly-field full-width-field pdf-field">
+                                    <label>Letter PDF</label>
+                                    {selectedLetter.pdf ? (
+                                        <button
+                                            type="button"
+                                            className="pdf-open-btn"
+                                            onClick={() => window.open(selectedLetter.pdf, "_blank", "noopener,noreferrer")}
+                                        >
+                                            Open PDF in new tab
+                                        </button>
+                                    ) : (
+                                        <div>No PDF attached.</div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="letter-modal-footer">
+                            <button type="button" className="search-btn" onClick={closeViewPanel}>
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
