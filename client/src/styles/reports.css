@@ -1,0 +1,405 @@
+/* Reports Dashboard & Physical Register Print Styles */
+
+.reports-container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #1e293b;
+}
+
+/* Page Header */
+.reports-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  padding: 24px;
+  border-radius: 14px;
+  color: #ffffff;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15);
+}
+
+.header-title h1 {
+  margin: 0 0 6px 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.header-title p {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-print {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.btn-print:hover {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+}
+
+.btn-csv {
+  background-color: #10b981;
+  color: white;
+}
+
+.btn-csv:hover {
+  background-color: #059669;
+  transform: translateY(-1px);
+}
+
+.btn-reset {
+  background-color: #475569;
+  color: #f1f5f9;
+}
+
+.btn-reset:hover {
+  background-color: #334155;
+}
+
+/* Filter Controls Card */
+.reports-filter-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  align-items: end;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.filter-group select,
+.filter-group input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 0.9rem;
+  background-color: #f8fafc;
+  color: #0f172a;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+  border-color: #3b82f6;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* Summary Statistics Cards */
+.summary-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-card .stat-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.stat-card .stat-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.stat-card.primary { border-top: 4px solid #3b82f6; }
+.stat-card.success { border-top: 4px solid #10b981; }
+.stat-card.warning { border-top: 4px solid #f59e0b; }
+.stat-card.info { border-top: 4px solid #06b6d4; }
+.stat-card.purple { border-top: 4px solid #8b5cf6; }
+
+/* Register Document Section (Screen & Print Output) */
+.register-document {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 28px;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Official Print Header (Only visible in Print or Register view) */
+.print-register-header {
+  border-bottom: 2px solid #0f172a;
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.print-register-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.print-register-header h3 {
+  margin: 4px 0 10px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.register-meta-bar {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #475569;
+  background-color: #f8fafc;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+/* Table Container */
+.register-table-wrapper {
+  overflow-x: auto;
+}
+
+.register-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-size: 0.875rem;
+}
+
+.register-table th,
+.register-table td {
+  border: 1px solid #cbd5e1;
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.register-table th {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+}
+
+.register-table tbody tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+.register-table tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* Status Pill Badges */
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.badge-sending {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.badge-receiving {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.badge-registered {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.badge-normal {
+  background-color: #e0e7ff;
+  color: #3730a3;
+}
+
+.badge-byhand {
+  background-color: #f3e8ff;
+  color: #6b21a8;
+}
+
+.badge-specialByhand {
+  background-color: #fae8ff;
+  color: #86198f;
+}
+
+/* Signature Footer Block */
+.print-signature-footer {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px dashed #cbd5e1;
+}
+
+.sig-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.sig-line {
+  width: 80%;
+  border-bottom: 1px solid #475569;
+}
+
+.sig-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+/* Loading & Empty States */
+.no-records {
+  text-align: center;
+  padding: 40px;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+/* ------------------------------------------------------------- */
+/* PRINT MEDIA STYLES - Optimized for Official Railway HQ Print  */
+/* ------------------------------------------------------------- */
+@media print {
+  /* Hide non-essential web UI */
+  body {
+    background-color: white !important;
+    color: black !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .sidebar,
+  .navbar,
+  .reports-header,
+  .reports-filter-card,
+  .summary-cards-grid,
+  .btn-action,
+  header,
+  nav {
+    display: none !important;
+  }
+
+  .reports-container {
+    padding: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .register-document {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  .print-register-header {
+    margin-bottom: 15px !important;
+    border-bottom: 2px solid #000 !important;
+  }
+
+  .register-meta-bar {
+    background: none !important;
+    border: 1px solid #000 !important;
+    color: #000 !important;
+    font-weight: bold !important;
+  }
+
+  .register-table th,
+  .register-table td {
+    border: 1px solid #000 !important;
+    color: #000 !important;
+    padding: 6px 8px !important;
+    font-size: 11pt !important;
+  }
+
+  .register-table th {
+    background-color: #f0f0f0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .register-table tr {
+    page-break-inside: avoid;
+  }
+
+  .print-signature-footer {
+    display: grid !important;
+    page-break-inside: avoid;
+    margin-top: 50px !important;
+    border-top: 1px solid #000 !important;
+  }
+
+  .sig-line {
+    border-bottom: 1px solid #000 !important;
+  }
+}

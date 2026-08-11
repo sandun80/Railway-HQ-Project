@@ -59,6 +59,14 @@ const letterSchema = new mongoose.Schema({
         type: String
     },
 
+    personReceivingLetter: {
+        type: String
+    },
+
+    dateReceivedByResponsibleOfficer: {
+        type: Date
+    },
+
     pdf: {
         type: String
     },
