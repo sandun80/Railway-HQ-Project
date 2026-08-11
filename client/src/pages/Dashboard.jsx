@@ -4,6 +4,9 @@ import "../styles/dashboard.css";
 
 function Dashboard() {
 
+    const user = JSON.parse(localStorage.getItem("user"));
+    const username = user?.username || "user";
+
     const [counts, setCounts] = useState({
         registered: 0,
         normal: 0,
@@ -58,6 +61,7 @@ function Dashboard() {
         <section className="dashboard-page">
 
             <div className="dashboard-header">
+                <h1>Welcome {username}</h1><br />
                 <h1>Dashboard</h1>
                 <p>Today&apos;s mail summary</p>
             </div>

@@ -12,6 +12,9 @@ function Byhand() {
         { key: "publicServiceCommission", label: "Public Service Commission" },
     ];
 
+    const user = JSON.parse(localStorage.getItem("user"));
+    const username = user?.username;
+
     const [formData, setFormData] = useState({
         letterNumber: "",
         letterDate: "",
@@ -126,6 +129,7 @@ function Byhand() {
                 subject_department_or_officer: formData.subjectOrOfficer,
                 letterDate: formData.letterDate,
                 status: "Sent",
+                sender: username,
                 pdf: pdfData,
             });
 

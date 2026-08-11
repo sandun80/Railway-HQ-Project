@@ -53,7 +53,13 @@ export const login = async (req, res) => {
             {
                 expiresIn: "1d"
             }
-        );
+        );  
+
+        console.log("USER BEFORE RESPONSE:", {
+            id: user._id,
+            username: user.username,
+            role: user.role
+        });
 
         res.status(200).json({
             message: "Login successful",

@@ -11,6 +11,10 @@ function NormalLetter() {
         letterTitle: "",
         destination: "",
     });
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    const username = user?.username;
+    
     const [pdfFile, setPdfFile] = useState(null);
     const [pdfPreviewUrl, setPdfPreviewUrl] = useState("");
 
@@ -54,6 +58,7 @@ function NormalLetter() {
                     title: formData.letterTitle,
                     destination: formData.destination,
                     status: "Sent",
+                    sender: username,
                     pdf: pdfData,
 
                 }

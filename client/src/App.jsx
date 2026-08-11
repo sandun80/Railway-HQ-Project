@@ -17,6 +17,7 @@ import NormalReceive from "./pages/NormalReceive";
 import ByhandReceive from "./pages/ByhandRecieve";
 import AllLetters from "./pages/AllLetter";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminPortal from "./pages/AdminPortal";
 
 function App(){
  return (
@@ -38,6 +39,11 @@ function App(){
           <Route 
             path="/dashboard" 
             element={<Dashboard />} 
+          />
+
+          <Route 
+            path="/admin"
+            element={<AdminPortal />}
           />
 
           <Route path="/letters/sending" element={<SendingPage />}>

@@ -12,6 +12,10 @@ function RegisteredLetters() {
         registeredPostNumber: "",
         letterDate:"",
     });
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    const username = user?.username;
+
     const [pdfFile, setPdfFile] = useState(null);
     const [pdfPreviewUrl, setPdfPreviewUrl] = useState("");
     const [isLetterLoaded, setIsLetterLoaded] = useState(false);
@@ -81,6 +85,7 @@ function RegisteredLetters() {
                     letterDate: formData.letterDate,
                     registeredPostNumber: formData.registeredPostNumber,
                     status: "Draft",
+                    sender: username,
                     pdf: pdfData,
                 }
             )

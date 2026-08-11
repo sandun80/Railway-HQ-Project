@@ -34,6 +34,8 @@ function AllLetter() {
         date: ""
     });
 
+    const username = localStorage.getItem("user").username;
+
     useEffect(() => {
         getLetters();
     }, []);
@@ -376,6 +378,7 @@ function AllLetter() {
                                         name="sender"
                                         value={editForm.sender}
                                         onChange={handleEditFieldChange}
+                                        readOnly
                                     />
                                 </div>
 
@@ -468,6 +471,15 @@ function AllLetter() {
                                         type="file"
                                         accept="application/pdf"
                                         onChange={handleEditPdfChange}
+                                    />
+                                </div>
+
+                                <div className="field-group">
+                                    <label htmlFor="view-reply">Reply</label>
+                                    <input
+                                        id="view-reply"
+                                        name="reply"
+                                        readOnly
                                     />
                                 </div>
 

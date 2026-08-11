@@ -36,11 +36,17 @@ function LoginPage() {
                 response.data.token
             );
 
+            console.log(response.data.user);
+            
+
             // Save user information
             localStorage.setItem(
                 "user",
                 JSON.stringify(response.data.user)
             );
+
+            console.log(localStorage.getItem("user"));
+            
             
 
             // Get role
@@ -50,13 +56,16 @@ function LoginPage() {
             if (role === "officer") {          
                 navigate("/dashboard");
             } 
-            else if (role === "role2") {
-                // navigate("/dashboard");
-                alert("This user not defined");
+            else if (role === "admin") {
+                navigate("/admin");
+                
             } 
-            else if (role === "role3") {
-                // navigate("/dashboard");
-                alert("This user not defined");
+            else if (role === "viewer") {
+                navigate("/allletters");
+                
+            }
+            else if (role == "replyperson") {
+              alert("Not yet implemented");
             }
 
         } catch (error) {

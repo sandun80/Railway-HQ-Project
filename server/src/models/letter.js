@@ -65,6 +65,10 @@ const letterSchema = new mongoose.Schema({
 
     status: {
         type: String,
+    },
+
+    reply: {
+
     }
 
 }, {
