@@ -15,6 +15,7 @@ function AdminPortal() {
 
     const [roles, setRoles] = useState([]);
     const [newRole, setNewRole] = useState("");
+    const [editingRole, setEditingRole] = useState(null);
 
     useEffect(() => {
         getRoles();
@@ -49,7 +50,7 @@ function AdminPortal() {
         const response = await axios.post(
             "http://localhost:5000/api/roles/createrole",
             {
-                name: newRole.trim()
+                name: newRole.trim().toLowerCase()
             }
         );
 
@@ -57,7 +58,6 @@ function AdminPortal() {
 
         setNewRole("");
 
-        // Reload dropdown
         getRoles();
 
     } catch (error) {
@@ -70,6 +70,47 @@ function AdminPortal() {
         );
     }
 };
+
+    const handleDeleteRole = async (roleId) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this role?");
+
+        if (!confirmDelete) return;
+
+        try {
+            const response = await axios.delete(`http://localhost:5000/api/roles/${roleId}`);
+            alert(response.data.message);
+            getRoles();
+
+            if (formData.role === roles.find((role) => role._id === roleId)?.name) {
+                setFormData((prev) => ({ ...prev, role: "officer" }));
+            }
+        } catch (error) {
+            console.error(error);
+            alert(error.response?.data?.message || "Failed to delete role");
+        }
+    };
+
+    const handleEditRole = (role) => {
+        setEditingRole({ ...role, name: role.name });
+    };
+
+    const handleUpdateRole = async () => {
+        if (!editingRole) return;
+
+        try {
+            const response = await axios.put(
+                `http://localhost:5000/api/roles/${editingRole._id}`,
+                { name: editingRole.name.trim().toLowerCase() }
+            );
+
+            alert(response.data.message);
+            setEditingRole(null);
+            getRoles();
+        } catch (error) {
+            console.error(error);
+            alert(error.response?.data?.message || "Failed to update role");
+        }
+    };
 
     const handleChange = (e) => {
 
@@ -119,6 +160,13 @@ function AdminPortal() {
         }
     };
 
+    const handleRoleInputChange = (e) => {
+        setEditingRole((prev) => ({
+            ...prev,
+            name: e.target.value
+        }));
+    };
+
     return (
         <section>
 
@@ -163,60 +211,113 @@ function AdminPortal() {
                 </div>
 
                 <div>
-    <label>Create Role</label>
+                    <label>Create Role</label>
 
-    <div className="role-create-container">
+                    <div className="role-create-container">
 
-        <input
-            type="text"
-            value={newRole}
-            onChange={(e) => setNewRole(e.target.value)}
-            placeholder="Enter new role"
-        />
+                        <input
+                            type="text"
+                            value={newRole}
+                            onChange={(e) => setNewRole(e.target.value)}
+                            placeholder="Enter new role"
+                        />
 
-        <button
-            type="button"
-            onClick={handleCreateRole}
-        >
-            Add Role
-        </button>
+                        <button
+                            type="button"
+                            onClick={handleCreateRole}
+                        >
+                            Add Role
+                        </button>
 
-        </div>
-    </div>
+                    </div>
+                </div>
 
+                <div>
+                    <label>Role</label>
 
-    <div>
-    <label>Role</label>
+                    <select
+                        name="role"
+                        value={formData.role}
+                        onChange={handleChange}
+                        required
+                    >
 
-    <select
-        name="role"
-        value={formData.role}
-        onChange={handleChange}
-        required
-    >
+                        <option value="">
+                            Select Role
+                        </option>
 
-        <option value="">
-            Select Role
-        </option>
+                        {roles.map((role) => (
+                            <option
+                                key={role._id}
+                                value={role.name}
+                            >
+                                {role.name}
+                            </option>
+                        ))}
 
-        {roles.map((role) => (
-            <option
-                key={role._id}
-                value={role.name}
-            >
-                {role.name}
-            </option>
-        ))}
-
-    </select>
-    </div>
-
+                    </select>
+                </div>
 
                 <button type="submit">
                     Create User
                 </button>
 
             </form>
+
+            <div className="role-list-section">
+                <h3>Manage Roles</h3>
+
+                <div className="role-list">
+                    {roles.map((role) => (
+                        <div key={role._id} className="role-item">
+                            <span>{role.name}</span>
+
+                            <div className="role-actions">
+                                <button
+                                    type="button"
+                                    className="edit-role-btn"
+                                    onClick={() => handleEditRole(role)}
+                                >
+                                    Edit
+                                </button>
+
+                                <button
+                                    type="button"
+                                    className="delete-role-btn"
+                                    onClick={() => handleDeleteRole(role._id)}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {editingRole && (
+                <div className="edit-role-modal">
+                    <div className="edit-role-card">
+                        <div className="modal-header">
+                            <h3>Edit Role</h3>
+                            <button type="button" className="close-modal-btn" onClick={() => setEditingRole(null)}>×</button>
+                        </div>
+
+                        <div className="edit-role-field">
+                            <label>Role Name</label>
+                            <input
+                                type="text"
+                                value={editingRole.name}
+                                onChange={handleRoleInputChange}
+                            />
+                        </div>
+
+                        <div className="modal-actions">
+                            <button type="button" className="cancel-btn" onClick={() => setEditingRole(null)}>Cancel</button>
+                            <button type="button" className="save-user-btn" onClick={handleUpdateRole}>Save</button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </section>
     );

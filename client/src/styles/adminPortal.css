@@ -1,4 +1,195 @@
-/* AdminPortal form elements */
+.role-list-section {
+    margin-top: 28px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+    padding: 20px;
+}
+
+.role-list-section h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    color: #0f172a;
+}
+
+.role-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.role-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 12px 14px;
+}
+
+.role-item span {
+    font-weight: 600;
+    color: #0f172a;
+    text-transform: lowercase;
+}
+
+.role-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.edit-role-btn,
+.delete-role-btn,
+.cancel-btn,
+.save-user-btn,
+.close-modal-btn {
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.edit-role-btn {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.delete-role-btn {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.edit-role-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    padding: 20px;
+}
+
+.edit-role-card {
+    width: min(460px, 100%);
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 24px 50px rgba(15, 23, 42, 0.18);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #0f172a;
+}
+
+.close-modal-btn {
+    background: transparent;
+    color: #475569;
+    font-size: 24px;
+    padding: 0;
+}
+
+.edit-role-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.edit-role-field label {
+    font-weight: 600;
+    color: #334155;
+}
+
+.edit-role-field input {
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.cancel-btn {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+.save-user-btn {
+    background: #2563eb;
+    color: #fff;
+}
+
+.role-create-container {
+    display: flex;
+    gap: 10px;
+}
+
+.role-create-container input {
+    flex: 1;
+}
+
+.role-create-container button {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 0 14px;
+    font-weight: 700;
+    cursor: pointer;
+    height: 30px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+form div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+label {
+    font-weight: 600;
+    color: #334155;
+}
+
+input,
+select {
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+button[type="submit"] {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
 
 form div {
   margin-bottom: 16px;
