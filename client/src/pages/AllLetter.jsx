@@ -34,9 +34,7 @@ function AllLetter() {
         date: ""
     });
 
-    useEffect(() => {
-        getLetters();
-    }, []);
+   
 
     const convertPdfToBase64 = (file) => new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -45,8 +43,17 @@ function AllLetter() {
         reader.onerror = (error) => reject(error);
     });
 
+    
+
     const user = JSON.parse(localStorage.getItem("user"));
     const role = user?.role;
+    const username = user?.username;
+
+    useEffect(() => {
+        if (username) {
+            getLetters(username, role);
+        }
+    }, [username, role]);
 
     const formatDate = (value) => {
         if (!value) {
@@ -84,12 +91,26 @@ function AllLetter() {
         return String(reply);
     };
 
-    const getLetters = async () => {
+    const getLetters = async (userName = username, currentRole = role) => {
         try {
-            const response = await axios.get("http://localhost:5000/api/letters/getallletters");
+            const isViewer = currentRole === "viewer";
+            const endpoint = isViewer
+                ? "http://localhost:5000/api/letters/getallletter"
+                : "http://localhost:5000/api/letters/getalllettersbyrole";
+
+            const response = await axios.get(endpoint, {
+                params: isViewer
+                    ? { role: currentRole }
+                    : { username: userName }
+            });
+
+            console.log("Role used:", currentRole);
+            console.log("Letters received:", response.data);
+
             setLetters(response.data);
         } catch (error) {
-            console.log(error);
+            console.error("Failed to get letters:", error);
+            console.error("Backend response:", error.response?.data);
         }
     };
 
@@ -257,7 +278,7 @@ function AllLetter() {
             date: ""
         });
 
-        getLetters();
+        getLetters(username, role);
     };
 
     return (

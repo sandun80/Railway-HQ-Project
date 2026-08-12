@@ -1,5 +1,7 @@
 import Letter from "../models/letter.js";
 
+
+
 export const createLetter = async (req, res) => {
     try {
 
@@ -121,22 +123,53 @@ export const searchLetterByNumber = async(req, res) => {
     }
 }
 
-export const getAllLetters = async(req, res) => {
-    try{
+export const getAllLetters = async (req, res) => {
+    try {
+        const requestedRole = String(req.query.role || "").trim().toLowerCase();
+
+        if (requestedRole !== "viewer") {
+            return res.status(403).json({
+                message: "Only viewer role can view all letters."
+            });
+        }
 
         const letters = await Letter.find().sort({ createdAt: -1 });
 
         res.status(200).json(letters);
 
-    }catch(error){
+    } catch (error) {
         console.log(error);
 
-         res.status(500).json({
+        res.status(500).json({
             message: error.message
         });
-        
     }
-}
+};
+
+export const getAllLettersByRole = async (req, res) => { 
+    try {
+        const { username } = req.query;
+
+        if (!username) {
+            return res.status(400).json({
+                message: "Username is required"
+            });
+        }
+
+        const letters = await Letter.find({
+            sender: username
+        }).sort({ createdAt: -1 });
+
+        res.status(200).json(letters);
+
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
 
 export const getDashboardCounts = async (req, res) => {
     try {

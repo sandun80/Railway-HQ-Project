@@ -1,13 +1,15 @@
 import express from "express";
 
-import { createLetter, searchLetterByNumber, updateLetter, getAllLetters, getDashboardCounts, filterLetters, deleteLetter, getReportData } from "../controllers/letterController.js";
+import { createLetter, searchLetterByNumber, updateLetter, getAllLetters, getAllLettersByRole, getDashboardCounts, filterLetters, deleteLetter, getReportData } from "../controllers/letterController.js";
 
 const router = express.Router();
 
 
 router.post("/", createLetter);
 
-router.get("/getallletters", getAllLetters);
+router.get("/getallletter", getAllLetters);
+
+router.get("/getalllettersbyrole", getAllLettersByRole);
 
 router.get("/getcounts", getDashboardCounts);
 
