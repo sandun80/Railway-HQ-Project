@@ -64,7 +64,7 @@ function LoginPage() {
                 navigate("/allletters");
                 
             }
-            else if (role == "replyperson") {
+            else {
               alert("Not yet implemented");
             }
 

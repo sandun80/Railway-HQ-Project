@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/adminPortal.css";
 
@@ -12,6 +12,64 @@ function AdminPortal() {
 
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
+
+    const [roles, setRoles] = useState([]);
+    const [newRole, setNewRole] = useState("");
+
+    useEffect(() => {
+        getRoles();
+        
+    }, []);
+
+    const getRoles = async() => {
+
+        try{
+
+            const response = await axios.get(
+                "http://localhost:5000/api/roles/getroles"
+            );
+
+            setRoles(response.data);
+
+        }catch(error){
+            console.log(error);
+            
+        }
+    };
+
+    const handleCreateRole = async () => {
+
+    if (!newRole.trim()) {
+        alert("Enter a role name");
+        return;
+    }
+
+    try {
+
+        const response = await axios.post(
+            "http://localhost:5000/api/roles/createrole",
+            {
+                name: newRole.trim()
+            }
+        );
+
+        alert(response.data.message);
+
+        setNewRole("");
+
+        // Reload dropdown
+        getRoles();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            error.response?.data?.message ||
+            "Failed to create role"
+        );
+    }
+};
 
     const handleChange = (e) => {
 
@@ -91,7 +149,6 @@ function AdminPortal() {
                     />
                 </div>
 
-
                 <div>
                     <label>Password</label>
 
@@ -105,34 +162,54 @@ function AdminPortal() {
                     />
                 </div>
 
-
                 <div>
-                    <label>Role</label>
+    <label>Create Role</label>
 
-                    <select
-                        name="role"
-                        value={formData.role}
-                        onChange={handleChange}
-                    >
+    <div className="role-create-container">
 
-                        <option value="officer">
-                            Officer
-                        </option>
+        <input
+            type="text"
+            value={newRole}
+            onChange={(e) => setNewRole(e.target.value)}
+            placeholder="Enter new role"
+        />
 
-                        <option value="viewer">
-                            Viewer
-                        </option>
+        <button
+            type="button"
+            onClick={handleCreateRole}
+        >
+            Add Role
+        </button>
 
-                        <option value="replyperson">
-                            Reply Person
-                        </option>
+        </div>
+    </div>
 
-                        <option value="admin">
-                            Admin
-                        </option>
 
-                    </select>
-                </div>
+    <div>
+    <label>Role</label>
+
+    <select
+        name="role"
+        value={formData.role}
+        onChange={handleChange}
+        required
+    >
+
+        <option value="">
+            Select Role
+        </option>
+
+        {roles.map((role) => (
+            <option
+                key={role._id}
+                value={role.name}
+            >
+                {role.name}
+            </option>
+        ))}
+
+    </select>
+    </div>
 
 
                 <button type="submit">

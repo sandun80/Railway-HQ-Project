@@ -6,6 +6,7 @@ import connectDB from "./config/db.js";
 import letterRoutes from "./routes/letterRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import roleRoutes from "./routes/roleRoute.js";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use(express.urlencoded({ extended: true, limit: "20mb" }));
 app.use("/api/letters", letterRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/roles", roleRoutes);
 
 
 // Test route
