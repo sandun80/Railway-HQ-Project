@@ -19,6 +19,7 @@ import AllLetters from "./pages/AllLetter";
 import ReplayDashboard from "./pages/replayDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminPortal from "./pages/AdminPortal";
+import UserManagemnt from "./pages/UserMngAdmin";
 
 function App(){
  return (
@@ -79,6 +80,11 @@ function App(){
           <Route
             path="/inbox"
             element={<ReplayDashboard />}
+          />
+
+          <Route 
+            path="/userlist"
+            element={<UserManagemnt />}
           />
 
       </Route>

@@ -79,6 +79,10 @@ function Sidebar() {
                     <Link to="/admin">
                         Admin Portal
                     </Link>
+
+                    <Link to= "/userlist">
+                        User Management
+                    </Link>
                 </>
             )}
 
