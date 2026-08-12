@@ -1,36 +1,55 @@
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import "../styles/userMngAdmin.css";
+import axios from "axios";
 
 function UserMngAdmin() {
 
     const [search, setSearch] = useState("");
+    const [users, setUsers] = useState([]);
+    const [roles, setRoles] = useState([]);
 
-    const [users, setUsers] = useState([
-        {
-            id: 1,
-            username: "Kasun",
-            password: "kasun234",
-            role: "officer"
-        },
-        {
-            id: 2,
-            username: "Nimal",
-            password: "nimal123",
-            role: "officer"
-        },
-        {
-            id: 3,
-            username: "Admin",
-            password: "admin123",
-            role: "admin"
-        },
-        {
-            id: 4,
-            username: "Viewer",
-            password: "viewer123",
-            role: "viewer"
+    useEffect(() => {
+         getUsers();
+         getRoles();
+    }, []);
+
+    const getUsers = async() => {
+        try{
+
+            const response = await axios.get(
+                "http://localhost:5000/api/user/getusers"
+            ); 
+            
+            const users = response.data.map((user) => ({
+                ...user,
+                id: user._id,
+                password: "",
+                passwordDisplay: "Password"
+            }));
+
+            setUsers(users);
+
+        }catch(error){
+            console.log(error);
+            
         }
-    ]);
+    }
+
+    const getRoles = async() => {
+
+        try{
+
+            const response = await axios.get(
+                "http://localhost:5000/api/roles/getroles"
+            );
+
+            setRoles(response.data);
+
+        }catch(error){
+            console.log(error);
+            
+        }
+    };
 
     const [editingUser, setEditingUser] = useState(null);
 
@@ -39,7 +58,7 @@ function UserMngAdmin() {
         user.role.toLowerCase().includes(search.toLowerCase())
     );
 
-    const handleDelete = (id) => {
+    const handleDelete = async (id) => {
 
         const confirmDelete = window.confirm(
             "Are you sure you want to delete this user?"
@@ -47,13 +66,27 @@ function UserMngAdmin() {
 
         if (!confirmDelete) return;
 
-        setUsers((prevUsers) =>
-            prevUsers.filter((user) => user.id !== id)
-        );
+        try {
+            await axios.delete(`http://localhost:5000/api/user/${id}`);
+
+            setUsers((prevUsers) =>
+                prevUsers.filter((user) => (user._id || user.id) !== id)
+            );
+
+            if (editingUser && (editingUser._id || editingUser.id) === id) {
+                setEditingUser(null);
+            }
+
+            alert("User deleted successfully.");
+        } catch (error) {
+            const message = error?.response?.data?.message || "Failed to delete user.";
+            alert(message);
+            console.error(error);
+        }
     };
 
     const handleEdit = (user) => {
-        setEditingUser({ ...user });
+        setEditingUser({ ...user, password: "" });
     };
 
     const handleUpdateChange = (e) => {
@@ -66,17 +99,52 @@ function UserMngAdmin() {
         }));
     };
 
-    const handleUpdate = () => {
+    const handleUpdate = async () => {
 
-        setUsers((prevUsers) =>
-            prevUsers.map((user) =>
-                user.id === editingUser.id
-                    ? editingUser
-                    : user
-            )
-        );
+        if (!editingUser) return;
 
-        setEditingUser(null);
+        try {
+            const payload = {
+                username: editingUser.username,
+                role: editingUser.role
+            };
+
+            if (editingUser.password && editingUser.password.trim()) {
+                payload.password = editingUser.password;
+            }
+
+            const response = await axios.put(
+                `http://localhost:5000/api/user/${editingUser._id || editingUser.id}`,
+                payload
+            );
+
+            const updatedUser = response.data.user;
+
+            setUsers((prevUsers) =>
+                prevUsers.map((user) => {
+                    const currentId = user._id || user.id;
+                    const nextId = updatedUser._id || updatedUser.id;
+
+                    if (currentId === nextId) {
+                        return {
+                            ...updatedUser,
+                            id: nextId,
+                            password: "",
+                            passwordDisplay: "Password"
+                        };
+                    }
+
+                    return user;
+                })
+            );
+
+            setEditingUser(null);
+            alert("User updated successfully.");
+        } catch (error) {
+            const message = error?.response?.data?.message || "Failed to update user.";
+            alert(message);
+            console.error(error);
+        }
     };
 
     const handleCancelEdit = () => {
@@ -141,7 +209,7 @@ function UserMngAdmin() {
 
                             filteredUsers.map((user) => (
 
-                                <tr key={user.id}>
+                                <tr key={user._id || user.id}>
 
                                     <td>
                                         <div className="username-cell">
@@ -159,7 +227,7 @@ function UserMngAdmin() {
 
                                     <td>
                                         <span className="password-cell">
-                                            {user.password}
+                                            {user.passwordDisplay || "Password"}
                                         </span>
                                     </td>
 
@@ -292,23 +360,18 @@ function UserMngAdmin() {
                                     value={editingUser.role}
                                     onChange={handleUpdateChange}
                                 >
-
-                                    <option value="admin">
-                                        Admin
+                                    <option value="">
+                                        Select Role
                                     </option>
 
-                                    <option value="officer">
-                                        Officer
-                                    </option>
-
-                                    <option value="viewer">
-                                        Viewer
-                                    </option>
-
-                                    <option value="replyperson">
-                                        Reply Person
-                                    </option>
-
+                                    {roles.map((role) => (
+                                        <option
+                                            key={role._id}
+                                            value={role.name}
+                                        >
+                                            {role.name}
+                                        </option>
+                                    ))}
                                 </select>
 
                             </div>
