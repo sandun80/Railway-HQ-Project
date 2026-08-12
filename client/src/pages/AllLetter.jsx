@@ -221,6 +221,34 @@ function AllLetter() {
         }
     };
 
+    const handleDeleteLetter = async (letter) => {
+        const letterIdentifier = letter?.letterNumber || "this letter";
+        const shouldDelete = window.confirm(`Are you sure you want to delete letter ${letterIdentifier}? This action cannot be undone.`);
+
+        if (!shouldDelete) {
+            return;
+        }
+
+        try {
+            const response = await axios.delete(
+                `http://localhost:5000/api/letters/${letterIdentifier}`
+            );
+
+            const deletedLetter = response.data?.deletedLetter || letter;
+            setLetters((prev) =>
+                prev.filter((item) =>
+                    (item._id || item.letterNumber) !== (deletedLetter._id || deletedLetter.letterNumber)
+                )
+            );
+
+            alert("Letter deleted successfully.");
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message || "Failed to delete letter.";
+            alert(errorMessage);
+            console.error(error);
+        }
+    };
+
     const handleReset = async () => {
         setFilters({
             letterNumber: "",
@@ -302,14 +330,23 @@ function AllLetter() {
                                 <td>{letter.status || "-"}</td>
                                 <td className="action-cell">
                                     {role === "officer" && (
-                                        <button
-                                        className="view-btn"
-                                        onClick={() => openEditPanel(letter)}
-                                    >
-                                        Edit
-                                    </button>
+                                        <>
+                                            <button
+                                                className="view-btn"
+                                                onClick={() => openEditPanel(letter)}
+                                            >
+                                                Edit
+                                            </button>
+
+                                            <button
+                                                className="delete-btn"
+                                                onClick={() => handleDeleteLetter(letter)}
+                                            >
+                                                Delete
+                                            </button>
+                                        </>
                                     )}
-                                    
+
                                     <button
                                         className="view-btn secondary-view-btn"
                                         onClick={() => openViewPanel(letter)}

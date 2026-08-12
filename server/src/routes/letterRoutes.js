@@ -1,6 +1,6 @@
 import express from "express";
 
-import { createLetter, searchLetterByNumber, updateLetter, getAllLetters, getDashboardCounts, filterLetters } from "../controllers/letterController.js";
+import { createLetter, searchLetterByNumber, updateLetter, deleteLetter, getAllLetters, getDashboardCounts, filterLetters } from "../controllers/letterController.js";
 
 const router = express.Router();
 
@@ -16,6 +16,8 @@ router.get("/filter", filterLetters);
 router.get("/:letterNumber", searchLetterByNumber);
 
 router.put("/:letterNumber", updateLetter);
+
+router.delete("/:letterNumber", deleteLetter);
 
 
 export default router;

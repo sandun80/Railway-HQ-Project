@@ -69,6 +69,29 @@ export const updateLetter = async (req, res) => {
     }
 };
 
+export const deleteLetter = async (req, res) => {
+    try {
+        const { letterNumber } = req.params;
+
+        const deletedLetter = await Letter.findOneAndDelete({ letterNumber });
+
+        if (!deletedLetter) {
+            return res.status(404).json({
+                message: "Letter not found"
+            });
+        }
+
+        res.status(200).json({
+            message: "Letter deleted successfully",
+            deletedLetter
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
 export const searchLetterByNumber = async(req, res) => {
     try{
 
