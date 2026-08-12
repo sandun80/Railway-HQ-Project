@@ -1,6 +1,6 @@
 import express from "express";
 
-import { createLetter, searchLetterByNumber, updateLetter, deleteLetter, getAllLetters, getDashboardCounts, filterLetters } from "../controllers/letterController.js";
+import { createLetter, searchLetterByNumber, updateLetter, getAllLetters, getDashboardCounts, filterLetters, getReportData } from "../controllers/letterController.js";
 
 const router = express.Router();
 
@@ -12,6 +12,8 @@ router.get("/getallletters", getAllLetters);
 router.get("/getcounts", getDashboardCounts);
 
 router.get("/filter", filterLetters);
+
+router.get("/reports", getReportData);
 
 router.get("/:letterNumber", searchLetterByNumber);
 
