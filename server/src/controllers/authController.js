@@ -27,20 +27,29 @@ export const login = async (req, res) => {
         
 
         // Check password
-        const passwordMatch = await bcrypt.compare(
-            password,
-            user.password
-        );
+        let passwordMatch = false;
 
-        console.log("Password match:", passwordMatch);
+        try {
+            passwordMatch = await bcrypt.compare(password, user.password);
+        } catch (error) {
+            passwordMatch = false;
+        }
 
+        const isLegacyPlainTextPassword = !passwordMatch && user.password === password;
 
-        if (!passwordMatch) {
+        if (!passwordMatch && !isLegacyPlainTextPassword) {
             return res.status(401).json({
                 message: "Invalid username or password"
             });
         }
-        
+
+        if (isLegacyPlainTextPassword) {
+            user.password = await bcrypt.hash(password, 10);
+            await user.save();
+            passwordMatch = true;
+        }
+
+        console.log("Password match:", passwordMatch);
 
         // Create JWT
         const token = jwt.sign(
