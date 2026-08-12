@@ -16,6 +16,7 @@ import Byhand from "./pages/ByhandLetter";
 import NormalReceive from "./pages/NormalReceive";
 import ByhandReceive from "./pages/ByhandRecieve";
 import AllLetters from "./pages/AllLetter";
+import ReplayDashboard from "./pages/replayDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminPortal from "./pages/AdminPortal";
 
@@ -73,6 +74,11 @@ function App(){
           <Route 
             path="/allletters"
             element={<AllLetters />}
+          />
+
+          <Route
+            path="/inbox"
+            element={<ReplayDashboard />}
           />
 
       </Route>
