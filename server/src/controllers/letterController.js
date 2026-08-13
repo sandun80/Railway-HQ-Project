@@ -123,6 +123,75 @@ export const searchLetterByNumber = async(req, res) => {
     }
 }
 
+export const getLettersForReply = async (req, res) => {
+    try {
+
+        const role = String(req.query.role || "").trim();
+
+        if (!role) {
+            return res.status(400).json({
+                message: "Role is required"
+            });
+        }
+
+        const letters = await Letter.find({
+            destination: { $regex: `^${role}$`, $options: "i" },
+            status: { $ne: "Draft" }
+        }).sort({ createdAt: -1 });
+
+        res.status(200).json(letters);
+
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+export const replyToLetter = async (req, res) => {
+    try {
+
+        const { letterNumber } = req.params;
+        const { reply, replyPdf } = req.body;
+
+        if (!reply?.trim()) {
+            return res.status(400).json({
+                message: "Reply text is required"
+            });
+        }
+
+        const updatedLetter = await Letter.findOneAndUpdate(
+            { letterNumber },
+            {
+                reply,
+                replyPdf: replyPdf || "",
+                status: "Replied"
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+
+        if (!updatedLetter) {
+            return res.status(404).json({
+                message: "Letter not found"
+            });
+        }
+
+        res.status(200).json(updatedLetter);
+
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
 export const getAllLetters = async (req, res) => {
     try {
         const requestedRole = String(req.query.role || "").trim().toLowerCase();

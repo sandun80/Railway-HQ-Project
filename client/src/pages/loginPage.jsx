@@ -65,7 +65,7 @@ function LoginPage() {
                 
             }
             else {
-              alert("Not yet implemented");
+              navigate("/inbox");
             }
 
         } catch (error) {

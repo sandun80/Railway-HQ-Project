@@ -1,102 +1,115 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 import "../styles/replyDashboard.css";
 
-const initialLetters = [
-    {
-        id: 1,
-        letterNumber: "RHL-2026-041",
-        sender: "Ministry of Transport",
-        subject: "Budget approval review",
-        category: "Registered",
-        flow: "Receiving",
-        status: "Pending",
-        date: "2026-08-11",
-        summary:
-            "Please review the revised transport budget submission and confirm whether the office can proceed with approval before the end of this week.",
-        pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-        unread: true
-    },
-    {
-        id: 2,
-        letterNumber: "RHL-2026-038",
-        sender: "Regional Audit Office",
-        subject: "Inspection follow-up",
-        category: "Normal",
-        flow: "Receiving",
-        status: "In Review",
-        date: "2026-08-10",
-        summary:
-            "Kindly provide supporting records related to the last quarter inspection report and indicate your response timeline.",
-        pdfUrl: "",
-        unread: false
-    },
-    {
-        id: 3,
-        letterNumber: "RHL-2026-033",
-        sender: "Human Resources Division",
-        subject: "Staff transfer notice",
-        category: "By Hand",
-        flow: "Sending",
-        status: "Replied",
-        date: "2026-08-08",
-        summary:
-            "This letter contains the official transfer notice for staff deployment coordination and required acknowledgment.",
-        pdfUrl: "",
-        unread: false
-    }
-];
-
 function ReplayDashboard() {
-    const [letters, setLetters] = useState(initialLetters);
-    const [selectedId, setSelectedId] = useState(initialLetters[0]?.id ?? null);
+    const user = JSON.parse(localStorage.getItem("user"));
+    const role = user?.role;
+
+    const [letters, setLetters] = useState([]);
+    const [selectedId, setSelectedId] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [replyText, setReplyText] = useState("");
     const [replyFile, setReplyFile] = useState(null);
-    const [draftSaved, setDraftSaved] = useState(false);
+    const [isSending, setIsSending] = useState(false);
+
+    const convertPdfToBase64 = (file) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+    });
+
+    const getLetters = async () => {
+        if (!role) return;
+
+        try {
+            const response = await axios.get("http://localhost:5000/api/letters/getlettersforreply", {
+                params: { role }
+            });
+
+            setLetters(response.data);
+        } catch (error) {
+            console.error("Failed to get letters for reply:", error);
+        }
+    };
+
+    useEffect(() => {
+        getLetters();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [role]);
 
     const filteredLetters = useMemo(() => {
         if (!searchTerm.trim()) return letters;
 
         return letters.filter((letter) =>
-            letter.letterNumber.toLowerCase().includes(searchTerm.trim().toLowerCase())
+            (letter.letterNumber || "").toLowerCase().includes(searchTerm.trim().toLowerCase())
         );
     }, [letters, searchTerm]);
 
     const selectedLetter = useMemo(
-        () => letters.find((letter) => letter.id === selectedId) || letters[0],
-        [letters, selectedId]
+        () =>
+            letters.find((letter) => (letter._id || letter.letterNumber) === selectedId) ||
+            filteredLetters[0] ||
+            null,
+        [letters, filteredLetters, selectedId]
     );
 
     const handleSelectLetter = (letterId) => {
         setSelectedId(letterId);
-        setDraftSaved(false);
         setReplyText("");
         setReplyFile(null);
-
-        setLetters((prev) =>
-            prev.map((letter) =>
-                letter.id === letterId ? { ...letter, unread: false } : letter
-            )
-        );
     };
 
-    const handleSendReply = () => {
+    const handleSendReply = async () => {
         if (!replyText.trim()) {
             alert("Please add a reply message before sending.");
             return;
         }
 
-        alert(
-            `Reply prepared for ${selectedLetter?.letterNumber}. ${replyFile ? `Attachment: ${replyFile.name}` : "No PDF attached."}`
-        );
-        setReplyText("");
-        setReplyFile(null);
-        setDraftSaved(false);
+        if (!selectedLetter?.letterNumber) {
+            alert("No letter selected.");
+            return;
+        }
+
+        try {
+            setIsSending(true);
+
+            const replyPdf = replyFile ? await convertPdfToBase64(replyFile) : "";
+
+            const response = await axios.put(
+                `http://localhost:5000/api/letters/${selectedLetter.letterNumber}/reply`,
+                {
+                    reply: replyText,
+                    replyPdf
+                }
+            );
+
+            const updatedLetter = response.data;
+
+            setLetters((prev) =>
+                prev.map((letter) =>
+                    letter._id === updatedLetter._id ? updatedLetter : letter
+                )
+            );
+
+            alert("Reply sent successfully.");
+            setReplyText("");
+            setReplyFile(null);
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message || "Failed to send reply.";
+            alert(errorMessage);
+            console.error(error);
+        } finally {
+            setIsSending(false);
+        }
     };
 
-    const handleSaveDraft = () => {
-        setDraftSaved(true);
-        alert("Reply draft saved locally.");
+    const formatDate = (value) => {
+        if (!value) return "-";
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "-";
+        return date.toLocaleDateString();
     };
 
     return (
@@ -125,22 +138,26 @@ function ReplayDashboard() {
                     <div className="inbox-list">
                         {filteredLetters.map((letter) => (
                             <button
-                                key={letter.id}
+                                key={letter._id || letter.letterNumber}
                                 type="button"
-                                className={`inbox-item ${selectedLetter?.id === letter.id ? "active" : ""}`}
-                                onClick={() => handleSelectLetter(letter.id)}
+                                className={`inbox-item ${(selectedLetter?._id || selectedLetter?.letterNumber) === (letter._id || letter.letterNumber) ? "active" : ""}`}
+                                onClick={() => handleSelectLetter(letter._id || letter.letterNumber)}
                             >
                                 <div className="inbox-top-row">
-                                    <span className="sender-name">{letter.sender}</span>
-                                    {letter.unread && <span className="unread-dot" />}
+                                    <span className="sender-name">{letter.sender || "-"}</span>
+                                    {letter.status !== "Replied" && <span className="unread-dot" />}
                                 </div>
-                                <p className="letter-subject">{letter.subject}</p>
+                                <p className="letter-subject">{letter.title}</p>
                                 <div className="inbox-meta-row">
                                     <span>{letter.letterNumber}</span>
-                                    <span>{letter.date}</span>
+                                    <span>{formatDate(letter.letterDate)}</span>
                                 </div>
                             </button>
                         ))}
+
+                        {filteredLetters.length === 0 && (
+                            <p className="empty-state">No letters found.</p>
+                        )}
                     </div>
                 </aside>
 
@@ -150,17 +167,17 @@ function ReplayDashboard() {
                             <div className="letter-header-card">
                                 <div>
                                     <p className="eyebrow">Letter details</p>
-                                    <h3>{selectedLetter.subject}</h3>
+                                    <h3>{selectedLetter.title}</h3>
                                 </div>
                                 <div className="status-group">
-                                    <span className="status-pill" data-status={selectedLetter.status}>{selectedLetter.status}</span>
+                                    <span className="status-pill" data-status={selectedLetter.status}>{selectedLetter.status || "-"}</span>
                                 </div>
                             </div>
 
                             <div className="detail-grid">
                                 <div className="detail-card">
                                     <label>From</label>
-                                    <p>{selectedLetter.sender}</p>
+                                    <p>{selectedLetter.sender || "-"}</p>
                                 </div>
                                 <div className="detail-card">
                                     <label>Letter No.</label>
@@ -168,31 +185,31 @@ function ReplayDashboard() {
                                 </div>
                                 <div className="detail-card">
                                     <label>Category</label>
-                                    <p>{selectedLetter.category}</p>
+                                    <p>{selectedLetter.category || "-"}</p>
                                 </div>
                                 <div className="detail-card">
                                     <label>Flow</label>
-                                    <p>{selectedLetter.flow}</p>
+                                    <p>{selectedLetter.flow || "-"}</p>
                                 </div>
                                 <div className="detail-card">
                                     <label>Received</label>
-                                    <p>{selectedLetter.date}</p>
+                                    <p>{formatDate(selectedLetter.letterDate)}</p>
                                 </div>
                                 <div className="detail-card">
                                     <label>Attachment</label>
-                                    <p>{selectedLetter.pdfUrl ? "PDF available" : "No PDF"}</p>
+                                    <p>{selectedLetter.pdf ? "PDF available" : "No PDF"}</p>
                                 </div>
                             </div>
 
                             <div className="summary-card">
-                                <label>Message</label>
-                                <p>{selectedLetter.summary}</p>
+                                <label>Subject / Department / Officer</label>
+                                <p>{selectedLetter.subject_department_or_officer || "-"}</p>
                             </div>
 
                             <div className="letter-actions-row">
-                                {selectedLetter.pdfUrl && (
+                                {selectedLetter.pdf && (
                                     <a
-                                        href={selectedLetter.pdfUrl}
+                                        href={selectedLetter.pdf}
                                         target="_blank"
                                         rel="noreferrer"
                                         className="primary-link-btn"
@@ -200,16 +217,20 @@ function ReplayDashboard() {
                                         Open PDF
                                     </a>
                                 )}
-                                <button type="button" className="secondary-outline-btn">
-                                    View full letter
-                                </button>
                             </div>
 
                             <div className="reply-panel">
                                 <div className="reply-header-row">
                                     <h4>Reply to letter</h4>
-                                    {draftSaved && <span className="draft-indicator">Draft saved</span>}
+                                    {selectedLetter.status === "Replied" && <span className="draft-indicator">Already replied</span>}
                                 </div>
+
+                                {selectedLetter.reply && (
+                                    <div className="summary-card">
+                                        <label>Current reply</label>
+                                        <p>{selectedLetter.reply}</p>
+                                    </div>
+                                )}
 
                                 <textarea
                                     value={replyText}
@@ -228,11 +249,13 @@ function ReplayDashboard() {
                                     </label>
 
                                     <div className="reply-actions">
-                                        <button type="button" className="secondary-outline-btn" onClick={handleSaveDraft}>
-                                            Save draft
-                                        </button>
-                                        <button type="button" className="primary-send-btn" onClick={handleSendReply}>
-                                            Send reply
+                                        <button
+                                            type="button"
+                                            className="primary-send-btn"
+                                            onClick={handleSendReply}
+                                            disabled={isSending}
+                                        >
+                                            {isSending ? "Sending..." : "Send reply"}
                                         </button>
                                     </div>
                                 </div>

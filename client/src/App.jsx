@@ -40,22 +40,28 @@ function App(){
 
           <Route 
             path="/dashboard" 
-            element={<Dashboard />} 
+            element={<ProtectedRoute allowedRoles={['officer', 'viewer']}>
+                  <Dashboard />
+              </ProtectedRoute>} 
           />
 
-          <Route 
+          <Route
             path="/admin"
-            element={<AdminPortal />}
-          />
+            element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                    <AdminPortal />
+                </ProtectedRoute>
+            }
+        />
 
-          <Route path="/letters/sending" element={<SendingPage />}>
+          <Route path="/letters/sending" element={<ProtectedRoute allowedRoles={['officer']}><SendingPage /></ProtectedRoute>}>
             <Route index element={<Navigate to="registered" replace />} />
             <Route path="registered" element={<RegisteredLetter />} />
             <Route path="normal" element={<NormalLetter />} />
             <Route path="byhand" element={<Byhand />} />
           </Route>
 
-          <Route path="/letters/receiving" element={<ReceivingPage />}>
+          <Route path="/letters/receiving" element={<ProtectedRoute allowedRoles={['officer']}><ReceivingPage /></ProtectedRoute>}>
             <Route index element={<Navigate to="registered" replace />} />
             <Route path="registered" element={<RegisteredRecieve />} />
             <Route path="normal" element={<NormalReceive />}/>
@@ -64,28 +70,34 @@ function App(){
 
           <Route 
             path="/letters/receiving"
-            element={<ReceivingPage />}
+            element={<ProtectedRoute allowedRoles={['officer']}><ReceivingPage /></ProtectedRoute>}
           />
 
           <Route 
             path="/reports"
-            element={<Reports />}
+            element={<ProtectedRoute allowedRoles={['officer']}><Reports /></ProtectedRoute>}
           />
           
           <Route 
             path="/allletters"
-            element={<AllLetters />}
+            element={<ProtectedRoute allowedRoles={['officer', 'viewer']}>
+                  <AllLetters />
+              </ProtectedRoute>}
           />
 
           <Route
             path="/inbox"
-            element={<ReplayDashboard />}
+            element={<ProtectedRoute excludedRoles={['officer', 'viewer', 'admin']}><ReplayDashboard /></ProtectedRoute>}
           />
 
-          <Route 
+          <Route
             path="/userlist"
-            element={<UserManagemnt />}
-          />
+            element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                    <UserManagemnt />
+                </ProtectedRoute>
+            }
+        />
 
       </Route>
 

@@ -89,6 +89,10 @@ function Sidebar() {
             {/* VIEWER */}
             {role === "viewer" && (
                 <>
+                    <Link to="/dashboard">
+                        Dashboard
+                    </Link>
+                    
                     <Link to="/allletters">
                         All Letters
                     </Link>
