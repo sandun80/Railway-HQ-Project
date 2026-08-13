@@ -123,6 +123,30 @@ export const searchLetterByNumber = async(req, res) => {
     }
 }
 
+export const getAllLettersForReplyingc = async (req, res) => {
+    try{
+
+        const { getAllLettersByRole } = req.user.role; 
+        
+        if (!destination) {
+            return res.status(400).json({
+                message: "Username is required"
+            });
+        }
+
+        const letters = await Letter.find({
+            destination: role
+        }).sort({ createdAt: -1 });
+
+        res.status(200).json(letters);
+
+
+    }catch(error){
+        console.log(error);
+        
+    }
+}
+
 export const getAllLetters = async (req, res) => {
     try {
         const requestedRole = String(req.query.role || "").trim().toLowerCase();
