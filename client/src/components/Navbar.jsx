@@ -64,12 +64,9 @@ function Navbar() {
 
         <div className="brand-tools">
           <div className="gov-links">
-            <span className="site-tag">gov.lk</span>
             <span className="lang-toggle">English</span>
-          </div>
-
-          <div className="search-box">
-            <input type="text" placeholder="Search..." aria-label="Search" />
+            <span className="lang-toggle">Sinhala</span>
+            <span className="lang-toggle">Tamil</span>
           </div>
         </div>
       </div>
