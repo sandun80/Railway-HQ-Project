@@ -674,6 +674,21 @@ function AllLetter() {
                                     <pre>{getReplyText(selectedLetter.reply)}</pre>
                                 </div>
 
+                                <div className="readonly-field full-width-field reply-pdf-field">
+                                    <label>Reply PDF</label>
+                                    {selectedLetter.replyPdf ? (
+                                        <a
+                                            className="pdf-open-btn"
+                                            href={selectedLetter.replyPdf}
+                                            download={`reply-${selectedLetter.letterNumber || "letter"}.pdf`}
+                                        >
+                                            Download Reply PDF
+                                        </a>
+                                    ) : (
+                                        <div>No reply PDF attached.</div>
+                                    )}
+                                </div>
+
                                 <div className="readonly-field full-width-field pdf-field">
                                     <label>Letter PDF</label>
                                     {selectedLetter.pdf ? (

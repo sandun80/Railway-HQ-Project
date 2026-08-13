@@ -72,11 +72,15 @@ const letterSchema = new mongoose.Schema({
     },
 
     status: {
-        type: String,
+        type: String
     },
 
     reply: {
+        type: String
+    },
 
+    replyPdf: {
+        type: String
     }
 
 }, {
