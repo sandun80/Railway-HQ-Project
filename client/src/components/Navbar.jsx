@@ -1,32 +1,14 @@
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import logo from "../assets/logo.png";
 import "../styles/Navbar.css";
 
 function Navbar() {
   const navigate = useNavigate();
-  const location = useLocation();
   const [lettersOpen, setLettersOpen] = useState(false);
-  const dropdownRef = useRef(null);
 
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const role = user?.role || "officer";
-
-  /* Close dropdown when clicking outside */
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setLettersOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  /* Close dropdown on route change */
-  useEffect(() => {
-    setLettersOpen(false);
-  }, [location.pathname]);
 
   const clearTokens = () => {
     localStorage.setItem("isLoggedIn", "false");
@@ -40,7 +22,7 @@ function Navbar() {
     if (role === "admin") {
       return [
         { label: "Admin Portal", to: "/admin" },
-        { label: "User Management", to: "/userlist" },
+        { label: "User Management", to: "/userlist" }
       ];
     }
 
@@ -58,24 +40,22 @@ function Navbar() {
         label: "Letters",
         children: [
           { label: "Sending", to: "/letters/sending" },
-          { label: "Receiving", to: "/letters/receiving" },
-        ],
+          { label: "Receiving", to: "/letters/receiving" }
+        ]
       },
       { label: "Reports", to: "/reports" },
-      { label: "All Letters", to: "/allletters" },
+      { label: "All Letters", to: "/allletters" }
     ];
   };
 
   const menuItems = getMenuItems();
-
-  /* Check if any child route is active (for the Letters toggle highlight) */
-  const isLettersActive = location.pathname.startsWith("/letters");
 
   return (
     <nav className="railway-header">
       <div className="railway-brand-bar">
         <div className="brand-wrap">
           <img src={logo} alt="Sri Lanka Railways Logo" className="navbar-logo" />
+
           <div className="navbar-title">
             <h2>Sri Lanka Railways</h2>
             <p>Official Document Management System</p>
@@ -84,50 +64,41 @@ function Navbar() {
 
         <div className="brand-tools">
           <div className="gov-links">
-            <span className="lang-toggle">Sinhala</span>
+            <span className="site-tag">gov.lk</span>
             <span className="lang-toggle">English</span>
-            <span className="lang-toggle">Tamil</span>
           </div>
-          
+
+          <div className="search-box">
+            <input type="text" placeholder="Search..." aria-label="Search" />
+          </div>
         </div>
       </div>
 
       <div className="railway-nav-bar">
         {menuItems.map((item) =>
           item.children ? (
-            <div
-              key={item.label}
-              className={`nav-dropdown ${lettersOpen ? "open" : ""}`}
-              ref={dropdownRef}
-            >
+            <div key={item.label} className="nav-dropdown">
               <button
                 type="button"
-                className={`nav-link nav-dropdown-toggle ${isLettersActive ? "active" : ""}`}
-                onClick={() => setLettersOpen((prev) => !prev)}
+                className="nav-link nav-dropdown-toggle"
+                onClick={() => setLettersOpen(!lettersOpen)}
               >
                 {item.label}
-                <span className="chevron">{lettersOpen ? "▲" : "▼"}</span>
+                <span>{lettersOpen ? "▲" : "▼"}</span>
               </button>
 
-              <div className="nav-dropdown-menu">
-                {item.children.map((child) => (
-                  <Link
-                    key={child.label}
-                    to={child.to}
-                    className="nav-dropdown-item"
-                    onClick={() => setLettersOpen(false)}
-                  >
-                    {child.label}
-                  </Link>
-                ))}
-              </div>
+              {lettersOpen && (
+                <div className="nav-dropdown-menu">
+                  {item.children.map((child) => (
+                    <Link key={child.label} to={child.to} className="nav-dropdown-item">
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
           ) : (
-            <Link
-              key={item.label}
-              to={item.to}
-              className={`nav-link ${location.pathname === item.to ? "active" : ""}`}
-            >
+            <Link key={item.label} to={item.to} className="nav-link">
               {item.label}
             </Link>
           )

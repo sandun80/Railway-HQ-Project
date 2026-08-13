@@ -1,321 +1,233 @@
-/* ── Railway Navbar ── */
-
 .railway-header {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    font-family: "Inter", "Segoe UI", system-ui, sans-serif;
-    box-shadow: 0 4px 20px rgba(7, 30, 74, 0.28);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
+  box-shadow: 0 10px 30px rgba(10, 42, 92, 0.18);
 }
 
-/* ── Brand bar ── */
 .railway-brand-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 40px;
-    padding: 14px 28px;
-    background: #0a2d6b;
-    border-bottom: 3px solid #c9a227;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 22px 12px;
+  background: linear-gradient(135deg, #0a3d8f 0%, #0075c9 35%, #14b6d3 100%);
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .brand-wrap {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-/* Logo container: white circle so any logo sits cleanly */
-.navbar-logo-wrap {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    border: 2px solid rgba(201, 162, 39, 0.45);
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .navbar-logo {
-    height: 40px;
-    width: auto;
+  height: 58px;
+  width: auto;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.24));
 }
 
 .navbar-title {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .navbar-title h2 {
-    margin: 0;
-    font-size: clamp(1.25rem, 1.8vw, 1.6rem);
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    color: #fff;
-    line-height: 1.8;
+  margin: 0;
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  line-height: 1.2;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .navbar-title p {
-    margin: 3px 0 0;
-    font-size: 0.72rem;
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+  margin: 2px 0 0;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.04em;
 }
 
-/* Brand right — search + lang */
 .brand-tools {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
+.gov-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.96);
+}
 
+.site-tag,
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  padding: 5px 9px;
+  background: linear-gradient(135deg, rgba(255, 209, 102, 0.25), rgba(255, 136, 0, 0.3));
+  border: 1px solid rgba(255, 223, 139, 0.7);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  font-size: 0.8rem;
+}
 
-.search-box svg,
-.search-box .search-icon {
-    color: rgba(255, 255, 255, 0.55);
-    flex-shrink: 0;
-    width: 16px;
-    height: 16px;
+.search-box {
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 8px;
+  padding: 7px 10px;
+  min-width: 170px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 20px rgba(6, 24, 58, 0.18);
 }
 
 .search-box input {
-    width: 100%;
-    border: none;
-    background: transparent;
-    outline: none;
-    font-size: 0.88rem;
-    color: #fff;
-    font-family: inherit;
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.82rem;
+  color: #0f172a;
 }
 
-
-
-.lang-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    padding: 7px 13px;
-    background: rgba(201, 162, 39, 0.15);
-    border: 1px solid rgba(201, 162, 39, 0.5);
-    color: #f5d97a;
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background 0.2s;
-}
-
-.lang-toggle:hover {
-    background: rgba(201, 162, 39, 0.25);
-}
-
-/* ── Nav bar ── */
 .railway-nav-bar {
-    display: flex;
-    align-items: stretch;
-    gap: 0;
-    background: #071e4a;
-    padding: 0 80px;
-    min-height: 58px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: linear-gradient(90deg, #0b2c5c 0%, #0e3f7a 30%, #0a2750 100%);
+  padding: 0 18px;
+  position: relative;
+  min-height: 52px;
 }
 
-/* Spacer pushes logout to the right */
-.nav-spacer {
-    flex: 1;
-}
-
-/* Base link / button style */
 .nav-link,
 .nav-dropdown-toggle,
 .nav-logout {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 0 18px;
-    height: 52px;
-    color: rgba(255, 255, 255, 0.75);
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    white-space: nowrap;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    font-family: inherit;
-    transition: color 0.15s;
-}
-
-.nav-link svg,
-.nav-dropdown-toggle svg {
-    width: 16px;
-    height: 16px;
-    opacity: 0.65;
-    flex-shrink: 0;
+  color: #f8fbff;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 15px 16px;
+  transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  line-height: 1.2;
 }
 
 .nav-link:hover,
-.nav-dropdown-toggle:hover {
-    color: #fff;
+.nav-dropdown-toggle:hover,
+.nav-logout:hover {
+  background: linear-gradient(180deg, rgba(255, 196, 75, 0.18), rgba(255, 255, 255, 0.08));
+  color: #ffe9a8;
+  transform: translateY(-1px);
 }
 
-/* Gold underline = active state */
-.nav-link.active,
-.nav-dropdown-toggle.active {
-    color: #f5d97a;
-}
-
-.nav-link.active::after,
-.nav-dropdown-toggle.active::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 18px;
-    right: 18px;
-    height: 3px;
-    background: #c9a227;
-    border-radius: 3px 3px 0 0;
-}
-
-/* Chevron on dropdown toggle */
-.nav-dropdown-toggle .chevron {
-    font-size: 12px;
-    opacity: 0.5;
-    margin-left: 2px;
-    transition: transform 0.2s;
-}
-
-.nav-dropdown.open .nav-dropdown-toggle .chevron {
-    transform: rotate(180deg);
-}
-
-/* ── Dropdown ── */
 .nav-dropdown {
-    position: relative;
-    display: flex;
-    align-items: stretch;
+  position: relative;
+}
+
+.nav-dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .nav-dropdown-menu {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
-    min-width: 185px;
-    background: #fff;
-    border-radius: 10px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 8px 24px rgba(7, 30, 74, 0.15);
-    padding: 8px;
-    display: none;
-    flex-direction: column;
-    z-index: 100;
-}
-
-.nav-dropdown.open .nav-dropdown-menu {
-    display: flex;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 180px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
 }
 
 .nav-dropdown-item {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    padding: 9px 12px;
-    border-radius: 6px;
-    font-size: 0.83rem;
-    font-weight: 500;
-    color: #1e3a5f;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-}
-
-.nav-dropdown-item svg {
-    width: 15px;
-    height: 15px;
-    color: #4a7ab5;
-    flex-shrink: 0;
+  color: #0f172a;
+  text-decoration: none;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-weight: 600;
 }
 
 .nav-dropdown-item:hover {
-    background: #f0f6ff;
-    color: #0a2d6b;
+  background: #eaf3ff;
+  color: #0b3b8f;
 }
 
-.nav-dropdown-separator {
-    height: 1px;
-    background: #f1f5f9;
-    margin: 4px 0;
-}
-
-/* ── Sign out ── */
 .nav-logout {
-    color: #fca5a5;
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
-    padding-left: 18px;
-    gap: 7px;
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+  border-radius: 0 0 0 0;
+  margin-left: 8px;
 }
 
-.nav-logout:hover {
-    color: #f87171;
+@media (max-width: 980px) {
+  .railway-brand-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .brand-tools {
+    width: 100%;
+    justify-content: space-between;
+  }
 }
 
-.nav-logout svg {
-    width: 16px;
-    height: 16px;
-}
+@media (max-width: 640px) {
+  .top-browser-bar {
+    padding: 8px 12px;
+  }
 
-/* ── Responsive ── */
-@media (max-width: 1000px) {
-    .railway-brand-bar {
-        flex-wrap: wrap;
-        gap: 12px;
-    }
+  .browser-url-bar {
+    font-size: 0.72rem;
+    min-width: 0;
+  }
 
-    .brand-tools {
-        width: 100%;
-    }
+  .browser-controls,
+  .browser-tools {
+    min-width: auto;
+    gap: 8px;
+  }
 
-    .search-box {
-        flex: 1;
-        min-width: 0;
-    }
-}
+  .railway-brand-bar {
+    padding: 16px 14px 12px;
+  }
 
-@media (max-width: 700px) {
-    .railway-brand-bar {
-        padding: 12px 16px;
-    }
+  .brand-wrap {
+    width: 100%;
+  }
 
-    .navbar-title h2 {
-        font-size: 1.05rem;
-    }
+  .navbar-title h2 {
+    font-size: 1.2rem;
+  }
 
-    .navbar-title p {
-        display: none;
-    }
+  .brand-tools {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    .railway-nav-bar {
-        padding: 0 8px;
-        overflow-x: auto;
-        scrollbar-width: none;
-    }
+  .search-box {
+    width: 100%;
+    min-width: 0;
+  }
 
-    .railway-nav-bar::-webkit-scrollbar {
-        display: none;
-    }
-
-    .nav-link,
-    .nav-dropdown-toggle,
-    .nav-logout {
-        padding: 0 12px;
-        font-size: 0.8rem;
-    }
+  .nav-link {
+    padding: 12px 10px;
+    font-size: 0.78rem;
+  }
 }
