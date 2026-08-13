@@ -1,4 +1,5 @@
 import Letter from "../models/letter.js";
+import { createLogEntry } from "./logController.js";
 
 
 
@@ -8,6 +9,17 @@ export const createLetter = async (req, res) => {
         console.log("Received data:", req.body);
 
         const letter = await Letter.create(req.body);
+
+        // Async log entry
+        const actor = req.body.sender || req.body.username || "System";
+        const actorRole = req.body.userRole || "officer";
+        createLogEntry({
+            username: actor,
+            userRole: actorRole,
+            action: req.body.status === "Draft" ? "CREATE" : "CREATE",
+            details: `Created ${letter.flow || ""} ${letter.category || ""} letter '${letter.title}' (Status: ${letter.status || "Created"})`,
+            letterNumber: letter.letterNumber
+        });
 
         res.status(201).json(letter);
 
@@ -54,6 +66,16 @@ export const updateLetter = async (req, res) => {
             });
         }
 
+        const actor = req.body.updatedBy || req.body.username || updatedLetter.sender || "Officer";
+        const actorRole = req.body.userRole || "officer";
+        createLogEntry({
+            username: actor,
+            userRole: actorRole,
+            action: "UPDATE",
+            details: `Updated letter details for '${updatedLetter.letterNumber}' (Title: ${updatedLetter.title}, Status: ${updatedLetter.status})`,
+            letterNumber: updatedLetter.letterNumber
+        });
+
         res.status(200).json(updatedLetter);
 
     } catch (error) {
@@ -82,6 +104,15 @@ export const deleteLetter = async (req, res) => {
                 message: "Letter not found"
             });
         }
+
+        const actor = req.query.username || "Admin";
+        createLogEntry({
+            username: actor,
+            userRole: "admin",
+            action: "DELETE",
+            details: `Deleted letter '${deletedLetter.letterNumber}' (${deletedLetter.title})`,
+            letterNumber: deletedLetter.letterNumber
+        });
 
         res.status(200).json({
             message: "Letter deleted successfully",
@@ -180,6 +211,16 @@ export const replyToLetter = async (req, res) => {
                 message: "Letter not found"
             });
         }
+
+        const replier = req.body.username || updatedLetter.destination || "Staff";
+        const replierRole = req.body.userRole || "replyperson";
+        createLogEntry({
+            username: replier,
+            userRole: replierRole,
+            action: "REPLY",
+            details: `Replied to letter '${updatedLetter.letterNumber}'`,
+            letterNumber: updatedLetter.letterNumber
+        });
 
         res.status(200).json(updatedLetter);
 

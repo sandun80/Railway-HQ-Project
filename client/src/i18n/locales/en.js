@@ -29,7 +29,8 @@ const en = {
         allLetters: "All Letters",
         adminPortal: "Admin Portal",
         userManagement: "User Management",
-        inbox: "Inbox"
+        inbox: "Inbox",
+        historyLogs: "History Logs"
     },
 
     login: {
@@ -328,6 +329,30 @@ const en = {
         sendReply: "Send reply",
         sending: "Sending...",
         noLetterSelected: "No letter selected."
+    },
+
+    logs: {
+        systemLogsTitle: "System History Logs",
+        systemLogsSubtitle: "Complete audit trail of system activities across all users and departments.",
+        myLogsTitle: "My Activity Logs",
+        myLogsSubtitle: "History log of all actions performed by your account.",
+        totalEntries: "Total Logs",
+        searchPlaceholder: "Search by user, letter number, details...",
+        filterAction: "Filter Action",
+        allActions: "All Actions",
+        actionCreate: "Create",
+        actionUpdate: "Update",
+        actionReply: "Reply",
+        actionDelete: "Delete",
+        actionLogin: "Login",
+        refreshBtn: "Refresh Logs",
+        noLogsFound: "No activity logs found.",
+        timestamp: "Timestamp",
+        user: "User",
+        role: "Role",
+        action: "Action",
+        letterNumber: "Ref. Letter #",
+        details: "Details"
     }
 };
 

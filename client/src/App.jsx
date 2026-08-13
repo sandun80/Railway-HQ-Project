@@ -20,6 +20,7 @@ import ReplayDashboard from "./pages/replayDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminPortal from "./pages/AdminPortal";
 import UserManagemnt from "./pages/UserMngAdmin";
+import HistoryLogs from "./pages/HistoryLogs";
 
 function App(){
  return (
@@ -69,11 +70,6 @@ function App(){
           </Route>
 
           <Route 
-            path="/letters/receiving"
-            element={<ProtectedRoute allowedRoles={['officer']}><ReceivingPage /></ProtectedRoute>}
-          />
-
-          <Route 
             path="/reports"
             element={<ProtectedRoute allowedRoles={['officer']}><Reports /></ProtectedRoute>}
           />
@@ -97,7 +93,16 @@ function App(){
                     <UserManagemnt />
                 </ProtectedRoute>
             }
-        />
+          />
+
+          <Route
+            path="/logs"
+            element={
+              <ProtectedRoute>
+                <HistoryLogs />
+              </ProtectedRoute>
+            }
+          />
 
       </Route>
 

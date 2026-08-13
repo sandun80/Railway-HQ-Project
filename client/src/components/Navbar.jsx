@@ -44,16 +44,23 @@ function Navbar() {
     if (role === "admin") {
       return [
         { label: t("navbar.adminPortal"), to: "/admin" },
-        { label: t("navbar.userManagement"), to: "/userlist" }
+        { label: t("navbar.userManagement"), to: "/userlist" },
+        { label: t("navbar.historyLogs", "History Logs"), to: "/logs" }
       ];
     }
 
     if (role === "viewer") {
-      return [{ label: t("navbar.allLetters"), to: "/allletters" }];
+      return [
+        { label: t("navbar.allLetters"), to: "/allletters" },
+        { label: t("navbar.historyLogs", "History Logs"), to: "/logs" }
+      ];
     }
 
     if (role === "replyperson") {
-      return [{ label: t("navbar.inbox"), to: "/inbox" }];
+      return [
+        { label: t("navbar.inbox"), to: "/inbox" },
+        { label: t("navbar.historyLogs", "History Logs"), to: "/logs" }
+      ];
     }
 
     return [
@@ -66,7 +73,8 @@ function Navbar() {
         ]
       },
       { label: t("navbar.reports"), to: "/reports" },
-      { label: t("navbar.allLetters"), to: "/allletters" }
+      { label: t("navbar.allLetters"), to: "/allletters" },
+      { label: t("navbar.historyLogs", "History Logs"), to: "/logs" }
     ];
   };
 

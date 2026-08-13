@@ -29,7 +29,8 @@ const ta = {
         allLetters: "அனைத்து கடிதங்கள்",
         adminPortal: "நிர்வாகி முனையம்",
         userManagement: "பயனர் மேலாண்மை",
-        inbox: "உள்வரவுப் பெட்டி"
+        inbox: "உள்வரவுப் பெட்டி",
+        historyLogs: "வரலாற்றுப் பதிவுகள்"
     },
 
     login: {
@@ -327,6 +328,30 @@ const ta = {
         sendReply: "பதிலை அனுப்பு",
         sending: "அனுப்பப்படுகிறது...",
         noLetterSelected: "கடிதம் எதுவும் தேர்ந்தெடுக்கப்படவில்லை."
+    },
+
+    logs: {
+        systemLogsTitle: "அமைப்பு வரலாற்றுப் பதிவுகள்",
+        systemLogsSubtitle: "அனைத்து பயனர்கள் மற்றும் துறைகளின் கணினி செயல்பாடுகளின் முழுமையான தණிக்கைப் பதிவு.",
+        myLogsTitle: "என் செயல்பாட்டுப் பதிவுகள்",
+        myLogsSubtitle: "உங்கள் கணக்கால் செய்யப்பட்ட அனைத்து நடவடிக்கைகளின் வரலாற்றுப் பதிவு.",
+        totalEntries: "மொத்தப் பதிவுகள்",
+        searchPlaceholder: "பயனர், கடித எண், விவரங்கள் மூலம் தேடுக...",
+        filterAction: "செயலை வடிகட்டவும்",
+        allActions: "அனைத்து செயல்களும்",
+        actionCreate: "உருவாக்கம்",
+        actionUpdate: "இப்போதைய நிலை",
+        actionReply: "பதிலளிப்பு",
+        actionDelete: "நீக்கம்",
+        actionLogin: "உள்நுழைவு",
+        refreshBtn: "பதிவுகளைப் புதுப்பி",
+        noLogsFound: "செயல்பாட்டுப் பதிவுகள் எதுவும் இல்லை.",
+        timestamp: "நேர முத்திரை",
+        user: "பயனர்",
+        role: "பங்கு",
+        action: "செயல்",
+        letterNumber: "குறிப்பு கடித எண்",
+        details: "விவரங்கள்"
     }
 };
 

@@ -8,6 +8,7 @@ import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import roleRoutes from "./routes/roleRoute.js";
 import departmentRoutes from "./routes/departmentRoute.js";
+import logRoutes from "./routes/logRoutes.js";
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/roles", roleRoutes);
 app.use("/api/departments", departmentRoutes);
+app.use("/api/logs", logRoutes);
 
 
 // Test route

@@ -29,7 +29,8 @@ const si = {
         allLetters: "සියලුම ලිපි",
         adminPortal: "පරිපාලක පිවිසුම",
         userManagement: "පරිශීලක කළමනාකරණය",
-        inbox: "එන ලිපි"
+        inbox: "එන ලිපි",
+        historyLogs: "ක්‍රියාකාරකම් සටහන්"
     },
 
     login: {
@@ -328,6 +329,30 @@ const si = {
         sendReply: "පිළිතුර යවන්න",
         sending: "යවමින්...",
         noLetterSelected: "ලිපියක් තෝරා නොමැත."
+    },
+
+    logs: {
+        systemLogsTitle: "පද්ධති ක්‍රියාකාරකම් සටහන්",
+        systemLogsSubtitle: "සියලුම පරිශීලකයින්ගේ සහ දෙපාර්තමේන්තුවල පද්ධති ක්‍රියාකාරකම් සටහන.",
+        myLogsTitle: "මගේ ක්‍රියාකාරකම් සටහන්",
+        myLogsSubtitle: "ඔබගේ ගිණුම මගින් සිදුකරන ලද සියලුම ක්‍රියාකාරකම් සටහන.",
+        totalEntries: "මුළු සටහන් ගණන",
+        searchPlaceholder: "පරිශීලක, ලිපි අංකය, විස්තර අනුව සොයන්න...",
+        filterAction: "ක්‍රියාව පෙරන්න",
+        allActions: "සියලුම ක්‍රියා",
+        actionCreate: "තැනීම",
+        actionUpdate: "යාවත්කාලීන කිරීම",
+        actionReply: "පිළිතුරු යැවීම",
+        actionDelete: "මැකීම",
+        actionLogin: "පිවිසීම",
+        refreshBtn: "සටහන් යළි පූරණය කරන්න",
+        noLogsFound: "ක්‍රියාකාරකම් සටහන් හමු නොවීය.",
+        timestamp: "කාල වකවානුව",
+        user: "පරිශීලකයා",
+        role: "කාර්යභාරය",
+        action: "ක්‍රියාව",
+        letterNumber: "අදාළ ලිපි අංකය",
+        details: "විස්තර"
     }
 };
 
