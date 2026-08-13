@@ -77,6 +77,13 @@
   border: 1px solid rgba(255, 223, 139, 0.7);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
   font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.lang-toggle.active-lang {
+  background: linear-gradient(135deg, #ffd166, #ff8800);
+  color: #0f2e57;
+  font-weight: 700;
 }
 
 .search-box {

@@ -1,15 +1,18 @@
 import { Link, Outlet } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import "../styles/receivingPage.css";
 
 function ReceivingPage(){
+    const { t } = useTranslation();
+
     return(
         <div className="letters-page letters-page-receiving">
-            <h2>Receiving Letters</h2>
+            <h2>{t("receivingPage.title")}</h2>
             
             <div className="button-group">
-                <Link to="registered">Registered Post</Link>
-                <Link to="normal">Normal Post</Link>
-                <Link to="byhand">By Hand</Link>
+                <Link to="registered">{t("receivingPage.registeredPost")}</Link>
+                <Link to="normal">{t("receivingPage.normalPost")}</Link>
+                <Link to="byhand">{t("receivingPage.byHand")}</Link>
             </div>
 
             <Outlet />

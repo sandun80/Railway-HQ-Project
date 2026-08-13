@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import "../styles/sendingForms.css";
 import axios from "axios";
 
 function NormalLetter() {
+    const { t } = useTranslation();
     const today = new Date().toISOString().split("T")[0];
 
     const [formData, setFormData] = useState({
@@ -100,12 +102,12 @@ function NormalLetter() {
 
     return (
         <section className="letter-form-section">
-            <h3>Normal Post - Sending Register</h3>
+            <h3>{t("normalLetter.heading")}</h3>
             <div className="form-preview-layout">
                 <form className="letter-form" onSubmit={handleSubmit}>
                     <div className="form-grid">
                         <div className="field-group">
-                            <label htmlFor="normal-letter-number">Letter Number</label>
+                            <label htmlFor="normal-letter-number">{t("normalLetter.letterNumber")}</label>
                             <input
                                 id="normal-letter-number"
                                 name="letterNumber"
@@ -117,7 +119,7 @@ function NormalLetter() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="reg-date">Date</label>
+                            <label htmlFor="reg-date">{t("normalLetter.date")}</label>
                             <input
                                 id="normal-letter-date"
                                 name="letterDate"
@@ -129,7 +131,7 @@ function NormalLetter() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="normal-letter-title">Letter Title</label>
+                            <label htmlFor="normal-letter-title">{t("normalLetter.letterTitle")}</label>
                             <input
                                 id="normal-letter-title"
                                 name="letterTitle"
@@ -141,7 +143,7 @@ function NormalLetter() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="normal-destination">Destination</label>
+                            <label htmlFor="normal-destination">{t("normalLetter.destination")}</label>
                             <select
                                 id="normal-destination"
                                 name="destination"
@@ -149,7 +151,7 @@ function NormalLetter() {
                                 onChange={handleChange}
                                 required
                             >
-                                <option value="">Select a role</option>
+                                <option value="">{t("normalLetter.selectRole")}</option>
 
                                 {departmentRoles.map((role) => (
                                     <option key={role._id} value={role.name}>
@@ -160,7 +162,7 @@ function NormalLetter() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="normal-pdf-upload">Upload Letter PDF</label>
+                            <label htmlFor="normal-pdf-upload">{t("normalLetter.uploadPdf")}</label>
                             <input
                                 id="normal-pdf-upload"
                                 name="pdfUpload"
@@ -171,13 +173,13 @@ function NormalLetter() {
                         </div>
                     </div>
 
-                    <button type="submit">Save Normal Sending Entry</button>
+                    <button type="submit">{t("normalLetter.saveEntry")}</button>
                 </form>
 
                 <aside className="pdf-preview-panel" aria-label="Normal PDF preview">
 
                     <div className="field-group">
-                            <label htmlFor="reg-current-date">Current Date</label>
+                            <label htmlFor="reg-current-date">{t("normalLetter.currentDate")}</label>
                             <input 
                                 className="current-date"
                                 name="current-date"
@@ -186,11 +188,11 @@ function NormalLetter() {
                             />
                     </div>
 
-                    <h4>PDF Preview</h4>
+                    <h4>{t("normalLetter.pdfPreview")}</h4>
                     {pdfPreviewUrl ? (
                         <iframe title="Normal sending PDF preview" src={pdfPreviewUrl} />
                     ) : (
-                        <p>No PDF selected.</p>
+                        <p>{t("normalLetter.noPdfSelected")}</p>
                     )}
                 </aside>
             </div>

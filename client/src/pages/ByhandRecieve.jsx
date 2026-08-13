@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import "../styles/receivingForms.css";
 import axios from "axios";
 
 function ByhandReceive() {
+    const { t } = useTranslation();
     const specialRegisterOptions = [
         { key: "publicAdministration", label: "Ministry of Public Administration" },
         { key: "transportMinistry", label: "Transport Ministry" },
@@ -209,12 +211,12 @@ function ByhandReceive() {
 
     return (
         <section className="letter-form-section receiving-section">
-            <h3>By Hand - Subject / Direct Officer Register</h3>
+            <h3>{t("byhandReceive.heading")}</h3>
             <div className="form-preview-layout">
                 <form className="letter-form" onSubmit={handleRoutingSubmit}>
                     <div className="form-grid">
                         <div className="field-group">
-                            <label htmlFor="rec-byhand-number">Letter Number</label>
+                            <label htmlFor="rec-byhand-number">{t("byhandReceive.letterNumber")}</label>
                             <input
                                 id="rec-byhand-number"
                                 name="letterNumber"
@@ -226,7 +228,7 @@ function ByhandReceive() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="reg-date">Date</label>
+                            <label htmlFor="reg-date">{t("byhandReceive.date")}</label>
                             <input
                                 id="recieveByhand-letter-date"
                                 name="letterDate"
@@ -239,7 +241,7 @@ function ByhandReceive() {
 
 
                         <div className="field-group">
-                            <label htmlFor="rec-byhand-title">Letter Title</label>
+                            <label htmlFor="rec-byhand-title">{t("byhandReceive.letterTitle")}</label>
                             <input
                                 id="rec-byhand-title"
                                 name="letterTitle"
@@ -252,7 +254,7 @@ function ByhandReceive() {
 
                         <div className="field-group">
                             <label htmlFor="rec-byhand-subject-officer">
-                                Department
+                                {t("byhandReceive.department")}
                             </label>
                             <select
                                 id="rec-byhand-subject-officer"
@@ -261,7 +263,7 @@ function ByhandReceive() {
                                 onChange={handleRoutingChange}
                                 required
                             >
-                                <option value="">Select department</option>
+                                <option value="">{t("byhandReceive.selectDepartment")}</option>
                                 {departments.map((department) => (
                                     <option key={department._id} value={department.name}>
                                         {department.name}
@@ -271,7 +273,7 @@ function ByhandReceive() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="rec-byhand-subject">Subject</label>
+                            <label htmlFor="rec-byhand-subject">{t("byhandReceive.subject")}</label>
                             <select
                                 id="rec-byhand-subject"
                                 name="subject"
@@ -279,7 +281,7 @@ function ByhandReceive() {
                                 onChange={handleRoutingChange}
                                 required
                             >
-                                <option value="">Select role</option>
+                                <option value="">{t("byhandReceive.selectRole")}</option>
                                 {departmentRoles.map((role) => (
                                     <option key={role._id} value={role.name}>
                                         {role.name}
@@ -289,7 +291,7 @@ function ByhandReceive() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="rec-byhand-pdf-upload">Upload Letter PDF</label>
+                            <label htmlFor="rec-byhand-pdf-upload">{t("byhandReceive.uploadPdf")}</label>
                             <input
                                 id="rec-byhand-pdf-upload"
                                 name="pdfUpload"
@@ -300,12 +302,12 @@ function ByhandReceive() {
                         </div>
                     </div>
 
-                    <button type="submit">Save By-Hand Routing Entry</button>
+                    <button type="submit">{t("byhandReceive.saveEntry")}</button>
                 </form>
 
                 <aside className="pdf-preview-panel" aria-label="By-hand receive routing PDF preview">
                      <div className="field-group">
-                            <label htmlFor="reg-current-date">Current Date</label>
+                            <label htmlFor="reg-current-date">{t("byhandReceive.currentDate")}</label>
                             <input 
                                 className="current-date"
                                 name="current-date"
@@ -314,16 +316,16 @@ function ByhandReceive() {
                             />
                     </div>
 
-                    <h4>PDF Preview</h4>
+                    <h4>{t("byhandReceive.pdfPreview")}</h4>
                     {routingPdfPreviewUrl ? (
                         <iframe title="By-hand receiving routing PDF preview" src={routingPdfPreviewUrl} />
                     ) : (
-                        <p>No PDF selected.</p>
+                        <p>{t("byhandReceive.noPdfSelected")}</p>
                     )}
                 </aside>
             </div>
 
-            <h3 className="secondary-heading">Special By-Hand Registers</h3>
+            <h3 className="secondary-heading">{t("byhandReceive.specialRegistersHeading")}</h3>
             <div className="special-switch-group" role="tablist" aria-label="Special register switch">
                 {specialRegisterOptions.map((option) => (
                     <button
@@ -343,7 +345,7 @@ function ByhandReceive() {
             <div className="form-preview-layout">
                 <form className="letter-form" onSubmit={handleSpecialSubmit}>
                     <p className="special-register-title">
-                        Active Register: {
+                        {t("byhandReceive.activeRegister")} {
                             specialRegisterOptions.find(
                                 (option) => option.key === activeSpecialRegister
                             )?.label
@@ -351,7 +353,7 @@ function ByhandReceive() {
                     </p>
                     <div className="form-grid">
                         <div className="field-group">
-                            <label htmlFor="special-date-received">Date Received</label>
+                            <label htmlFor="special-date-received">{t("byhandReceive.dateReceived")}</label>
                             <input
                                 id="special-date-received"
                                 name="dateReceived"
@@ -363,7 +365,7 @@ function ByhandReceive() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="special-letter-number">Letter Number</label>
+                            <label htmlFor="special-letter-number">{t("byhandReceive.letterNumber")}</label>
                             <input
                                 id="special-letter-number"
                                 name="letterNumber"
@@ -387,7 +389,7 @@ function ByhandReceive() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="special-letter-title">Letter Title</label>
+                            <label htmlFor="special-letter-title">{t("byhandReceive.letterTitle")}</label>
                             <input
                                 id="special-letter-title"
                                 name="letterTitle"
@@ -399,7 +401,7 @@ function ByhandReceive() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="special-destination">Destination</label>
+                            <label htmlFor="special-destination">{t("byhandReceive.destination")}</label>
                             <input
                                 id="special-destination"
                                 name="destination"
@@ -411,7 +413,7 @@ function ByhandReceive() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="special-person">Person Receiving the Letter</label>
+                            <label htmlFor="special-person">{t("byhandReceive.personReceiving")}</label>
                             <input
                                 id="special-person"
                                 name="personReceivingLetter"
@@ -423,7 +425,7 @@ function ByhandReceive() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="special-office">Receiving Office</label>
+                            <label htmlFor="special-office">{t("byhandReceive.receivingOffice")}</label>
                             <input
                                 id="special-office"
                                 name="receivingOffice"
@@ -435,7 +437,7 @@ function ByhandReceive() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="special-byhand-pdf-upload">Upload Letter PDF</label>
+                            <label htmlFor="special-byhand-pdf-upload">{t("byhandReceive.uploadPdf")}</label>
                             <input
                                 id="special-byhand-pdf-upload"
                                 name="pdfUpload"
@@ -446,12 +448,12 @@ function ByhandReceive() {
                         </div>
                     </div>
 
-                    <button type="submit">Save Special By-Hand Entry</button>
+                    <button type="submit">{t("byhandReceive.saveSpecialEntry")}</button>
                 </form>
 
                 <aside className="pdf-preview-panel" aria-label="Special by-hand PDF preview">
                     <div className="field-group">
-                            <label htmlFor="reg-current-date">Current Date</label>
+                            <label htmlFor="reg-current-date">{t("byhandReceive.currentDate")}</label>
                             <input 
                                 className="current-date"
                                 name="current-date"
@@ -460,11 +462,11 @@ function ByhandReceive() {
                             />
                     </div>
                     
-                    <h4>PDF Preview</h4>
+                    <h4>{t("byhandReceive.pdfPreview")}</h4>
                     {activeSpecialPreviewUrl ? (
                         <iframe title="Special by-hand PDF preview" src={activeSpecialPreviewUrl} />
                     ) : (
-                        <p>No PDF selected.</p>
+                        <p>{t("byhandReceive.noPdfSelected")}</p>
                     )}
                 </aside>
             </div>

@@ -1,10 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import "../styles/Sidebar.css";
 
 function Sidebar() {
 
     const [lettersOpen, setLettersOpen] = useState(false);
+    const { t } = useTranslation();
 
     const navigate = useNavigate();
 
@@ -28,7 +30,7 @@ function Sidebar() {
             {role === "officer" && (
                 <>
                     <Link to="/dashboard">
-                        Dashboard
+                        {t("navbar.dashboard")}
                     </Link>
 
                     {/* Letters Dropdown */}
@@ -40,7 +42,7 @@ function Sidebar() {
                                 setLettersOpen(!lettersOpen)
                             }
                         >
-                            Letters
+                            {t("navbar.letters")}
 
                             <span>
                                 {lettersOpen ? "▲" : "▼"}
@@ -51,11 +53,11 @@ function Sidebar() {
                             <div className="dropdown-menu">
 
                                 <Link to="/letters/sending">
-                                    Sending
+                                    {t("navbar.sending")}
                                 </Link>
 
                                 <Link to="/letters/receiving">
-                                    Receiving
+                                    {t("navbar.receiving")}
                                 </Link>
 
                             </div>
@@ -64,11 +66,11 @@ function Sidebar() {
                     </div>
 
                     <Link to="/reports">
-                        Reports
+                        {t("navbar.reports")}
                     </Link>
 
                     <Link to="/allletters">
-                        All Letters
+                        {t("navbar.allLetters")}
                     </Link>
                 </>
             )}
@@ -77,11 +79,11 @@ function Sidebar() {
             {role === "admin" && (
                 <>
                     <Link to="/admin">
-                        Admin Portal
+                        {t("navbar.adminPortal")}
                     </Link>
 
                     <Link to= "/userlist">
-                        User Management
+                        {t("navbar.userManagement")}
                     </Link>
                 </>
             )}
@@ -90,11 +92,11 @@ function Sidebar() {
             {role === "viewer" && (
                 <>
                     <Link to="/dashboard">
-                        Dashboard
+                        {t("navbar.dashboard")}
                     </Link>
                     
                     <Link to="/allletters">
-                        All Letters
+                        {t("navbar.allLetters")}
                     </Link>
                 </>
             )}
@@ -103,7 +105,7 @@ function Sidebar() {
             {role === "replyperson" && (
                 <>
                     <Link to="/inbox">
-                        Inbox
+                        {t("navbar.inbox")}
                     </Link>
                 </>
             )}
@@ -114,7 +116,7 @@ function Sidebar() {
                 id="logout-btn"
                 onClick={clearTokens}
             >
-                Logout
+                {t("common.logout")}
             </button>
 
         </aside>

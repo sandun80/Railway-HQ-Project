@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import "../styles/sendingForms.css";
 import axios from "axios";
 
 function Byhand() {
+    const { t } = useTranslation();
 
     const today = new Date().toISOString().split("T")[0];
 
@@ -211,12 +213,12 @@ function Byhand() {
 
     return (
         <section className="letter-form-section">
-            <h3>By Hand - Routing Register</h3>
+            <h3>{t("byhandLetter.heading")}</h3>
             <div className="form-preview-layout">
                 <form className="letter-form" onSubmit={handleSubmit}>
                     <div className="form-grid">
                         <div className="field-group">
-                            <label htmlFor="byhand-letter-number">Letter Number</label>
+                            <label htmlFor="byhand-letter-number">{t("byhandLetter.letterNumber")}</label>
                             <input
                                 id="byhand-letter-number"
                                 name="letterNumber"
@@ -228,7 +230,7 @@ function Byhand() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="reg-date">Date</label>
+                            <label htmlFor="reg-date">{t("byhandLetter.date")}</label>
                             <input
                                 id="byhand-letter-date"
                                 name="letterDate"
@@ -241,7 +243,7 @@ function Byhand() {
 
 
                         <div className="field-group">
-                            <label htmlFor="byhand-letter-title">Letter Title</label>
+                            <label htmlFor="byhand-letter-title">{t("byhandLetter.letterTitle")}</label>
                             <input
                                 id="byhand-letter-title"
                                 name="letterTitle"
@@ -254,7 +256,7 @@ function Byhand() {
                         
                         <div className="field-group">
                             <label htmlFor="subject-officer-name">
-                                Department
+                                {t("byhandLetter.department")}
                             </label>
                             <select
                                 id="subject-officer-name"
@@ -263,7 +265,7 @@ function Byhand() {
                                 onChange={handleChange}
                                 required
                             >
-                                <option value="">Select department</option>
+                                <option value="">{t("byhandLetter.selectDepartment")}</option>
                                 {departments.map((department) => (
                                     <option key={department._id} value={department.name}>
                                         {department.name}
@@ -273,7 +275,7 @@ function Byhand() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="byhand-subject">Subject</label>
+                            <label htmlFor="byhand-subject">{t("byhandLetter.subject")}</label>
                             <select
                                 id="byhand-subject"
                                 name="subject"
@@ -281,7 +283,7 @@ function Byhand() {
                                 onChange={handleChange}
                                 required
                             >
-                                <option value="">Select role</option>
+                                <option value="">{t("byhandLetter.selectRole")}</option>
                                 {departmentRoles.map((role) => (
                                     <option key={role._id} value={role.name}>
                                         {role.name}
@@ -291,7 +293,7 @@ function Byhand() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="byhand-pdf-upload">Upload Letter PDF</label>
+                            <label htmlFor="byhand-pdf-upload">{t("byhandLetter.uploadPdf")}</label>
                             <input
                                 id="byhand-pdf-upload"
                                 name="pdfUpload"
@@ -302,13 +304,13 @@ function Byhand() {
                         </div>
                     </div>
 
-                    <button type="submit">Save By-Hand Routing Entry</button>
+                    <button type="submit">{t("byhandLetter.saveEntry")}</button>
                 </form>
 
                 <aside className="pdf-preview-panel" aria-label="By-hand PDF preview">
 
                     <div className="field-group">
-                            <label htmlFor="reg-current-date">Current Date</label>
+                            <label htmlFor="reg-current-date">{t("byhandLetter.currentDate")}</label>
                             <input 
                                 className="current-date"
                                 name="current-date"
@@ -317,16 +319,16 @@ function Byhand() {
                             />
                     </div>
 
-                    <h4>PDF Preview</h4>
+                    <h4>{t("byhandLetter.pdfPreview")}</h4>
                     {pdfPreviewUrl ? (
                         <iframe title="By-hand sending PDF preview" src={pdfPreviewUrl} />
                     ) : (
-                        <p>No PDF selected.</p>
+                        <p>{t("byhandLetter.noPdfSelected")}</p>
                     )}
                 </aside>
             </div>
 
-            <h3 className="secondary-heading">Special By-Hand Registers</h3>
+            <h3 className="secondary-heading">{t("byhandLetter.specialRegistersHeading")}</h3>
             <div className="special-switch-group" role="tablist" aria-label="Special register switch">
                 {specialRegisterOptions.map((option) => (
                     <button
@@ -347,7 +349,7 @@ function Byhand() {
             <div className="form-preview-layout">
                 <form className="letter-form" onSubmit={handleSpecialSubmit}>
                     <p className="special-register-title">
-                        Active Register: {
+                        {t("byhandLetter.activeRegister")} {
                             specialRegisterOptions.find(
                                 (option) => option.key === activeSpecialRegister
                             )?.label
@@ -356,7 +358,7 @@ function Byhand() {
 
                     <div className="form-grid">
                         <div className="field-group">
-                            <label htmlFor="special-date-received">Date Received</label>
+                            <label htmlFor="special-date-received">{t("byhandLetter.dateReceived")}</label>
                             <input
                                 id="special-date-received"
                                 name="dateReceived"
@@ -368,7 +370,7 @@ function Byhand() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="special-letter-number">Letter Number</label>
+                            <label htmlFor="special-letter-number">{t("byhandLetter.letterNumber")}</label>
                             <input
                                 id="special-letter-number"
                                 name="letterNumber"
@@ -380,7 +382,7 @@ function Byhand() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="special-letter-date">Date</label>
+                            <label htmlFor="special-letter-date">{t("byhandLetter.date")}</label>
                             <input
                                 id="special-letter-date"
                                 name="letterDate"
@@ -392,7 +394,7 @@ function Byhand() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="special-letter-title">Letter Title</label>
+                            <label htmlFor="special-letter-title">{t("byhandLetter.letterTitle")}</label>
                             <input
                                 id="special-letter-title"
                                 name="letterTitle"
@@ -404,7 +406,7 @@ function Byhand() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="special-destination">Destination</label>
+                            <label htmlFor="special-destination">{t("byhandLetter.destination")}</label>
                             <input
                                 id="special-destination"
                                 name="destination"
@@ -416,7 +418,7 @@ function Byhand() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="special-person">Person Receiving the Letter</label>
+                            <label htmlFor="special-person">{t("byhandLetter.personReceiving")}</label>
                             <input
                                 id="special-person"
                                 name="personReceivingLetter"
@@ -428,7 +430,7 @@ function Byhand() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="special-office">Receiving Office</label>
+                            <label htmlFor="special-office">{t("byhandLetter.receivingOffice")}</label>
                             <input
                                 id="special-office"
                                 name="receivingOffice"
@@ -440,7 +442,7 @@ function Byhand() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="special-byhand-pdf-upload">Upload Letter PDF</label>
+                            <label htmlFor="special-byhand-pdf-upload">{t("byhandLetter.uploadPdf")}</label>
                             <input
                                 id="special-byhand-pdf-upload"
                                 name="pdfUpload"
@@ -452,16 +454,16 @@ function Byhand() {
                     </div>
 
                     <div className="form-actions">
-                        <button type="submit">Save Special By-Hand Entry</button>
+                        <button type="submit">{t("byhandLetter.saveSpecialEntry")}</button>
                     </div>
                 </form>
 
                 <aside className="pdf-preview-panel" aria-label="Special by-hand PDF preview">
-                    <h4>PDF Preview</h4>
+                    <h4>{t("byhandLetter.pdfPreview")}</h4>
                     {activeSpecialPreviewUrl ? (
                         <iframe title="Special by-hand PDF preview" src={activeSpecialPreviewUrl} />
                     ) : (
-                        <p>No PDF selected.</p>
+                        <p>{t("byhandLetter.noPdfSelected")}</p>
                     )}
                 </aside>
             </div>

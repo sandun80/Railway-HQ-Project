@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import "../styles/replyDashboard.css";
 
 function ReplayDashboard() {
+    const { t } = useTranslation();
     const user = JSON.parse(localStorage.getItem("user"));
     const role = user?.role;
 
@@ -118,8 +120,8 @@ function ReplayDashboard() {
                 <aside className="inbox-sidebar">
                     <div className="sidebar-header">
                         <div>
-                            <p className="eyebrow">Inbox</p>
-                            <h2>Your Mails</h2>
+                            <p className="eyebrow">{t("replayDashboard.inbox")}</p>
+                            <h2>{t("replayDashboard.yourMails")}</h2>
                         </div>
                         <span className="sidebar-badge">{letters.length}</span>
                     </div>
@@ -129,10 +131,10 @@ function ReplayDashboard() {
                             type="text"
                             value={searchTerm}
                             onChange={(event) => setSearchTerm(event.target.value)}
-                            placeholder="Search by letter no."
+                            placeholder={t("replayDashboard.searchPlaceholder")}
                             aria-label="Search letter by number"
                         />
-                        <button type="button">Search</button>
+                        <button type="button">{t("replayDashboard.search")}</button>
                     </div>
 
                     <div className="inbox-list">
@@ -156,7 +158,7 @@ function ReplayDashboard() {
                         ))}
 
                         {filteredLetters.length === 0 && (
-                            <p className="empty-state">No letters found.</p>
+                            <p className="empty-state">{t("replayDashboard.noLetters")}</p>
                         )}
                     </div>
                 </aside>
@@ -166,7 +168,7 @@ function ReplayDashboard() {
                         <>
                             <div className="letter-header-card">
                                 <div>
-                                    <p className="eyebrow">Letter details</p>
+                                    <p className="eyebrow">{t("replayDashboard.letterDetails")}</p>
                                     <h3>{selectedLetter.title}</h3>
                                 </div>
                                 <div className="status-group">
@@ -176,33 +178,33 @@ function ReplayDashboard() {
 
                             <div className="detail-grid">
                                 <div className="detail-card">
-                                    <label>From</label>
+                                    <label>{t("replayDashboard.from")}</label>
                                     <p>{selectedLetter.sender || "-"}</p>
                                 </div>
                                 <div className="detail-card">
-                                    <label>Letter No.</label>
+                                    <label>{t("replayDashboard.letterNo")}</label>
                                     <p>{selectedLetter.letterNumber}</p>
                                 </div>
                                 <div className="detail-card">
-                                    <label>Category</label>
+                                    <label>{t("replayDashboard.category")}</label>
                                     <p>{selectedLetter.category || "-"}</p>
                                 </div>
                                 <div className="detail-card">
-                                    <label>Flow</label>
+                                    <label>{t("replayDashboard.flow")}</label>
                                     <p>{selectedLetter.flow || "-"}</p>
                                 </div>
                                 <div className="detail-card">
-                                    <label>Received</label>
+                                    <label>{t("replayDashboard.received")}</label>
                                     <p>{formatDate(selectedLetter.letterDate)}</p>
                                 </div>
                                 <div className="detail-card">
-                                    <label>Attachment</label>
-                                    <p>{selectedLetter.pdf ? "PDF available" : "No PDF"}</p>
+                                    <label>{t("replayDashboard.attachment")}</label>
+                                    <p>{selectedLetter.pdf ? t("replayDashboard.pdfAvailable") : t("replayDashboard.noPdf")}</p>
                                 </div>
                             </div>
 
                             <div className="summary-card">
-                                <label>Subject / Department / Officer</label>
+                                <label>{t("replayDashboard.subjectDeptOfficer")}</label>
                                 <p>{selectedLetter.subject_department_or_officer || "-"}</p>
                             </div>
 
@@ -214,20 +216,20 @@ function ReplayDashboard() {
                                         rel="noreferrer"
                                         className="primary-link-btn"
                                     >
-                                        Open PDF
+                                        {t("replayDashboard.openPdf")}
                                     </a>
                                 )}
                             </div>
 
                             <div className="reply-panel">
                                 <div className="reply-header-row">
-                                    <h4>Reply to letter</h4>
-                                    {selectedLetter.status === "Replied" && <span className="draft-indicator">Already replied</span>}
+                                    <h4>{t("replayDashboard.replyToLetter")}</h4>
+                                    {selectedLetter.status === "Replied" && <span className="draft-indicator">{t("replayDashboard.alreadyReplied")}</span>}
                                 </div>
 
                                 {selectedLetter.reply && (
                                     <div className="summary-card">
-                                        <label>Current reply</label>
+                                        <label>{t("replayDashboard.currentReply")}</label>
                                         <p>{selectedLetter.reply}</p>
                                     </div>
                                 )}
@@ -235,7 +237,7 @@ function ReplayDashboard() {
                                 <textarea
                                     value={replyText}
                                     onChange={(event) => setReplyText(event.target.value)}
-                                    placeholder="Write your response here..."
+                                    placeholder={t("replayDashboard.replyPlaceholder")}
                                 />
 
                                 <div className="reply-footer-row">
@@ -245,7 +247,7 @@ function ReplayDashboard() {
                                             accept="application/pdf"
                                             onChange={(event) => setReplyFile(event.target.files?.[0] || null)}
                                         />
-                                        <span>{replyFile ? `Attached: ${replyFile.name}` : "Attach PDF"}</span>
+                                        <span>{replyFile ? `${replyFile.name}` : t("replayDashboard.attachPdf")}</span>
                                     </label>
 
                                     <div className="reply-actions">
@@ -255,14 +257,14 @@ function ReplayDashboard() {
                                             onClick={handleSendReply}
                                             disabled={isSending}
                                         >
-                                            {isSending ? "Sending..." : "Send reply"}
+                                            {isSending ? t("replayDashboard.sending") : t("replayDashboard.sendReply")}
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </>
                     ) : (
-                        <div className="empty-state">No letter selected.</div>
+                        <div className="empty-state">{t("replayDashboard.noLetterSelected")}</div>
                     )}
                 </main>
             </div>

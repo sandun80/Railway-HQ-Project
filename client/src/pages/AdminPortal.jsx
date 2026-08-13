@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import "../styles/adminPortal.css";
 
 function AdminPortal() {
+    const { t } = useTranslation();
 
     const [formData, setFormData] = useState({
         username: "",
@@ -268,9 +270,9 @@ function AdminPortal() {
     return (
         <section>
 
-            <h1>Admin Portal</h1>
+            <h1>{t("adminPortal.title")}</h1>
 
-            <h2>Create User</h2>
+            <h2>{t("adminPortal.createUser")}</h2>
 
             {message && (
                 <p>{message}</p>
@@ -283,33 +285,33 @@ function AdminPortal() {
             <form onSubmit={handleSubmit}>
 
                 <div>
-                    <label>Username</label>
+                    <label>{t("adminPortal.username")}</label>
 
                     <input
                         type="text"
                         name="username"
                         value={formData.username}
                         onChange={handleChange}
-                        placeholder="Enter username"
+                        placeholder={t("adminPortal.usernamePlaceholder")}
                         required
                     />
                 </div>
 
                 <div>
-                    <label>Password</label>
+                    <label>{t("adminPortal.password")}</label>
 
                     <input
                         type="password"
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
-                        placeholder="Enter password"
+                        placeholder={t("adminPortal.passwordPlaceholder")}
                         required
                     />
                 </div>
 
                 <div>
-                    <label>Create Role</label>
+                    <label>{t("adminPortal.createRole")}</label>
 
                     <div className="role-create-container">
 
@@ -317,21 +319,21 @@ function AdminPortal() {
                             type="text"
                             value={newRole}
                             onChange={(e) => setNewRole(e.target.value)}
-                            placeholder="Enter new role"
+                            placeholder={t("adminPortal.enterNewRole")}
                         />
 
                         <button
                             type="button"
                             onClick={handleCreateRole}
                         >
-                            Add Role
+                            {t("adminPortal.addRole")}
                         </button>
 
                     </div>
                 </div>
 
                 <div>
-                    <label>Create Department</label>
+                    <label>{t("adminPortal.createDepartment")}</label>
 
                     <div className="role-create-container">
 
@@ -339,21 +341,21 @@ function AdminPortal() {
                             type="text"
                             value={newDepartment}
                             onChange={(e) => setNewDepartment(e.target.value)}
-                            placeholder="Enter new department"
+                            placeholder={t("adminPortal.enterNewDepartment")}
                         />
 
                         <button
                             type="button"
                             onClick={handleCreateDepartment}
                         >
-                            Add Department
+                            {t("adminPortal.addDepartment")}
                         </button>
 
                     </div>
                 </div>
 
                 <div>
-                    <label>Role</label>
+                    <label>{t("adminPortal.role")}</label>
 
                     <select
                         name="role"
@@ -363,7 +365,7 @@ function AdminPortal() {
                     >
 
                         <option value="">
-                            Select Role
+                            {t("adminPortal.selectRole")}
                         </option>
 
                         {roles.map((role) => (
@@ -379,13 +381,13 @@ function AdminPortal() {
                 </div>
 
                 <button type="submit">
-                    Create User
+                    {t("adminPortal.createUserBtn")}
                 </button>
 
             </form>
 
             <div className="role-list-section">
-                <h3>Manage Roles</h3>
+                <h3>{t("adminPortal.manageRoles")}</h3>
 
                 <div className="role-list">
                     {roles.map((role) => (
@@ -398,7 +400,7 @@ function AdminPortal() {
                                     className="edit-role-btn"
                                     onClick={() => handleEditRole(role)}
                                 >
-                                    Edit
+                                    {t("common.edit")}
                                 </button>
 
                                 <button
@@ -406,7 +408,7 @@ function AdminPortal() {
                                     className="delete-role-btn"
                                     onClick={() => handleDeleteRole(role._id)}
                                 >
-                                    Delete
+                                    {t("common.delete")}
                                 </button>
                             </div>
                         </div>
@@ -415,7 +417,7 @@ function AdminPortal() {
             </div>
 
             <div className="role-list-section">
-                <h3>Manage Departments</h3>
+                <h3>{t("adminPortal.manageDepartments")}</h3>
 
                 <div className="role-list">
                     {departments.map((department) => (
@@ -428,7 +430,7 @@ function AdminPortal() {
                                     className="edit-role-btn"
                                     onClick={() => handleEditDepartment(department)}
                                 >
-                                    Edit
+                                    {t("common.edit")}
                                 </button>
 
                                 <button
@@ -436,7 +438,7 @@ function AdminPortal() {
                                     className="delete-role-btn"
                                     onClick={() => handleDeleteDepartment(department._id)}
                                 >
-                                    Delete
+                                    {t("common.delete")}
                                 </button>
                             </div>
                         </div>
@@ -448,12 +450,12 @@ function AdminPortal() {
                 <div className="edit-role-modal">
                     <div className="edit-role-card">
                         <div className="modal-header">
-                            <h3>Edit Role</h3>
+                            <h3>{t("adminPortal.editRole")}</h3>
                             <button type="button" className="close-modal-btn" onClick={() => setEditingRole(null)}>×</button>
                         </div>
 
                         <div className="edit-role-field">
-                            <label>Role Name</label>
+                            <label>{t("adminPortal.roleName")}</label>
                             <input
                                 type="text"
                                 value={editingRole.name}
@@ -462,8 +464,8 @@ function AdminPortal() {
                         </div>
 
                         <div className="modal-actions">
-                            <button type="button" className="cancel-btn" onClick={() => setEditingRole(null)}>Cancel</button>
-                            <button type="button" className="save-user-btn" onClick={handleUpdateRole}>Save</button>
+                            <button type="button" className="cancel-btn" onClick={() => setEditingRole(null)}>{t("common.cancel") || "Cancel"}</button>
+                            <button type="button" className="save-user-btn" onClick={handleUpdateRole}>{t("common.save") || "Save"}</button>
                         </div>
                     </div>
                 </div>
@@ -473,12 +475,12 @@ function AdminPortal() {
                 <div className="edit-role-modal">
                     <div className="edit-role-card">
                         <div className="modal-header">
-                            <h3>Edit Department</h3>
+                            <h3>{t("adminPortal.editDepartment")}</h3>
                             <button type="button" className="close-modal-btn" onClick={() => setEditingDepartment(null)}>×</button>
                         </div>
 
                         <div className="edit-role-field">
-                            <label>Department Name</label>
+                            <label>{t("adminPortal.departmentName")}</label>
                             <input
                                 type="text"
                                 value={editingDepartment.name}
@@ -487,8 +489,8 @@ function AdminPortal() {
                         </div>
 
                         <div className="modal-actions">
-                            <button type="button" className="cancel-btn" onClick={() => setEditingDepartment(null)}>Cancel</button>
-                            <button type="button" className="save-user-btn" onClick={handleUpdateDepartment}>Save</button>
+                            <button type="button" className="cancel-btn" onClick={() => setEditingDepartment(null)}>{t("common.cancel") || "Cancel"}</button>
+                            <button type="button" className="save-user-btn" onClick={handleUpdateDepartment}>{t("common.save") || "Save"}</button>
                         </div>
                     </div>
                 </div>

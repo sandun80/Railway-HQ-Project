@@ -1,14 +1,21 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import logo from "../assets/logo.png";
 import "../styles/Navbar.css";
 
 function Navbar() {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const [lettersOpen, setLettersOpen] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const role = user?.role || "officer";
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+    localStorage.setItem("language", lng);
+  };
 
   const clearTokens = () => {
     localStorage.setItem("isLoggedIn", "false");
@@ -21,30 +28,30 @@ function Navbar() {
   const getMenuItems = () => {
     if (role === "admin") {
       return [
-        { label: "Admin Portal", to: "/admin" },
-        { label: "User Management", to: "/userlist" }
+        { label: t("navbar.adminPortal"), to: "/admin" },
+        { label: t("navbar.userManagement"), to: "/userlist" }
       ];
     }
 
     if (role === "viewer") {
-      return [{ label: "All Letters", to: "/allletters" }];
+      return [{ label: t("navbar.allLetters"), to: "/allletters" }];
     }
 
     if (role === "replyperson") {
-      return [{ label: "Inbox", to: "/inbox" }];
+      return [{ label: t("navbar.inbox"), to: "/inbox" }];
     }
 
     return [
-      { label: "Dashboard", to: "/dashboard" },
+      { label: t("navbar.dashboard"), to: "/dashboard" },
       {
-        label: "Letters",
+        label: t("navbar.letters"),
         children: [
-          { label: "Sending", to: "/letters/sending" },
-          { label: "Receiving", to: "/letters/receiving" }
+          { label: t("navbar.sending"), to: "/letters/sending" },
+          { label: t("navbar.receiving"), to: "/letters/receiving" }
         ]
       },
-      { label: "Reports", to: "/reports" },
-      { label: "All Letters", to: "/allletters" }
+      { label: t("navbar.reports"), to: "/reports" },
+      { label: t("navbar.allLetters"), to: "/allletters" }
     ];
   };
 
@@ -57,16 +64,30 @@ function Navbar() {
           <img src={logo} alt="Sri Lanka Railways Logo" className="navbar-logo" />
 
           <div className="navbar-title">
-            <h2>Sri Lanka Railways</h2>
-            <p>Official Document Management System</p>
+            <h2>{t("navbar.orgName")}</h2>
+            <p>{t("navbar.orgTagline")}</p>
           </div>
         </div>
 
         <div className="brand-tools">
           <div className="gov-links">
-            <span className="lang-toggle">English</span>
-            <span className="lang-toggle">Sinhala</span>
-            <span className="lang-toggle">Tamil</span>
+            <span
+              className={`lang-toggle ${i18n.language === "en" ? "active-lang" : ""}`}
+              onClick={() => changeLanguage("en")}
+              role="button"
+              tabIndex={0}
+            >
+              {t("navbar.english")}
+            </span>
+            <span
+              className={`lang-toggle ${i18n.language === "si" ? "active-lang" : ""}`}
+              onClick={() => changeLanguage("si")}
+              role="button"
+              tabIndex={0}
+            >
+              {t("navbar.sinhala")}
+            </span>
+            <span className="lang-toggle">{t("navbar.tamil")}</span>
           </div>
         </div>
       </div>
@@ -102,7 +123,7 @@ function Navbar() {
         )}
 
         <button type="button" className="nav-logout" onClick={clearTokens}>
-          Logout
+          {t("common.logout")}
         </button>
       </div>
     </nav>

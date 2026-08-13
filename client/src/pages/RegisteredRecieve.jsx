@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import "../styles/receivingForms.css";
 import axios from "axios";
 
 function RegisteredRecieve() {
+    const { t } = useTranslation();
 
     const today = new Date().toISOString().split("T")[0];
 
@@ -78,14 +80,14 @@ function RegisteredRecieve() {
 
     return (
         <section className="letter-form-section receiving-section">
-            <h3>Registered Post - Receiving Register</h3>
+            <h3>{t("registeredReceive.heading")}</h3>
             <div className="form-preview-layout">
                 <form className="letter-form" onSubmit={handleSubmit}>
                     <div className="form-grid">
                         <div className="field-group">
 
                             <div className="field-group">
-                            <label htmlFor="rec-reg-number">Letter Number</label>
+                            <label htmlFor="rec-reg-number">{t("registeredReceive.letterNumber")}</label>
                             <input
                                 id="rec-reg-letter-number"
                                 name="letterNumber"
@@ -96,7 +98,7 @@ function RegisteredRecieve() {
                             />
                         </div>
 
-                            <label htmlFor="rec-reg-sender">Sender</label>
+                            <label htmlFor="rec-reg-sender">{t("registeredReceive.sender")}</label>
                             <input
                                 id="rec-reg-sender"
                                 name="sender"
@@ -108,7 +110,7 @@ function RegisteredRecieve() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="reg-date">Date</label>
+                            <label htmlFor="reg-date">{t("registeredReceive.date")}</label>
                             <input
                                 id="recieveReg-letter-date"
                                 name="letterDate"
@@ -121,7 +123,7 @@ function RegisteredRecieve() {
 
 
                         <div className="field-group">
-                            <label htmlFor="rec-reg-date">Date Received</label>
+                            <label htmlFor="rec-reg-date">{t("registeredReceive.dateReceived")}</label>
                             <input
                                 id="rec-reg-date"
                                 name="dateReceived"
@@ -133,7 +135,7 @@ function RegisteredRecieve() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="rec-reg-title">Letter Title</label>
+                            <label htmlFor="rec-reg-title">{t("registeredReceive.letterTitle")}</label>
                             <input
                                 id="rec-reg-title"
                                 name="letterTitle"
@@ -145,7 +147,7 @@ function RegisteredRecieve() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="rec-reg-number">Registered Post Number</label>
+                            <label htmlFor="rec-reg-number">{t("registeredReceive.registeredPostNumber")}</label>
                             <input
                                 id="rec-reg-number"
                                 name="registeredPostNumber"
@@ -157,7 +159,7 @@ function RegisteredRecieve() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="rec-reg-branch">Destination Branch</label>
+                            <label htmlFor="rec-reg-branch">{t("registeredReceive.destinationBranch")}</label>
                             <input
                                 id="rec-reg-branch"
                                 name="destinationBranch"
@@ -169,7 +171,7 @@ function RegisteredRecieve() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="rec-reg-pdf-upload">Upload Letter PDF</label>
+                            <label htmlFor="rec-reg-pdf-upload">{t("registeredReceive.uploadPdf")}</label>
                             <input
                                 id="rec-reg-pdf-upload"
                                 name="pdfUpload"
@@ -180,13 +182,13 @@ function RegisteredRecieve() {
                         </div>
                     </div>
 
-                    <button type="submit">Save Registered Receiving Entry</button>
+                    <button type="submit">{t("registeredReceive.saveEntry")}</button>
                 </form>
 
                 <aside className="pdf-preview-panel" aria-label="Registered receive PDF preview">
 
                     <div className="field-group">
-                            <label htmlFor="reg-current-date">Current Date</label>
+                            <label htmlFor="reg-current-date">{t("registeredReceive.currentDate")}</label>
                             <input 
                                 className="current-date"
                                 name="current-date"
@@ -196,11 +198,11 @@ function RegisteredRecieve() {
                     </div>
 
 
-                    <h4>PDF Preview</h4>
+                    <h4>{t("registeredReceive.pdfPreview")}</h4>
                     {pdfPreviewUrl ? (
                         <iframe title="Registered receiving PDF preview" src={pdfPreviewUrl} />
                     ) : (
-                        <p>No PDF selected.</p>
+                        <p>{t("registeredReceive.noPdfSelected")}</p>
                     )}
                 </aside>
             </div>

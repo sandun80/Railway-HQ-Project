@@ -1,11 +1,13 @@
 import "../styles/LoginPage.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import axios from "axios";
 
 function LoginPage() {
 
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -73,7 +75,7 @@ function LoginPage() {
 
             setError(
                 error.response?.data?.message ||
-                "Login failed"
+                t("login.loginFailed")
             );
         }
     };
@@ -84,10 +86,10 @@ function LoginPage() {
 
                 <div className="login-card">
 
-                    <h1>Welcome Back</h1>
+                    <h1>{t("login.welcome")}</h1>
 
                     <p>
-                        Please sign in to continue
+                        {t("login.subtitle")}
                     </p>
 
                     {error && (
@@ -100,11 +102,11 @@ function LoginPage() {
 
                         <div className="input-group">
 
-                            <label>Username</label>
+                            <label>{t("login.username")}</label>
 
                             <input
                                 type="text"
-                                placeholder="Enter your username"
+                                placeholder={t("login.usernamePlaceholder")}
                                 value={username}
                                 onChange={(e) =>
                                     setUsername(e.target.value)
@@ -116,11 +118,11 @@ function LoginPage() {
 
                         <div className="input-group">
 
-                            <label>Password</label>
+                            <label>{t("login.password")}</label>
 
                             <input
                                 type="password"
-                                placeholder="Enter your password"
+                                placeholder={t("login.passwordPlaceholder")}
                                 value={password}
                                 onChange={(e) =>
                                     setPassword(e.target.value)
@@ -134,15 +136,15 @@ function LoginPage() {
                             type="submit"
                             className="login-btn"
                         >
-                            Login
+                            {t("login.loginBtn")}
                         </button>
 
                     </form>
 
                     <div style={{ marginTop: "16px", fontSize: "12px", color: "#666", textAlign: "center" }}>
-                        <p style={{ margin: 0 }}><strong>Local Dev Accounts:</strong></p>
-                        <p style={{ margin: "2px 0 0" }}>Admin: <code>admin</code> / <code>admin123</code></p>
-                        <p style={{ margin: "2px 0 0" }}>Officer: <code>officer</code> / <code>officer123</code></p>
+                        <p style={{ margin: 0 }}><strong>{t("login.devAccountsTitle")}</strong></p>
+                        <p style={{ margin: "2px 0 0" }}>{t("login.devAdmin")}: <code>admin</code> / <code>admin123</code></p>
+                        <p style={{ margin: "2px 0 0" }}>{t("login.devOfficer")}: <code>officer</code> / <code>officer123</code></p>
                     </div>
 
                 </div>

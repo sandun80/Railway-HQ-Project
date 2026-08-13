@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import "../styles/sendingForms.css";
 import axios from "axios";
 
 function RegisteredLetters() {
+    const { t } = useTranslation();
     const today = new Date().toISOString().split("T")[0];
 
     const [formData, setFormData] = useState({
@@ -163,12 +165,12 @@ function RegisteredLetters() {
 
     return (
         <section className="letter-form-section">
-            <h3>Registered Post - Sending Register</h3>
+            <h3>{t("registeredLetters.heading")}</h3>
             <div className="form-preview-layout">
                 <form className="letter-form" onSubmit={handleSubmit}>
                     <div className="form-grid">
                         <div className="field-group">
-                            <label htmlFor="reg-letter-number">Letter Number</label>
+                            <label htmlFor="reg-letter-number">{t("registeredLetters.letterNumber")}</label>
                             <div className="inline-input-action">
                                 <input
                                     id="reg-letter-number"
@@ -184,13 +186,13 @@ function RegisteredLetters() {
                                     className="small-search-btn"
                                     onClick={handleSearchFromLetterNumber}
                                 >
-                                    Search
+                                    {t("registeredLetters.searchBtn")}
                                 </button>
                             </div>
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="reg-date">Date</label>
+                            <label htmlFor="reg-date">{t("registeredLetters.date")}</label>
                             <input
                                 id="letter-date"
                                 name="letterDate"
@@ -203,7 +205,7 @@ function RegisteredLetters() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="reg-letter-title">Letter Title</label>
+                            <label htmlFor="reg-letter-title">{t("registeredLetters.letterTitle")}</label>
                             <input
                                 id="reg-letter-title"
                                 name="letterTitle"
@@ -216,7 +218,7 @@ function RegisteredLetters() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="reg-destination">Destination</label>
+                            <label htmlFor="reg-destination">{t("registeredLetters.destination")}</label>
 
                             <select
                                 id="reg-destination"
@@ -226,7 +228,7 @@ function RegisteredLetters() {
                                 required
                                 disabled={isLetterLoaded}
                             >
-                                <option value="">Select a role</option>
+                                <option value="">{t("registeredLetters.selectRole")}</option>
 
                                 {departmentRoles.map((role) => (
                                     <option
@@ -240,19 +242,19 @@ function RegisteredLetters() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="reg-post-number">Registered Post Number</label>
+                            <label htmlFor="reg-post-number">{t("registeredLetters.registeredPostNumber")}</label>
                             <input
                                 id="reg-post-number"
                                 name="registeredPostNumber"
                                 type="text"
                                 value={formData.registeredPostNumber}
                                 onChange={handleChange}
-                                placeholder="Can be updated later"
+                                placeholder={t("registeredLetters.registeredPostNumberPlaceholder")}
                             />
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="reg-pdf-upload">Upload Letter PDF</label>
+                            <label htmlFor="reg-pdf-upload">{t("registeredLetters.uploadPdf")}</label>
                             <input
                                 id="reg-pdf-upload"
                                 name="pdfUpload"
@@ -270,16 +272,16 @@ function RegisteredLetters() {
                             className="draft-save-btn"
                             onClick={handleDraftSave}
                         >
-                            Draft Save
+                            {t("registeredLetters.draftSave")}
                         </button>
-                        <button type="submit">Save Registered Sending Entry</button>
+                        <button type="submit">{t("registeredLetters.saveEntry")}</button>
                     </div>
                 </form>
 
                 <aside className="pdf-preview-panel" aria-label="Registered PDF preview">
 
                     <div className="field-group">
-                            <label htmlFor="reg-current-date">Current Date</label>
+                            <label htmlFor="reg-current-date">{t("registeredLetters.currentDate")}</label>
                             <input 
                                 className="current-date"
                                 name="current-date"
@@ -288,11 +290,11 @@ function RegisteredLetters() {
                             />
                     </div>
 
-                    <h4>PDF Preview</h4>
+                    <h4>{t("registeredLetters.pdfPreview")}</h4>
                     {pdfPreviewUrl ? (
                         <iframe title="Registered sending PDF preview" src={pdfPreviewUrl} />
                     ) : (
-                        <p>No PDF selected.</p>
+                        <p>{t("registeredLetters.noPdfSelected")}</p>
                     )}
                 </aside>
             </div>

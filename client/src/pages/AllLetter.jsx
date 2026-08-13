@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import "../styles/allLetter.css";
 import axios from "axios";
 
 function AllLetter() {
+    const { t } = useTranslation();
     const [letters, setLetters] = useState([]);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -286,7 +288,7 @@ function AllLetter() {
             <div className="search-filter">
                 <input
                     type="text"
-                    placeholder="Letter No."
+                    placeholder={t("allLetter.letterNumberPlaceholder")}
                     name="letterNumber"
                     value={filters.letterNumber}
                     onChange={handleFilterChange}
@@ -294,7 +296,7 @@ function AllLetter() {
 
                 <input
                     type="text"
-                    placeholder="Sent To"
+                    placeholder={t("allLetter.sentToPlaceholder")}
                     name="sentTo"
                     value={filters.sentTo}
                     onChange={handleFilterChange}
@@ -302,7 +304,7 @@ function AllLetter() {
 
                 <input
                     type="text"
-                    placeholder="Received From"
+                    placeholder={t("allLetter.receivedFromPlaceholder")}
                     name="receivedFrom"
                     value={filters.receivedFrom}
                     onChange={handleFilterChange}
@@ -316,11 +318,11 @@ function AllLetter() {
                 />
 
                 <button className="search-btn" onClick={handleSearch}>
-                    Search
+                    {t("common.search")}
                 </button>
 
                 <button className="reset-btn" onClick={handleReset}>
-                    Reset
+                    {t("common.reset")}
                 </button>
             </div>
 
@@ -328,14 +330,14 @@ function AllLetter() {
                 <table className="letter-table">
                     <thead>
                         <tr>
-                            <th>Letter No.</th>
-                            <th>Flow</th>
-                            <th>Category</th>
-                            <th>Title</th>
-                            <th>Destination</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>{t("allLetter.tableLetterNumber")}</th>
+                            <th>{t("allLetter.tableFlow")}</th>
+                            <th>{t("allLetter.tableCategory")}</th>
+                            <th>{t("allLetter.tableTitle")}</th>
+                            <th>{t("allLetter.tableDestination")}</th>
+                            <th>{t("allLetter.tableDate")}</th>
+                            <th>{t("allLetter.tableStatus")}</th>
+                            <th>{t("allLetter.tableAction")}</th>
                         </tr>
                     </thead>
 
@@ -356,14 +358,14 @@ function AllLetter() {
                                                 className="view-btn"
                                                 onClick={() => openEditPanel(letter)}
                                             >
-                                                Edit
+                                                {t("common.edit")}
                                             </button>
 
                                             <button
                                                 className="delete-btn"
                                                 onClick={() => handleDeleteLetter(letter)}
                                             >
-                                                Delete
+                                                {t("common.delete")}
                                             </button>
                                         </>
                                     )}
@@ -372,7 +374,7 @@ function AllLetter() {
                                         className="view-btn secondary-view-btn"
                                         onClick={() => openViewPanel(letter)}
                                     >
-                                        View
+                                        {t("common.view")}
                                     </button>
                                 </td>
                             </tr>
@@ -385,7 +387,7 @@ function AllLetter() {
                 <div className="letter-modal-overlay" onClick={closeEditPanel}>
                     <div className="letter-modal" onClick={(event) => event.stopPropagation()}>
                         <div className="letter-modal-header">
-                            <h3>Edit Letter</h3>
+                            <h3>{t("allLetter.editLetter")}</h3>
                             <button type="button" className="letter-modal-close" onClick={closeEditPanel}>
                                 x
                             </button>
@@ -394,7 +396,7 @@ function AllLetter() {
                         <div className="letter-modal-body">
                             <div className="letter-modal-grid">
                                 <div className="field-group">
-                                    <label htmlFor="edit-letter-number">Letter Number</label>
+                                    <label htmlFor="edit-letter-number">{t("allLetter.letterNumberLabel")}</label>
                                     <input
                                         id="edit-letter-number"
                                         name="letterNumber"
@@ -404,28 +406,28 @@ function AllLetter() {
                                 </div>
 
                                 <div className="field-group">
-                                    <label htmlFor="edit-flow">Flow</label>
+                                    <label htmlFor="edit-flow">{t("allLetter.flowLabel")}</label>
                                     <select
                                         id="edit-flow"
                                         name="flow"
                                         value={editForm.flow}
                                         onChange={handleEditFieldChange}
                                     >
-                                        <option value="">Select flow</option>
+                                        <option value="">{t("allLetter.selectFlow")}</option>
                                         <option value="sending">sending</option>
                                         <option value="receiving">receiving</option>
                                     </select>
                                 </div>
 
                                 <div className="field-group">
-                                    <label htmlFor="edit-category">Category</label>
+                                    <label htmlFor="edit-category">{t("allLetter.categoryLabel")}</label>
                                     <select
                                         id="edit-category"
                                         name="category"
                                         value={editForm.category}
                                         onChange={handleEditFieldChange}
                                     >
-                                        <option value="">Select category</option>
+                                        <option value="">{t("allLetter.selectCategory")}</option>
                                         <option value="registered">registered</option>
                                         <option value="normal">normal</option>
                                         <option value="byhand">byhand</option>
@@ -434,7 +436,7 @@ function AllLetter() {
                                 </div>
 
                                 <div className="field-group">
-                                    <label htmlFor="edit-title">Title</label>
+                                    <label htmlFor="edit-title">{t("allLetter.titleLabel")}</label>
                                     <input
                                         id="edit-title"
                                         name="title"
@@ -444,7 +446,7 @@ function AllLetter() {
                                 </div>
 
                                 <div className="field-group">
-                                    <label htmlFor="edit-sender">Sender</label>
+                                    <label htmlFor="edit-sender">{t("allLetter.senderLabel")}</label>
                                     <input
                                         id="edit-sender"
                                         name="sender"
@@ -455,7 +457,7 @@ function AllLetter() {
                                 </div>
 
                                 <div className="field-group">
-                                    <label htmlFor="edit-receiver">Receiver</label>
+                                    <label htmlFor="edit-receiver">{t("allLetter.receiverLabel")}</label>
                                     <input
                                         id="edit-receiver"
                                         name="receiver"
@@ -465,7 +467,7 @@ function AllLetter() {
                                 </div>
 
                                 <div className="field-group">
-                                    <label htmlFor="edit-destination">Destination</label>
+                                    <label htmlFor="edit-destination">{t("allLetter.destinationLabel")}</label>
                                     <input
                                         id="edit-destination"
                                         name="destination"
@@ -475,7 +477,7 @@ function AllLetter() {
                                 </div>
 
                                 <div className="field-group">
-                                    <label htmlFor="edit-letter-date">Letter Date</label>
+                                    <label htmlFor="edit-letter-date">{t("allLetter.letterDateLabel")}</label>
                                     <input
                                         id="edit-letter-date"
                                         type="date"
@@ -486,7 +488,7 @@ function AllLetter() {
                                 </div>
 
                                 <div className="field-group">
-                                    <label htmlFor="edit-reg-post-number">Registered Post Number</label>
+                                    <label htmlFor="edit-reg-post-number">{t("allLetter.registeredPostNumberLabel")}</label>
                                     <input
                                         id="edit-reg-post-number"
                                         name="registeredPostNumber"
@@ -496,7 +498,7 @@ function AllLetter() {
                                 </div>
 
                                 <div className="field-group">
-                                    <label htmlFor="edit-subject-officer">Subject / Department / Officer</label>
+                                    <label htmlFor="edit-subject-officer">{t("allLetter.subjectDeptOfficerLabel")}</label>
                                     <input
                                         id="edit-subject-officer"
                                         name="subject_department_or_officer"
@@ -506,7 +508,7 @@ function AllLetter() {
                                 </div>
 
                                 <div className="field-group">
-                                    <label htmlFor="edit-date-received">Date Received</label>
+                                    <label htmlFor="edit-date-received">{t("allLetter.dateReceivedLabel")}</label>
                                     <input
                                         id="edit-date-received"
                                         type="date"
@@ -517,7 +519,7 @@ function AllLetter() {
                                 </div>
 
                                 <div className="field-group">
-                                    <label htmlFor="edit-receiving-office">Receiving Office</label>
+                                    <label htmlFor="edit-receiving-office">{t("allLetter.receivingOfficeLabel")}</label>
                                     <input
                                         id="edit-receiving-office"
                                         name="recivingOffice"
@@ -527,7 +529,7 @@ function AllLetter() {
                                 </div>
 
                                 <div className="field-group">
-                                    <label htmlFor="edit-status">Status</label>
+                                    <label htmlFor="edit-status">{t("allLetter.statusLabel")}</label>
                                     <input
                                         id="edit-status"
                                         name="status"
@@ -540,7 +542,7 @@ function AllLetter() {
                                 
 
                                 <div className="field-group full-width-field">
-                                    <label htmlFor="edit-pdf">Replace PDF (optional)</label>
+                                    <label htmlFor="edit-pdf">{t("allLetter.replacePdf")}</label>
                                     <input
                                         id="edit-pdf"
                                         type="file"
@@ -556,19 +558,19 @@ function AllLetter() {
                                         target="_blank"
                                         rel="noreferrer"
                                     >
-                                        Open current PDF
+                                        {t("allLetter.openCurrentPdf")}
                                     </a>
                                 )}
 
                                 {editPdfFile && (
-                                    <p className="new-pdf-name">Selected new PDF: {editPdfFile.name}</p>
+                                    <p className="new-pdf-name">{t("allLetter.selectedNewPdf")} {editPdfFile.name}</p>
                                 )}
                             </div>
                         </div>
 
                         <div className="letter-modal-footer">
                             <button type="button" className="reset-btn" onClick={closeEditPanel}>
-                                Cancel
+                                {t("allLetter.cancel")}
                             </button>
                             <button
                                 type="button"
@@ -576,7 +578,7 @@ function AllLetter() {
                                 onClick={handleUpdateLetter}
                                 disabled={isUpdating}
                             >
-                                {isUpdating ? "Updating..." : "Update"}
+                                {isUpdating ? t("allLetter.updating") : t("allLetter.update")}
                             </button>
                         </div>
                     </div>
@@ -588,7 +590,7 @@ function AllLetter() {
                     <div className="letter-modal readonly-modal" onClick={(event) => event.stopPropagation()}>
                         <div className="letter-modal-header">
                             <div>
-                                <p className="modal-kicker">Letter Details</p>
+                                <p className="modal-kicker">{t("allLetter.letterDetails")}</p>
                                 <h3>{selectedLetter.letterNumber || "-"}</h3>
                             </div>
                             <button type="button" className="letter-modal-close" onClick={closeViewPanel}>
@@ -605,102 +607,102 @@ function AllLetter() {
                         <div className="letter-modal-body">
                             <div className="letter-readonly-grid">
                                 <div className="readonly-field">
-                                    <label>Letter Number</label>
+                                    <label>{t("allLetter.letterNumberLabel")}</label>
                                     <div>{selectedLetter.letterNumber || "-"}</div>
                                 </div>
 
                                 <div className="readonly-field">
-                                    <label>Flow</label>
+                                    <label>{t("allLetter.flowLabel")}</label>
                                     <div>{selectedLetter.flow || "-"}</div>
                                 </div>
 
                                 <div className="readonly-field">
-                                    <label>Category</label>
+                                    <label>{t("allLetter.categoryLabel")}</label>
                                     <div>{selectedLetter.category || "-"}</div>
                                 </div>
 
                                 <div className="readonly-field">
-                                    <label>Title</label>
+                                    <label>{t("allLetter.titleLabel")}</label>
                                     <div>{selectedLetter.title || "-"}</div>
                                 </div>
 
                                 <div className="readonly-field">
-                                    <label>Sender</label>
+                                    <label>{t("allLetter.senderLabel")}</label>
                                     <div>{selectedLetter.sender || "-"}</div>
                                 </div>
 
                                 <div className="readonly-field">
-                                    <label>Receiver</label>
+                                    <label>{t("allLetter.receiverLabel")}</label>
                                     <div>{selectedLetter.receiver || "-"}</div>
                                 </div>
 
                                 <div className="readonly-field">
-                                    <label>Destination</label>
+                                    <label>{t("allLetter.destinationLabel")}</label>
                                     <div>{selectedLetter.destination || "-"}</div>
                                 </div>
 
                                 <div className="readonly-field">
-                                    <label>Letter Date</label>
+                                    <label>{t("allLetter.letterDateLabel")}</label>
                                     <div>{formatDate(selectedLetter.letterDate)}</div>
                                 </div>
 
                                 <div className="readonly-field">
-                                    <label>Registered Post Number</label>
+                                    <label>{t("allLetter.registeredPostNumberLabel")}</label>
                                     <div>{selectedLetter.registeredPostNumber || "-"}</div>
                                 </div>
 
                                 <div className="readonly-field">
-                                    <label>Subject / Department / Officer</label>
+                                    <label>{t("allLetter.subjectDeptOfficerLabel")}</label>
                                     <div>{selectedLetter.subject_department_or_officer || "-"}</div>
                                 </div>
 
                                 <div className="readonly-field">
-                                    <label>Date Received</label>
+                                    <label>{t("allLetter.dateReceivedLabel")}</label>
                                     <div>{formatDate(selectedLetter.dateRecived)}</div>
                                 </div>
 
                                 <div className="readonly-field">
-                                    <label>Receiving Office</label>
+                                    <label>{t("allLetter.receivingOfficeLabel")}</label>
                                     <div>{selectedLetter.recivingOffice || "-"}</div>
                                 </div>
 
                                 <div className="readonly-field">
-                                    <label>Status</label>
+                                    <label>{t("allLetter.statusLabel")}</label>
                                     <div>{selectedLetter.status || "-"}</div>
                                 </div>
 
                                 <div className="readonly-field full-width-field reply-field">
-                                    <label>Reply</label>
+                                    <label>{t("allLetter.replyLabel")}</label>
                                     <pre>{getReplyText(selectedLetter.reply)}</pre>
                                 </div>
 
                                 <div className="readonly-field full-width-field reply-pdf-field">
-                                    <label>Reply PDF</label>
+                                    <label>{t("allLetter.replyPdfLabel")}</label>
                                     {selectedLetter.replyPdf ? (
                                         <a
                                             className="pdf-open-btn"
                                             href={selectedLetter.replyPdf}
                                             download={`reply-${selectedLetter.letterNumber || "letter"}.pdf`}
                                         >
-                                            Download Reply PDF
+                                            {t("allLetter.downloadReplyPdf")}
                                         </a>
                                     ) : (
-                                        <div>No reply PDF attached.</div>
+                                        <div>{t("allLetter.noReplyPdf")}</div>
                                     )}
                                 </div>
 
                                 <div className="readonly-field full-width-field pdf-field">
-                                    <label>Letter PDF</label>
+                                    <label>{t("allLetter.letterPdfLabel")}</label>
                                     {selectedLetter.pdf ? (
                                         <button
                                             type="button"
                                             className="pdf-open-btn"
                                             onClick={() => window.open(selectedLetter.pdf, "_blank", "noopener,noreferrer")}
                                         >
-                                            Open PDF in new tab
+                                            {t("allLetter.openPdf")}
                                         </button>
                                     ) : (
-                                        <div>No PDF attached.</div>
+                                        <div>{t("allLetter.noPdf")}</div>
                                     )}
                                 </div>
                             </div>
@@ -708,7 +710,7 @@ function AllLetter() {
 
                         <div className="letter-modal-footer">
                             <button type="button" className="search-btn" onClick={closeViewPanel}>
-                                Close
+                                {t("common.close")}
                             </button>
                         </div>
                     </div>

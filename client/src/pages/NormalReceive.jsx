@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import "../styles/receivingForms.css";
 import axios from "axios";
 
 function NormalReceive() {
+    const { t } = useTranslation();
 
     const today = new Date().toISOString().split("T")[0];
 
@@ -76,13 +78,13 @@ function NormalReceive() {
 
     return (
         <section className="letter-form-section receiving-section">
-            <h3>Normal Post - Receiving Register</h3>
+            <h3>{t("normalReceive.heading")}</h3>
             <div className="form-preview-layout">
                 <form className="letter-form" onSubmit={handleSubmit}>
                     <div className="form-grid">
 
                         <div className="field-group">
-                            <label htmlFor="rec-normal-number">Letter Number</label>
+                            <label htmlFor="rec-normal-number">{t("normalReceive.letterNumber")}</label>
                             <input
                                 id="rec-normal-number"
                                 name="letterNumber"
@@ -94,7 +96,7 @@ function NormalReceive() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="rec-normal-sender">Sender</label>
+                            <label htmlFor="rec-normal-sender">{t("normalReceive.sender")}</label>
                             <input
                                 id="rec-normal-sender"
                                 name="sender"
@@ -106,7 +108,7 @@ function NormalReceive() {
                         </div>
 
                          <div className="field-group">
-                            <label htmlFor="reg-date">Date</label>
+                            <label htmlFor="reg-date">{t("normalReceive.date")}</label>
                             <input
                                 id="recieveNormal-letter-date"
                                 name="letterDate"
@@ -119,7 +121,7 @@ function NormalReceive() {
 
 
                         <div className="field-group">
-                            <label htmlFor="rec-normal-date">Date Received</label>
+                            <label htmlFor="rec-normal-date">{t("normalReceive.dateReceived")}</label>
                             <input
                                 id="rec-normal-date"
                                 name="dateReceived"
@@ -131,7 +133,7 @@ function NormalReceive() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="rec-normal-title">Letter Title</label>
+                            <label htmlFor="rec-normal-title">{t("normalReceive.letterTitle")}</label>
                             <input
                                 id="rec-normal-title"
                                 name="letterTitle"
@@ -143,7 +145,7 @@ function NormalReceive() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="rec-normal-branch">Destination Branch</label>
+                            <label htmlFor="rec-normal-branch">{t("normalReceive.destinationBranch")}</label>
                             <input
                                 id="rec-normal-branch"
                                 name="destinationBranch"
@@ -155,7 +157,7 @@ function NormalReceive() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="rec-normal-pdf-upload">Upload Letter PDF</label>
+                            <label htmlFor="rec-normal-pdf-upload">{t("normalReceive.uploadPdf")}</label>
                             <input
                                 id="rec-normal-pdf-upload"
                                 name="pdfUpload"
@@ -166,12 +168,12 @@ function NormalReceive() {
                         </div>
                     </div>
 
-                    <button type="submit">Save Normal Receiving Entry</button>
+                    <button type="submit">{t("normalReceive.saveEntry")}</button>
                 </form>
 
                 <aside className="pdf-preview-panel" aria-label="Normal receive PDF preview">
                     <div className="field-group">
-                            <label htmlFor="reg-current-date">Current Date</label>
+                            <label htmlFor="reg-current-date">{t("normalReceive.currentDate")}</label>
                             <input 
                                 className="current-date"
                                 name="current-date"
@@ -180,11 +182,11 @@ function NormalReceive() {
                             />
                     </div>
 
-                    <h4>PDF Preview</h4>
+                    <h4>{t("normalReceive.pdfPreview")}</h4>
                     {pdfPreviewUrl ? (
                         <iframe title="Normal receiving PDF preview" src={pdfPreviewUrl} />
                     ) : (
-                        <p>No PDF selected.</p>
+                        <p>{t("normalReceive.noPdfSelected")}</p>
                     )}
                 </aside>
             </div>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import "../styles/dashboard.css";
 
 /* ── SVG icons ── */
@@ -36,6 +37,7 @@ const IconDraft = () => (
 );
 
 function Dashboard() {
+    const { t } = useTranslation();
     const user = JSON.parse(localStorage.getItem("user"));
     const username = user?.username || "User";
 
@@ -65,28 +67,28 @@ function Dashboard() {
         {
             id: "registered",
             colorClass: "card-registered",
-            title: "Registered Mail Sent Today",
+            title: t("dashboard.registeredTitle"),
             count: counts.registered,
             icon: <IconRegistered />,
         },
         {
             id: "normal",
             colorClass: "card-normal",
-            title: "Normal Mail Sent Today",
+            title: t("dashboard.normalTitle"),
             count: counts.normal,
             icon: <IconNormal />,
         },
         {
             id: "byhand",
             colorClass: "card-byhand",
-            title: "By Hand Mail Sent Today",
+            title: t("dashboard.byhandTitle"),
             count: counts.byhand,
             icon: <IconByHand />,
         },
         {
             id: "draft",
             colorClass: "card-draft",
-            title: "Draft Registered Mail",
+            title: t("dashboard.draftTitle"),
             count: counts.draft,
             icon: <IconDraft />,
         },
@@ -104,8 +106,8 @@ function Dashboard() {
         <section className="dashboard-page">
 
             <div className="dashboard-header">
-                <span className="greeting">Mail Management System</span>
-                <h1>Welcome back, {username}</h1>
+                <span className="greeting">{t("dashboard.greeting")}</span>
+                <h1>{t("dashboard.welcomeBack", { username })}</h1>
                 <p className="subtitle">{today}</p>
             </div>
 
@@ -120,7 +122,7 @@ function Dashboard() {
                             <div className="card-icon">{item.icon}</div>
                         </div>
                         <p className="card-count">{item.count}</p>
-                        <p className="card-label">letters</p>
+                        <p className="card-label">{t("dashboard.lettersLabel")}</p>
                     </article>
                 ))}
             </div>

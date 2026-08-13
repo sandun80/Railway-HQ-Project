@@ -1,8 +1,10 @@
 import { useState, useEffect} from "react";
+import { useTranslation } from "react-i18next";
 import "../styles/userMngAdmin.css";
 import axios from "axios";
 
 function UserMngAdmin() {
+    const { t } = useTranslation();
 
     const [search, setSearch] = useState("");
     const [users, setUsers] = useState([]);
@@ -157,15 +159,15 @@ function UserMngAdmin() {
             <div className="user-management-header">
 
                 <div>
-                    <h1>User Management</h1>
+                    <h1>{t("userMngAdmin.title")}</h1>
                     <p>
-                        Manage system users, roles and account details.
+                        {t("userMngAdmin.subtitle")}
                     </p>
                 </div>
 
                 <div className="user-count">
                     <span>{users.length}</span>
-                    <small>Total Users</small>
+                    <small>{t("userMngAdmin.totalUsers")}</small>
                 </div>
 
             </div>
@@ -176,14 +178,13 @@ function UserMngAdmin() {
 
                 <input
                     type="text"
-                    placeholder="Search by username or role..."
+                    placeholder={t("userMngAdmin.searchPlaceholder")}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
 
                 <span>
-                    {filteredUsers.length} user
-                    {filteredUsers.length !== 1 ? "s" : ""} found
+                    {filteredUsers.length} {filteredUsers.length !== 1 ? t("userMngAdmin.usersFound") : t("userMngAdmin.userFound")}
                 </span>
 
             </div>
@@ -196,10 +197,10 @@ function UserMngAdmin() {
 
                     <thead>
                         <tr>
-                            <th>Username</th>
-                            <th>Password</th>
-                            <th>Role</th>
-                            <th>Actions</th>
+                            <th>{t("userMngAdmin.columnUsername")}</th>
+                            <th>{t("userMngAdmin.columnPassword")}</th>
+                            <th>{t("userMngAdmin.columnRole")}</th>
+                            <th>{t("userMngAdmin.columnActions")}</th>
                         </tr>
                     </thead>
 
@@ -227,7 +228,7 @@ function UserMngAdmin() {
 
                                     <td>
                                         <span className="password-cell">
-                                            {user.passwordDisplay || "Password"}
+                                            {user.passwordDisplay || t("userMngAdmin.columnPassword")}
                                         </span>
                                     </td>
 
@@ -249,7 +250,7 @@ function UserMngAdmin() {
                                                     handleEdit(user)
                                                 }
                                             >
-                                                Edit
+                                                {t("common.edit")}
                                             </button>
 
                                             <button
@@ -258,7 +259,7 @@ function UserMngAdmin() {
                                                     handleDelete(user.id)
                                                 }
                                             >
-                                                Delete
+                                                {t("common.delete")}
                                             </button>
 
                                         </div>
@@ -276,7 +277,7 @@ function UserMngAdmin() {
                                     colSpan="4"
                                     className="no-users"
                                 >
-                                    No users found.
+                                    {t("userMngAdmin.noUsers")}
                                 </td>
                             </tr>
 
@@ -299,9 +300,9 @@ function UserMngAdmin() {
                         <div className="modal-header">
 
                             <div>
-                                <h2>Edit User</h2>
+                                <h2>{t("userMngAdmin.editUser")}</h2>
                                 <p>
-                                    Update the user's account details.
+                                    {t("userMngAdmin.editUserSubtitle")}
                                 </p>
                             </div>
 
@@ -320,7 +321,7 @@ function UserMngAdmin() {
                             <div className="edit-field">
 
                                 <label>
-                                    Username
+                                    {t("userMngAdmin.columnUsername")}
                                 </label>
 
                                 <input
@@ -336,7 +337,7 @@ function UserMngAdmin() {
                             <div className="edit-field">
 
                                 <label>
-                                    Password
+                                    {t("userMngAdmin.columnPassword")}
                                 </label>
 
                                 <input
@@ -352,7 +353,7 @@ function UserMngAdmin() {
                             <div className="edit-field">
 
                                 <label>
-                                    Role
+                                    {t("userMngAdmin.columnRole")}
                                 </label>
 
                                 <select
@@ -361,7 +362,7 @@ function UserMngAdmin() {
                                     onChange={handleUpdateChange}
                                 >
                                     <option value="">
-                                        Select Role
+                                        {t("userMngAdmin.selectRole")}
                                     </option>
 
                                     {roles.map((role) => (
@@ -385,14 +386,14 @@ function UserMngAdmin() {
                                 className="cancel-btn"
                                 onClick={handleCancelEdit}
                             >
-                                Cancel
+                                {t("common.cancel") || "Cancel"}
                             </button>
 
                             <button
                                 className="save-user-btn"
                                 onClick={handleUpdate}
                             >
-                                Save Changes
+                                {t("userMngAdmin.saveChanges")}
                             </button>
 
                         </div>

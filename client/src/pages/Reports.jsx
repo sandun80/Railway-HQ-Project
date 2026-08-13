@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import "../styles/reports.css";
 
 function Reports() {
+    const { t } = useTranslation();
     const todayStr = new Date().toISOString().split("T")[0];
 
     const [category, setCategory] = useState("all");
@@ -166,18 +168,18 @@ function Reports() {
             {/* Screen Header */}
             <div className="reports-header">
                 <div className="header-title">
-                    <h1>Letter Management System - Reports</h1>
-                    <p>Railway Headquarters | Official Printable Registers & Analytical Reports</p>
+                    <h1>{t("reports.title")}</h1>
+                    <p>{t("reports.subtitle")}</p>
                 </div>
                 <div className="header-actions">
                     <button type="button" className="btn-action btn-print" onClick={handlePrint}>
-                        Print Report
+                        {t("reports.print")}
                     </button>
                     <button type="button" className="btn-action btn-csv" onClick={exportToCSV}>
-                        Export CSV
+                        {t("reports.exportCsv")}
                     </button>
                     <button type="button" className="btn-action btn-reset" onClick={handleResetFilters}>
-                        Reset
+                        {t("reports.reset")}
                     </button>
                 </div>
             </div>
@@ -187,31 +189,31 @@ function Reports() {
                 <form onSubmit={handleSearchSubmit}>
                     <div className="filter-grid">
                         <div className="filter-group">
-                            <label>Letter Category</label>
+                            <label>{t("reports.letterCategory")}</label>
                             <select value={category} onChange={(e) => setCategory(e.target.value)}>
-                                <option value="all">All Categories</option>
-                                <option value="registered">Registered Post</option>
-                                <option value="normal">Normal Post</option>
-                                <option value="byhand">By Hand</option>
-                                <option value="specialByhand">Special By-Hand (Ministry)</option>
+                                <option value="all">{t("reports.allCategories")}</option>
+                                <option value="registered">{t("reports.registeredPost")}</option>
+                                <option value="normal">{t("reports.normalPost")}</option>
+                                <option value="byhand">{t("reports.byHand")}</option>
+                                <option value="specialByhand">{t("reports.specialByHand")}</option>
                             </select>
                         </div>
 
                         <div className="filter-group">
-                            <label>Flow Type</label>
+                            <label>{t("reports.flowType")}</label>
                             <select value={flow} onChange={(e) => setFlow(e.target.value)}>
-                                <option value="all">All (Sending & Receiving)</option>
-                                <option value="sending">Sending</option>
-                                <option value="receiving">Receiving</option>
+                                <option value="all">{t("reports.allFlows")}</option>
+                                <option value="sending">{t("reports.sending")}</option>
+                                <option value="receiving">{t("reports.receiving")}</option>
                             </select>
                         </div>
 
                         <div className="filter-group">
-                            <label>By-Hand Subject / Officer</label>
+                            <label>{t("reports.subjectOfficer")}</label>
                             <input
                                 type="text"
                                 list="subject-options"
-                                placeholder="Filter Subject/Officer..."
+                                placeholder={t("reports.subjectOfficerPlaceholder")}
                                 value={subject}
                                 onChange={(e) => setSubject(e.target.value)}
                             />
@@ -223,18 +225,18 @@ function Reports() {
                         </div>
 
                         <div className="filter-group">
-                            <label>Report Period</label>
+                            <label>{t("reports.reportPeriod")}</label>
                             <select value={period} onChange={(e) => setPeriod(e.target.value)}>
-                                <option value="daily">Daily (Single Date)</option>
-                                <option value="weekly">Weekly Range</option>
-                                <option value="monthly">Monthly</option>
-                                <option value="custom">Custom Date Range</option>
+                                <option value="daily">{t("reports.daily")}</option>
+                                <option value="weekly">{t("reports.weekly")}</option>
+                                <option value="monthly">{t("reports.monthly")}</option>
+                                <option value="custom">{t("reports.custom")}</option>
                             </select>
                         </div>
 
                         {period === "daily" ? (
                             <div className="filter-group">
-                                <label>Date</label>
+                                <label>{t("reports.date")}</label>
                                 <input
                                     type="date"
                                     value={startDate}
@@ -247,7 +249,7 @@ function Reports() {
                         ) : (
                             <>
                                 <div className="filter-group">
-                                    <label>Start Date</label>
+                                    <label>{t("reports.startDate")}</label>
                                     <input
                                         type="date"
                                         value={startDate}
@@ -255,7 +257,7 @@ function Reports() {
                                     />
                                 </div>
                                 <div className="filter-group">
-                                    <label>End Date</label>
+                                    <label>{t("reports.endDate")}</label>
                                     <input
                                         type="date"
                                         value={endDate}
@@ -266,16 +268,16 @@ function Reports() {
                         )}
 
                         <div className="filter-group">
-                            <label>Search Keyword</label>
+                            <label>{t("reports.searchKeyword")}</label>
                             <div style={{ display: "flex", gap: "6px" }}>
                                 <input
                                     type="text"
-                                    placeholder="Letter #, Title, Sender..."
+                                    placeholder={t("reports.searchPlaceholder")}
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                 />
                                 <button type="submit" className="btn-action btn-print" style={{ padding: "10px 14px" }}>
-                                    Search
+                                    {t("reports.search")}
                                 </button>
                             </div>
                         </div>
@@ -286,23 +288,23 @@ function Reports() {
             {/* Metric Summary Cards */}
             <div className="summary-cards-grid">
                 <div className="stat-card primary">
-                    <span className="stat-label">Total Records</span>
+                    <span className="stat-label">{t("reports.totalRecords")}</span>
                     <span className="stat-value">{summary.total}</span>
                 </div>
                 <div className="stat-card success">
-                    <span className="stat-label">Sending Letters</span>
+                    <span className="stat-label">{t("reports.sendingLetters")}</span>
                     <span className="stat-value">{summary.sending}</span>
                 </div>
                 <div className="stat-card info">
-                    <span className="stat-label">Receiving Letters</span>
+                    <span className="stat-label">{t("reports.receivingLetters")}</span>
                     <span className="stat-value">{summary.receiving}</span>
                 </div>
                 <div className="stat-card warning">
-                    <span className="stat-label">Registered Post</span>
+                    <span className="stat-label">{t("reports.registeredPost")}</span>
                     <span className="stat-value">{summary.registered}</span>
                 </div>
                 <div className="stat-card purple">
-                    <span className="stat-label">Normal / By Hand</span>
+                    <span className="stat-label">{t("reports.normalByHand")}</span>
                     <span className="stat-value">{summary.normal + summary.byhand + summary.specialByhand}</span>
                 </div>
             </div>
@@ -321,9 +323,9 @@ function Reports() {
                 </div>
 
                 {loading ? (
-                    <div className="no-records">Loading report records...</div>
+                    <div className="no-records">{t("reports.loadingRecords")}</div>
                 ) : letters.length === 0 ? (
-                    <div className="no-records">No letter records found for the selected criteria.</div>
+                    <div className="no-records">{t("reports.noRecords")}</div>
                 ) : (
                     <div className="register-table-wrapper">
                         {/* Dynamic Table Layout matching BRP Physical Registers */}
