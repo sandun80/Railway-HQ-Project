@@ -25,6 +25,7 @@ function ByhandReceive() {
     const departmentRoles = roles.filter(
         (role) => !excludedRoleNames.includes(String(role.name).toLowerCase())
     );
+    const [departments, setDepartments] = useState([]);
 
     const [activeSpecialRegister, setActiveSpecialRegister] = useState("publicAdministration");
     const [specialForms, setSpecialForms] = useState({
@@ -102,6 +103,19 @@ function ByhandReceive() {
         };
 
         getRoles();
+    }, []);
+
+    useEffect(() => {
+        const getDepartments = async () => {
+            try {
+                const response = await axios.get("http://localhost:5000/api/departments/getdepartments");
+                setDepartments(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        getDepartments();
     }, []);
 
     useEffect(() => {
@@ -240,14 +254,20 @@ function ByhandReceive() {
                             <label htmlFor="rec-byhand-subject-officer">
                                 Department
                             </label>
-                            <input
+                            <select
                                 id="rec-byhand-subject-officer"
                                 name="department"
-                                type="text"
                                 value={routingForm.department}
                                 onChange={handleRoutingChange}
                                 required
-                            />
+                            >
+                                <option value="">Select department</option>
+                                {departments.map((department) => (
+                                    <option key={department._id} value={department.name}>
+                                        {department.name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div className="field-group">

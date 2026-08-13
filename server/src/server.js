@@ -7,6 +7,7 @@ import letterRoutes from "./routes/letterRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import roleRoutes from "./routes/roleRoute.js";
+import departmentRoutes from "./routes/departmentRoute.js";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use("/api/letters", letterRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/roles", roleRoutes);
+app.use("/api/departments", departmentRoutes);
 
 
 // Test route

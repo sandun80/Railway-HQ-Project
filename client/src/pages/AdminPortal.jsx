@@ -17,8 +17,13 @@ function AdminPortal() {
     const [newRole, setNewRole] = useState("");
     const [editingRole, setEditingRole] = useState(null);
 
+    const [departments, setDepartments] = useState([]);
+    const [newDepartment, setNewDepartment] = useState("");
+    const [editingDepartment, setEditingDepartment] = useState(null);
+
     useEffect(() => {
         getRoles();
+        getDepartments();
         
     }, []);
 
@@ -167,6 +172,99 @@ function AdminPortal() {
         }));
     };
 
+    const getDepartments = async () => {
+
+        try{
+
+            const response = await axios.get(
+                "http://localhost:5000/api/departments/getdepartments"
+            );
+
+            setDepartments(response.data);
+
+        }catch(error){
+            console.log(error);
+            
+        }
+    };
+
+    const handleCreateDepartment = async () => {
+
+        if (!newDepartment.trim()) {
+            alert("Enter a department name");
+            return;
+        }
+
+        try {
+
+            const response = await axios.post(
+                "http://localhost:5000/api/departments/createdepartment",
+                {
+                    name: newDepartment.trim()
+                }
+            );
+
+            alert(response.data.message);
+
+            setNewDepartment("");
+
+            getDepartments();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                error.response?.data?.message ||
+                "Failed to create department"
+            );
+        }
+    };
+
+    const handleDeleteDepartment = async (departmentId) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this department?");
+
+        if (!confirmDelete) return;
+
+        try {
+            const response = await axios.delete(`http://localhost:5000/api/departments/${departmentId}`);
+            alert(response.data.message);
+            getDepartments();
+        } catch (error) {
+            console.error(error);
+            alert(error.response?.data?.message || "Failed to delete department");
+        }
+    };
+
+    const handleEditDepartment = (department) => {
+        setEditingDepartment({ ...department, name: department.name });
+    };
+
+    const handleUpdateDepartment = async () => {
+        if (!editingDepartment) return;
+
+        try {
+            const response = await axios.put(
+                `http://localhost:5000/api/departments/${editingDepartment._id}`,
+                { name: editingDepartment.name.trim() }
+            );
+
+            alert(response.data.message);
+            setEditingDepartment(null);
+            getDepartments();
+        } catch (error) {
+            console.error(error);
+            alert(error.response?.data?.message || "Failed to update department");
+        }
+    };
+
+    const handleDepartmentInputChange = (e) => {
+        setEditingDepartment((prev) => ({
+            ...prev,
+            name: e.target.value
+        }));
+    };
+
     return (
         <section>
 
@@ -227,6 +325,28 @@ function AdminPortal() {
                             onClick={handleCreateRole}
                         >
                             Add Role
+                        </button>
+
+                    </div>
+                </div>
+
+                <div>
+                    <label>Create Department</label>
+
+                    <div className="role-create-container">
+
+                        <input
+                            type="text"
+                            value={newDepartment}
+                            onChange={(e) => setNewDepartment(e.target.value)}
+                            placeholder="Enter new department"
+                        />
+
+                        <button
+                            type="button"
+                            onClick={handleCreateDepartment}
+                        >
+                            Add Department
                         </button>
 
                     </div>
@@ -294,6 +414,36 @@ function AdminPortal() {
                 </div>
             </div>
 
+            <div className="role-list-section">
+                <h3>Manage Departments</h3>
+
+                <div className="role-list">
+                    {departments.map((department) => (
+                        <div key={department._id} className="role-item">
+                            <span>{department.name}</span>
+
+                            <div className="role-actions">
+                                <button
+                                    type="button"
+                                    className="edit-role-btn"
+                                    onClick={() => handleEditDepartment(department)}
+                                >
+                                    Edit
+                                </button>
+
+                                <button
+                                    type="button"
+                                    className="delete-role-btn"
+                                    onClick={() => handleDeleteDepartment(department._id)}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
             {editingRole && (
                 <div className="edit-role-modal">
                     <div className="edit-role-card">
@@ -314,6 +464,31 @@ function AdminPortal() {
                         <div className="modal-actions">
                             <button type="button" className="cancel-btn" onClick={() => setEditingRole(null)}>Cancel</button>
                             <button type="button" className="save-user-btn" onClick={handleUpdateRole}>Save</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {editingDepartment && (
+                <div className="edit-role-modal">
+                    <div className="edit-role-card">
+                        <div className="modal-header">
+                            <h3>Edit Department</h3>
+                            <button type="button" className="close-modal-btn" onClick={() => setEditingDepartment(null)}>×</button>
+                        </div>
+
+                        <div className="edit-role-field">
+                            <label>Department Name</label>
+                            <input
+                                type="text"
+                                value={editingDepartment.name}
+                                onChange={handleDepartmentInputChange}
+                            />
+                        </div>
+
+                        <div className="modal-actions">
+                            <button type="button" className="cancel-btn" onClick={() => setEditingDepartment(null)}>Cancel</button>
+                            <button type="button" className="save-user-btn" onClick={handleUpdateDepartment}>Save</button>
                         </div>
                     </div>
                 </div>

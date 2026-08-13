@@ -27,6 +27,7 @@ function Byhand() {
     const departmentRoles = roles.filter(
         (role) => !excludedRoleNames.includes(String(role.name).toLowerCase())
     );
+    const [departments, setDepartments] = useState([]);
     const [activeSpecialRegister, setActiveSpecialRegister] = useState("publicAdministration");
     const [specialForms, setSpecialForms] = useState({
         publicAdministration: {
@@ -103,6 +104,19 @@ function Byhand() {
         };
 
         getRoles();
+    }, []);
+
+    useEffect(() => {
+        const getDepartments = async () => {
+            try {
+                const response = await axios.get("http://localhost:5000/api/departments/getdepartments");
+                setDepartments(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        getDepartments();
     }, []);
 
     useEffect(() => {
@@ -242,14 +256,20 @@ function Byhand() {
                             <label htmlFor="subject-officer-name">
                                 Department
                             </label>
-                            <input
+                            <select
                                 id="subject-officer-name"
                                 name="department"
-                                type="text"
                                 value={formData.department}
                                 onChange={handleChange}
                                 required
-                            />
+                            >
+                                <option value="">Select department</option>
+                                {departments.map((department) => (
+                                    <option key={department._id} value={department.name}>
+                                        {department.name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div className="field-group">
