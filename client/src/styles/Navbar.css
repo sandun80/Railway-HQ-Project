@@ -1,44 +1,321 @@
-/* Navbar container */
-nav {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  background: #ffffff;
-  padding: 12px 30px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+/* ── Railway Navbar ── */
+
+.railway-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+    box-shadow: 0 4px 20px rgba(7, 30, 74, 0.28);
 }
 
-/* Logo */
+/* ── Brand bar ── */
+.railway-brand-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 14px 28px;
+    background: #0a2d6b;
+    border-bottom: 3px solid #c9a227;
+}
+
+.brand-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+/* Logo container: white circle so any logo sits cleanly */
+.navbar-logo-wrap {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 2px solid rgba(201, 162, 39, 0.45);
+}
+
 .navbar-logo {
-  height: 55px;
-  width: auto;
-  margin-right: 18px;
-  transition: transform 0.3s ease;
+    height: 40px;
+    width: auto;
 }
 
-.navbar-logo:hover {
-  transform: scale(1.05);
-}
-
-/* Title section */
 .navbar-title {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .navbar-title h2 {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin: 0;
+    margin: 0;
+    font-size: clamp(1.25rem, 1.8vw, 1.6rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: #fff;
+    line-height: 1.8;
 }
 
 .navbar-title p {
-  font-size: 0.9rem;
-  color: #64748b;
-  margin: 2px 0 0 0;
+    margin: 3px 0 0;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* Brand right — search + lang */
+.brand-tools {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+
+.search-box svg,
+.search-box .search-icon {
+    color: rgba(255, 255, 255, 0.55);
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+}
+
+.search-box input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 0.88rem;
+    color: #fff;
+    font-family: inherit;
+}
+
+
+
+.lang-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    padding: 7px 13px;
+    background: rgba(201, 162, 39, 0.15);
+    border: 1px solid rgba(201, 162, 39, 0.5);
+    color: #f5d97a;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+
+.lang-toggle:hover {
+    background: rgba(201, 162, 39, 0.25);
+}
+
+/* ── Nav bar ── */
+.railway-nav-bar {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    background: #071e4a;
+    padding: 0 80px;
+    min-height: 58px;
+}
+
+/* Spacer pushes logout to the right */
+.nav-spacer {
+    flex: 1;
+}
+
+/* Base link / button style */
+.nav-link,
+.nav-dropdown-toggle,
+.nav-logout {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 18px;
+    height: 52px;
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 0.15s;
+}
+
+.nav-link svg,
+.nav-dropdown-toggle svg {
+    width: 16px;
+    height: 16px;
+    opacity: 0.65;
+    flex-shrink: 0;
+}
+
+.nav-link:hover,
+.nav-dropdown-toggle:hover {
+    color: #fff;
+}
+
+/* Gold underline = active state */
+.nav-link.active,
+.nav-dropdown-toggle.active {
+    color: #f5d97a;
+}
+
+.nav-link.active::after,
+.nav-dropdown-toggle.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 18px;
+    right: 18px;
+    height: 3px;
+    background: #c9a227;
+    border-radius: 3px 3px 0 0;
+}
+
+/* Chevron on dropdown toggle */
+.nav-dropdown-toggle .chevron {
+    font-size: 12px;
+    opacity: 0.5;
+    margin-left: 2px;
+    transition: transform 0.2s;
+}
+
+.nav-dropdown.open .nav-dropdown-toggle .chevron {
+    transform: rotate(180deg);
+}
+
+/* ── Dropdown ── */
+.nav-dropdown {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+}
+
+.nav-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    min-width: 185px;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 8px 24px rgba(7, 30, 74, 0.15);
+    padding: 8px;
+    display: none;
+    flex-direction: column;
+    z-index: 100;
+}
+
+.nav-dropdown.open .nav-dropdown-menu {
+    display: flex;
+}
+
+.nav-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 12px;
+    border-radius: 6px;
+    font-size: 0.83rem;
+    font-weight: 500;
+    color: #1e3a5f;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.nav-dropdown-item svg {
+    width: 15px;
+    height: 15px;
+    color: #4a7ab5;
+    flex-shrink: 0;
+}
+
+.nav-dropdown-item:hover {
+    background: #f0f6ff;
+    color: #0a2d6b;
+}
+
+.nav-dropdown-separator {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 4px 0;
+}
+
+/* ── Sign out ── */
+.nav-logout {
+    color: #fca5a5;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    padding-left: 18px;
+    gap: 7px;
+}
+
+.nav-logout:hover {
+    color: #f87171;
+}
+
+.nav-logout svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1000px) {
+    .railway-brand-bar {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .brand-tools {
+        width: 100%;
+    }
+
+    .search-box {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
+@media (max-width: 700px) {
+    .railway-brand-bar {
+        padding: 12px 16px;
+    }
+
+    .navbar-title h2 {
+        font-size: 1.05rem;
+    }
+
+    .navbar-title p {
+        display: none;
+    }
+
+    .railway-nav-bar {
+        padding: 0 8px;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .railway-nav-bar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .nav-link,
+    .nav-dropdown-toggle,
+    .nav-logout {
+        padding: 0 12px;
+        font-size: 0.8rem;
+    }
 }
