@@ -19,8 +19,14 @@ function Byhand() {
         letterNumber: "",
         letterDate: "",
         letterTitle: "",
-        subjectOrOfficer: "",
+        department: "",
+        subject: "",
     });
+    const [roles, setRoles] = useState([]);
+    const excludedRoleNames = ["officer", "viewer", "admin"];
+    const departmentRoles = roles.filter(
+        (role) => !excludedRoleNames.includes(String(role.name).toLowerCase())
+    );
     const [activeSpecialRegister, setActiveSpecialRegister] = useState("publicAdministration");
     const [specialForms, setSpecialForms] = useState({
         publicAdministration: {
@@ -87,6 +93,19 @@ function Byhand() {
     }, [pdfFile]);
 
     useEffect(() => {
+        const getRoles = async () => {
+            try {
+                const response = await axios.get("http://localhost:5000/api/roles/getroles");
+                setRoles(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        getRoles();
+    }, []);
+
+    useEffect(() => {
         const objectUrls = [];
         const nextPreviewUrls = {
             publicAdministration: "",
@@ -125,8 +144,8 @@ function Byhand() {
                 flow: "sending",
                 category: "byhand",
                 title: formData.letterTitle,
-                destination: formData.subjectOrOfficer,
-                subject_department_or_officer: formData.subjectOrOfficer,
+                destination: formData.department,
+                subject_department_or_officer: `Department: ${formData.department} | Subject: ${formData.subject}`,
                 letterDate: formData.letterDate,
                 status: "Sent",
                 sender: username,
@@ -221,16 +240,34 @@ function Byhand() {
                         
                         <div className="field-group">
                             <label htmlFor="subject-officer-name">
-                                Subject / Department or Officer
+                                Department
                             </label>
                             <input
                                 id="subject-officer-name"
-                                name="subjectOrOfficer"
+                                name="department"
                                 type="text"
-                                value={formData.subjectOrOfficer}
+                                value={formData.department}
                                 onChange={handleChange}
                                 required
                             />
+                        </div>
+
+                        <div className="field-group">
+                            <label htmlFor="byhand-subject">Subject</label>
+                            <select
+                                id="byhand-subject"
+                                name="subject"
+                                value={formData.subject}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">Select role</option>
+                                {departmentRoles.map((role) => (
+                                    <option key={role._id} value={role.name}>
+                                        {role.name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div className="field-group">

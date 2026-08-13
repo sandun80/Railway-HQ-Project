@@ -12,6 +12,12 @@ function NormalLetter() {
         destination: "",
     });
 
+    const [roles, setRoles] = useState([]);
+    const excludedRoleNames = ["officer", "viewer", "admin"];
+    const departmentRoles = roles.filter(
+        (role) => !excludedRoleNames.includes(String(role.name).toLowerCase())
+    );
+
     const user = JSON.parse(localStorage.getItem("user"));
     const username = user?.username;
     
@@ -36,6 +42,19 @@ function NormalLetter() {
 
         return () => URL.revokeObjectURL(objectUrl);
     }, [pdfFile]);
+
+    useEffect(() => {
+        const getRoles = async () => {
+            try {
+                const response = await axios.get("http://localhost:5000/api/roles/getroles");
+                setRoles(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        getRoles();
+    }, []);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -123,14 +142,21 @@ function NormalLetter() {
 
                         <div className="field-group">
                             <label htmlFor="normal-destination">Destination</label>
-                            <input
+                            <select
                                 id="normal-destination"
                                 name="destination"
-                                type="text"
                                 value={formData.destination}
                                 onChange={handleChange}
                                 required
-                            />
+                            >
+                                <option value="">Select a role</option>
+
+                                {departmentRoles.map((role) => (
+                                    <option key={role._id} value={role.name}>
+                                        {role.name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div className="field-group">

@@ -13,6 +13,12 @@ function RegisteredLetters() {
         letterDate:"",
     });
 
+    const [roles, setRoles] = useState([]);
+    const excludedRoleNames = ["officer", "viewer", "admin"];
+    const departmentRoles = roles.filter(
+        (role) => !excludedRoleNames.includes(String(role.name).toLowerCase())
+    );
+
     const user = JSON.parse(localStorage.getItem("user"));
     const username = user?.username;
 
@@ -28,6 +34,9 @@ function RegisteredLetters() {
     });
 
     useEffect(() => {
+
+        getRoles();
+
         if (!pdfFile) {
             setPdfPreviewUrl("");
             return;
@@ -37,7 +46,20 @@ function RegisteredLetters() {
         setPdfPreviewUrl(objectUrl);
 
         return () => URL.revokeObjectURL(objectUrl);
+
     }, [pdfFile]);
+
+    const getRoles = async () => {
+        try{
+            const response = await axios.get("http://localhost:5000/api/roles/getroles");
+            setRoles(response.data);
+
+        }catch (error) {
+            console.log(error);
+
+        }
+        
+    }
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -195,15 +217,26 @@ function RegisteredLetters() {
 
                         <div className="field-group">
                             <label htmlFor="reg-destination">Destination</label>
-                            <input
+
+                            <select
                                 id="reg-destination"
                                 name="destination"
-                                type="text"
                                 value={formData.destination}
                                 onChange={handleChange}
                                 required
-                                readOnly={isLetterLoaded}
-                            />
+                                disabled={isLetterLoaded}
+                            >
+                                <option value="">Select a role</option>
+
+                                {departmentRoles.map((role) => (
+                                    <option
+                                        key={role._id}
+                                        value={role.name}
+                                    >
+                                        {role.name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div className="field-group">
