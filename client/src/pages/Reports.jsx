@@ -171,13 +171,13 @@ function Reports() {
                 </div>
                 <div className="header-actions">
                     <button type="button" className="btn-action btn-print" onClick={handlePrint}>
-                        🖨️ Print Report
+                        Print Report
                     </button>
                     <button type="button" className="btn-action btn-csv" onClick={exportToCSV}>
-                        📥 Export CSV
+                        Export CSV
                     </button>
                     <button type="button" className="btn-action btn-reset" onClick={handleResetFilters}>
-                        🔄 Reset
+                        Reset
                     </button>
                 </div>
             </div>
@@ -275,7 +275,7 @@ function Reports() {
                                     onChange={(e) => setSearch(e.target.value)}
                                 />
                                 <button type="submit" className="btn-action btn-print" style={{ padding: "10px 14px" }}>
-                                    🔍
+                                    Search
                                 </button>
                             </div>
                         </div>
