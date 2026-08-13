@@ -1,4 +1,3 @@
-import Navbar from "../components/Navbar";
 import "../styles/LoginPage.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -22,8 +21,8 @@ function LoginPage() {
             const response = await axios.post(
                 "http://localhost:5000/api/auth/login",
                 {
-                    username,
-                    password
+                    username: username.trim(),
+                    password: password.trim()
                 }
             );
 
@@ -65,7 +64,7 @@ function LoginPage() {
                 
             }
             else {
-              navigate("/inbox");
+              alert("Not yet implemented");
             }
 
         } catch (error) {
@@ -81,8 +80,6 @@ function LoginPage() {
 
     return (
         <>
-            <Navbar />
-
             <div className="login-container">
 
                 <div className="login-card">
@@ -141,6 +138,12 @@ function LoginPage() {
                         </button>
 
                     </form>
+
+                    <div style={{ marginTop: "16px", fontSize: "12px", color: "#666", textAlign: "center" }}>
+                        <p style={{ margin: 0 }}><strong>Local Dev Accounts:</strong></p>
+                        <p style={{ margin: "2px 0 0" }}>Admin: <code>admin</code> / <code>admin123</code></p>
+                        <p style={{ margin: "2px 0 0" }}>Officer: <code>officer</code> / <code>officer123</code></p>
+                    </div>
 
                 </div>
 
