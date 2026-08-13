@@ -1,20 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Sri Lanka Railways Official Palette */
+  --slr-dark-maroon: #3B0F1A;
+  --slr-crimson-maroon: #66172E;
+  --slr-steel-blue: #55708E;
+  --slr-ice-blue: #B7C7D9;
+  --slr-warm-ivory: #F2EDE6;
+
+  /* Primary Theme Token Mappings */
+  --primary-50: rgba(183, 199, 217, 0.3);
+  --primary-100: #B7C7D9;
+  --primary-200: #9cb1c9;
+  --primary-500: #55708E;
+  --primary-600: #66172E;
+  --primary-700: #3B0F1A;
+  --primary-900: #290a12;
+  
+  --accent-cyan: #55708E;
+  --accent-amber: #d97706;
+  --accent-emerald: #166534;
+
+  --navy-900: #3B0F1A;
+  --navy-800: #66172E;
+  --navy-700: #55708E;
+  --slate-500: #55708E;
+  --slate-400: #7b94b2;
+  --slate-200: #B7C7D9;
+  --slate-100: #eae4db;
+  --slate-50: #F2EDE6;
+
+  --bg-gradient: linear-gradient(135deg, #F2EDE6 0%, #e9e2d7 50%, #f5f0e9 100%);
+  --header-bg: linear-gradient(135deg, #3B0F1A 0%, #4e1422 60%, #66172E 100%);
+  --nav-bar-bg: linear-gradient(90deg, #3B0F1A 0%, #4a1321 50%, #3B0F1A 100%);
+  
+  --glass-card: rgba(255, 255, 255, 0.94);
+  --glass-card-hover: #ffffff;
+  --glass-border: rgba(183, 199, 217, 0.7);
+  
+  --shadow-sm: 0 2px 8px rgba(59, 15, 26, 0.04);
+  --shadow-md: 0 8px 24px -6px rgba(59, 15, 26, 0.08);
+  --shadow-lg: 0 20px 40px -12px rgba(59, 15, 26, 0.14);
+  --shadow-glow: 0 10px 30px -5px rgba(102, 23, 46, 0.35);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-full: 9999px;
+
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Outfit', system-ui, -apple-system, sans-serif;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
-  background: linear-gradient(180deg, #eef7ff 0%, #f8f9ff 32%, #f3f7fb 100%);
+  background: var(--bg-gradient);
+  color: var(--slr-dark-maroon);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--slr-ice-blue);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--slr-steel-blue);
+}
+
+/* Smooth Focus States */
+:focus-visible {
+  outline: 2px solid var(--slr-crimson-maroon);
+  outline-offset: 2px;
 }
 
 .layout {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .content {
   margin-left: 0;
-  padding: 20px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.4), rgba(233,244,255,0.6));
+  padding: 28px 32px;
+  background: transparent;
+  flex: 1;
 }

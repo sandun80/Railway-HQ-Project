@@ -16,9 +16,10 @@ function NormalLetter() {
 
     const [roles, setRoles] = useState([]);
     const excludedRoleNames = ["officer", "viewer", "admin"];
-    const departmentRoles = roles.filter(
+    const filteredRoles = roles.filter(
         (role) => !excludedRoleNames.includes(String(role.name).toLowerCase())
     );
+    const departmentRoles = filteredRoles.length > 0 ? filteredRoles : roles;
 
     const user = JSON.parse(localStorage.getItem("user"));
     const username = user?.username;

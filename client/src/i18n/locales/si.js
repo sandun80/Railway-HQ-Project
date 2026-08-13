@@ -17,7 +17,7 @@ const si = {
 
     navbar: {
         orgName: "ශ්‍රී ලංකා දුම්රිය",
-        orgTagline: "නිල ලේඛන කළමනාකරණ පද්ධතිය",
+        orgTagline: "ලිපි කළමනාකරණ පද්ධතිය",
         english: "ඉංග්‍රීසි",
         sinhala: "සිංහල",
         tamil: "දෙමළ",

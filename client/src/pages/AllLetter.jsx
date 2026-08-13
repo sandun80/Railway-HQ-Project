@@ -387,9 +387,12 @@ function AllLetter() {
                 <div className="letter-modal-overlay" onClick={closeEditPanel}>
                     <div className="letter-modal" onClick={(event) => event.stopPropagation()}>
                         <div className="letter-modal-header">
-                            <h3>{t("allLetter.editLetter")}</h3>
+                            <div>
+                                <p className="modal-kicker">UPDATE RECORD</p>
+                                <h3>{t("allLetter.editLetter")}{editForm.letterNumber ? `: ${editForm.letterNumber}` : ""}</h3>
+                            </div>
                             <button type="button" className="letter-modal-close" onClick={closeEditPanel}>
-                                x
+                                ×
                             </button>
                         </div>
 
@@ -591,7 +594,7 @@ function AllLetter() {
                         <div className="letter-modal-header">
                             <div>
                                 <p className="modal-kicker">{t("allLetter.letterDetails")}</p>
-                                <h3>{selectedLetter.letterNumber || "-"}</h3>
+                                <h3>{selectedLetter.title || selectedLetter.letterNumber || "-"}</h3>
                             </div>
                             <button type="button" className="letter-modal-close" onClick={closeViewPanel}>
                                 ×
@@ -599,9 +602,9 @@ function AllLetter() {
                         </div>
 
                         <div className="letter-modal-summary">
-                            <span>{selectedLetter.flow || "-"}</span>
-                            <span>{selectedLetter.category || "-"}</span>
-                            <span>{selectedLetter.status || "-"}</span>
+                            <span className={`summary-pill flow-${selectedLetter.flow}`}>{selectedLetter.flow || "-"}</span>
+                            <span className={`summary-pill cat-${selectedLetter.category}`}>{selectedLetter.category || "-"}</span>
+                            <span className={`summary-pill status-${selectedLetter.status}`}>{selectedLetter.status || "-"}</span>
                         </div>
 
                         <div className="letter-modal-body">

@@ -26,9 +26,10 @@ function Byhand() {
     });
     const [roles, setRoles] = useState([]);
     const excludedRoleNames = ["officer", "viewer", "admin"];
-    const departmentRoles = roles.filter(
+    const filteredRoles = roles.filter(
         (role) => !excludedRoleNames.includes(String(role.name).toLowerCase())
     );
+    const departmentRoles = filteredRoles.length > 0 ? filteredRoles : roles;
     const [departments, setDepartments] = useState([]);
     const [activeSpecialRegister, setActiveSpecialRegister] = useState("publicAdministration");
     const [specialForms, setSpecialForms] = useState({

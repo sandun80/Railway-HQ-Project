@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import logo from "../assets/logo.png";
 import "../styles/Navbar.css";
@@ -8,6 +8,7 @@ function Navbar() {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const [lettersOpen, setLettersOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const role = user?.role || "officer";
@@ -24,6 +25,20 @@ function Navbar() {
     localStorage.removeItem("role");
     navigate("/", { replace: true });
   };
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setLettersOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const getMenuItems = () => {
     if (role === "admin") {
@@ -87,7 +102,14 @@ function Navbar() {
             >
               {t("navbar.sinhala")}
             </span>
-            <span className="lang-toggle">{t("navbar.tamil")}</span>
+            <span
+              className={`lang-toggle ${i18n.language === "ta" ? "active-lang" : ""}`}
+              onClick={() => changeLanguage("ta")}
+              role="button"
+              tabIndex={0}
+            >
+              {t("navbar.tamil")}
+            </span>
           </div>
         </div>
       </div>
@@ -95,7 +117,7 @@ function Navbar() {
       <div className="railway-nav-bar">
         {menuItems.map((item) =>
           item.children ? (
-            <div key={item.label} className="nav-dropdown">
+            <div key={item.label} className="nav-dropdown" ref={dropdownRef}>
               <button
                 type="button"
                 className="nav-link nav-dropdown-toggle"
@@ -108,7 +130,12 @@ function Navbar() {
               {lettersOpen && (
                 <div className="nav-dropdown-menu">
                   {item.children.map((child) => (
-                    <Link key={child.label} to={child.to} className="nav-dropdown-item">
+                    <Link
+                      key={child.label}
+                      to={child.to}
+                      className="nav-dropdown-item"
+                      onClick={() => setLettersOpen(false)}
+                    >
                       {child.label}
                     </Link>
                   ))}
@@ -116,7 +143,12 @@ function Navbar() {
               )}
             </div>
           ) : (
-            <Link key={item.label} to={item.to} className="nav-link">
+            <Link
+              key={item.label}
+              to={item.to}
+              className="nav-link"
+              onClick={() => setLettersOpen(false)}
+            >
               {item.label}
             </Link>
           )

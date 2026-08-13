@@ -2,239 +2,233 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
-  box-shadow: 0 10px 30px rgba(10, 42, 92, 0.18);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 12px 36px -10px rgba(59, 15, 26, 0.16);
+  border-bottom: 1px solid var(--slr-ice-blue);
 }
 
 .railway-brand-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 14px 22px 12px;
-  background: linear-gradient(135deg, #0a3d8f 0%, #0075c9 35%, #14b6d3 100%);
-  color: #fff;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  gap: 24px;
+  padding: 18px 40px;
+  background: linear-gradient(135deg, #3B0F1A 0%, #4e1422 55%, #66172E 100%);
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.railway-brand-bar::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(183, 199, 217, 0.2) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .brand-wrap {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 20px;
+  z-index: 1;
 }
 
 .navbar-logo {
-  height: 58px;
+  height: 68px;
   width: auto;
-  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.24));
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
+  transition: transform 0.3s ease;
+}
+
+.navbar-logo:hover {
+  transform: scale(1.05);
 }
 
 .navbar-title {
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 .navbar-title h2 {
   margin: 0;
-  font-size: clamp(1.2rem, 2vw, 1.8rem);
-  line-height: 1.2;
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  color: #fff;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  font-size: clamp(1.5rem, 2.2vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  font-family: var(--font-heading);
+  line-height: 1.15;
 }
 
 .navbar-title p {
-  margin: 2px 0 0;
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.92);
-  letter-spacing: 0.04em;
+  margin: 4px 0 0;
+  font-size: 0.92rem;
+  color: var(--slr-ice-blue);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .brand-tools {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 20px;
+  z-index: 1;
 }
 
 .gov-links {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.96);
+  gap: 12px;
 }
 
-.site-tag,
 .lang-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  padding: 5px 9px;
-  background: linear-gradient(135deg, rgba(255, 209, 102, 0.25), rgba(255, 136, 0, 0.3));
-  border: 1px solid rgba(255, 223, 139, 0.7);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
-  font-size: 0.8rem;
+  padding: 8px 18px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lang-toggle:hover {
+  background: rgba(255, 255, 255, 0.28);
+  transform: translateY(-1px);
 }
 
 .lang-toggle.active-lang {
-  background: linear-gradient(135deg, #ffd166, #ff8800);
-  color: #0f2e57;
-  font-weight: 700;
+  background: linear-gradient(135deg, #66172E, #3B0F1A);
+  border-color: var(--slr-ice-blue);
+  color: #ffffff;
+  font-weight: 800;
+  box-shadow: 0 4px 14px rgba(102, 23, 46, 0.45);
 }
 
-.search-box {
-  background: rgba(255, 255, 255, 0.97);
-  border-radius: 8px;
-  padding: 7px 10px;
-  min-width: 170px;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 8px 20px rgba(6, 24, 58, 0.18);
-}
-
-.search-box input {
-  width: 100%;
-  border: none;
-  background: transparent;
-  outline: none;
-  font-size: 0.82rem;
-  color: #0f172a;
-}
-
+/* Secondary Nav bar */
 .railway-nav-bar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  gap: 2px;
-  background: linear-gradient(90deg, #0b2c5c 0%, #0e3f7a 30%, #0a2750 100%);
-  padding: 0 18px;
-  position: relative;
-  min-height: 52px;
+  gap: 10px;
+  background: linear-gradient(90deg, #3B0F1A 0%, #55708E 50%, #3B0F1A 100%);
+  padding: 8px 36px;
+  min-height: 60px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .nav-link,
 .nav-dropdown-toggle,
 .nav-logout {
-  color: #f8fbff;
+  color: #ffffff;
   text-decoration: none;
-  font-size: 0.92rem;
+  font-size: 1.02rem;
   font-weight: 700;
-  padding: 15px 16px;
-  transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+  padding: 12px 22px;
+  border-radius: 10px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
   border: none;
   background: transparent;
   cursor: pointer;
-  line-height: 1.2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .nav-link:hover,
-.nav-dropdown-toggle:hover,
-.nav-logout:hover {
-  background: linear-gradient(180deg, rgba(255, 196, 75, 0.18), rgba(255, 255, 255, 0.08));
-  color: #ffe9a8;
+.nav-dropdown-toggle:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
   transform: translateY(-1px);
+}
+
+.nav-link.active,
+.nav-link[aria-current="page"] {
+  background: linear-gradient(135deg, #66172E, #3B0F1A);
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(102, 23, 46, 0.45);
 }
 
 .nav-dropdown {
   position: relative;
 }
 
-.nav-dropdown-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
 .nav-dropdown-menu {
   position: absolute;
-  top: calc(100% + 4px);
+  top: calc(100% + 10px);
   left: 0;
-  min-width: 180px;
+  min-width: 220px;
   background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
-  padding: 10px 8px;
+  border-radius: 16px;
+  box-shadow: 0 24px 48px -10px rgba(59, 15, 26, 0.3);
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  z-index: 20;
+  gap: 6px;
+  z-index: 50;
+  border: 1px solid var(--slr-ice-blue);
+  animation: navDropdownFade 0.2s ease;
+}
+
+@keyframes navDropdownFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .nav-dropdown-item {
-  color: #0f172a;
+  color: var(--slr-dark-maroon);
   text-decoration: none;
-  padding: 10px 12px;
-  border-radius: 8px;
-  font-weight: 600;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all 0.15s ease;
 }
 
 .nav-dropdown-item:hover {
-  background: #eaf3ff;
-  color: #0b3b8f;
+  background: var(--slr-warm-ivory);
+  color: var(--slr-crimson-maroon);
+  transform: translateX(4px);
 }
 
 .nav-logout {
-  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
-  border-radius: 0 0 0 0;
-  margin-left: 8px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+  margin-left: auto;
+  border-radius: 10px;
+  padding: 10px 24px;
+  font-weight: 800;
+  font-size: 1.02rem;
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
+}
+
+.nav-logout:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.45);
 }
 
 @media (max-width: 980px) {
   .railway-brand-bar {
     flex-direction: column;
     align-items: flex-start;
+    padding: 18px 24px;
   }
-
   .brand-tools {
     width: 100%;
     justify-content: space-between;
-  }
-}
-
-@media (max-width: 640px) {
-  .top-browser-bar {
-    padding: 8px 12px;
-  }
-
-  .browser-url-bar {
-    font-size: 0.72rem;
-    min-width: 0;
-  }
-
-  .browser-controls,
-  .browser-tools {
-    min-width: auto;
-    gap: 8px;
-  }
-
-  .railway-brand-bar {
-    padding: 16px 14px 12px;
-  }
-
-  .brand-wrap {
-    width: 100%;
-  }
-
-  .navbar-title h2 {
-    font-size: 1.2rem;
-  }
-
-  .brand-tools {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .search-box {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .nav-link {
-    padding: 12px 10px;
-    font-size: 0.78rem;
   }
 }

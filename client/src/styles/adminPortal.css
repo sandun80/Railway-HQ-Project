@@ -1,245 +1,332 @@
-.role-list-section {
-    margin-top: 28px;
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
-    padding: 20px;
+.admin-portal-container {
+  padding: 8px 4px 40px;
+  color: var(--slr-dark-maroon);
 }
 
-.role-list-section h3 {
-    margin-top: 0;
-    margin-bottom: 16px;
-    color: #0f172a;
+.admin-portal-header {
+  margin-bottom: 28px;
+}
+
+.admin-portal-header h1 {
+  margin: 0 0 6px 0;
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-family: var(--font-heading);
+  color: var(--slr-dark-maroon);
+}
+
+.admin-portal-header p {
+  margin: 0;
+  color: var(--slr-steel-blue);
+  font-size: 0.95rem;
+}
+
+.admin-grid-two {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.admin-card {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  border-radius: 20px;
+  padding: 28px;
+  border: 1px solid var(--slr-ice-blue);
+  box-shadow: 0 12px 32px -8px rgba(59, 15, 26, 0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-card h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--slr-dark-maroon);
+  font-family: var(--font-heading);
+}
+
+.card-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.card-header-bar h3 {
+  margin-bottom: 0;
+}
+
+.count-badge {
+  background: var(--slr-ice-blue);
+  color: var(--slr-dark-maroon);
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.admin-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-field-group label,
+.admin-quick-section label {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--slr-dark-maroon);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-field-group input,
+.admin-field-group select,
+.admin-inline-group input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid var(--slr-ice-blue);
+  border-radius: 12px;
+  font-size: 0.92rem;
+  background: var(--slr-warm-ivory);
+  color: var(--slr-dark-maroon);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.admin-field-group input:focus,
+.admin-field-group select:focus,
+.admin-inline-group input:focus {
+  border-color: var(--slr-crimson-maroon);
+  box-shadow: 0 0 0 4px rgba(102, 23, 46, 0.15);
+  background: #ffffff;
+}
+
+.admin-inline-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.admin-inline-group input {
+  flex: 1;
+}
+
+.admin-btn-primary {
+  margin-top: 8px;
+  width: 100%;
+  background: linear-gradient(135deg, var(--slr-crimson-maroon), var(--slr-dark-maroon));
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 20px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(102, 23, 46, 0.35);
+  transition: all 0.25s ease;
+}
+
+.admin-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(102, 23, 46, 0.45);
+}
+
+.admin-btn-accent {
+  background: linear-gradient(135deg, var(--slr-steel-blue), var(--slr-dark-maroon));
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(85, 112, 142, 0.3);
+  transition: all 0.2s ease;
+}
+
+.admin-btn-accent:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(85, 112, 142, 0.4);
 }
 
 .role-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .role-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--slr-warm-ivory);
+  border: 1px solid var(--slr-ice-blue);
+  border-radius: 12px;
+  padding: 14px 18px;
+  transition: all 0.2s ease;
 }
 
-.role-item span {
-    font-weight: 600;
-    color: #0f172a;
-    text-transform: lowercase;
+.role-item:hover {
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(59, 15, 26, 0.06);
+}
+
+.role-name {
+  font-weight: 700;
+  color: var(--slr-dark-maroon);
+  text-transform: capitalize;
+  font-size: 0.95rem;
 }
 
 .role-actions {
-    display: flex;
-    gap: 8px;
+  display: flex;
+  gap: 8px;
 }
 
 .edit-role-btn,
-.delete-role-btn,
-.cancel-btn,
-.save-user-btn,
-.close-modal-btn {
-    border: none;
-    border-radius: 8px;
-    padding: 8px 12px;
-    cursor: pointer;
-    font-weight: 600;
+.delete-role-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.82rem;
+  transition: all 0.2s ease;
 }
 
 .edit-role-btn {
-    background: #dbeafe;
-    color: #1d4ed8;
+  background: var(--slr-ice-blue);
+  color: var(--slr-dark-maroon);
+}
+
+.edit-role-btn:hover {
+  background: var(--slr-steel-blue);
+  color: #ffffff;
 }
 
 .delete-role-btn {
-    background: #fee2e2;
-    color: #b91c1c;
+  background: #fee2e2;
+  color: #dc2626;
 }
 
+.delete-role-btn:hover {
+  background: #fecaca;
+}
+
+/* Modals */
 .edit-role-modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
-    padding: 20px;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
 }
 
 .edit-role-card {
-    width: min(460px, 100%);
-    background: #fff;
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 24px 50px rgba(15, 23, 42, 0.18);
+  width: min(480px, 100%);
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 25px 50px -12px rgba(59, 15, 26, 0.45);
+  animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .modal-header h3 {
-    margin: 0;
-    color: #0f172a;
+  margin: 0;
+  color: var(--slr-dark-maroon);
+  font-size: 1.25rem;
+  font-weight: 800;
 }
 
 .close-modal-btn {
-    background: transparent;
-    color: #475569;
-    font-size: 24px;
-    padding: 0;
+  border: none;
+  background: var(--slr-ice-blue);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--slr-dark-maroon);
+  cursor: pointer;
 }
 
 .edit-role-field {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
 }
 
 .edit-role-field label {
-    font-weight: 600;
-    color: #334155;
+  font-weight: 800;
+  font-size: 0.82rem;
+  color: var(--slr-dark-maroon);
+  text-transform: uppercase;
 }
 
 .edit-role-field input {
-    padding: 10px 12px;
-    border: 1px solid #cbd5e1;
-    border-radius: 10px;
-    font-size: 14px;
-}
-
-.modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
-.cancel-btn {
-    background: #e2e8f0;
-    color: #0f172a;
-}
-
-.save-user-btn {
-    background: #2563eb;
-    color: #fff;
-}
-
-.role-create-container {
-    display: flex;
-    gap: 10px;
-}
-
-.role-create-container input {
-    flex: 1;
-}
-
-.role-create-container button {
-    background: #2563eb;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    padding: 0 14px;
-    font-weight: 700;
-    cursor: pointer;
-    height: 30px;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-
-form div {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-label {
-    font-weight: 600;
-    color: #334155;
-}
-
-input,
-select {
-    padding: 10px 12px;
-    border: 1px solid #cbd5e1;
-    border-radius: 10px;
-    font-size: 14px;
-}
-
-button[type="submit"] {
-    background: #2563eb;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    padding: 12px 18px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-form div {
-  margin-bottom: 16px;
-  max-width: 350px; /* limit field width */
-}
-
-label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 6px;
-  color: #333333;
-}
-
-input[type="text"],
-input[type="password"],
-select {
-  width: 100%;
-  max-width: 950px; /* keep consistent width */
-  padding: 8px 10px;
-  border: 1px solid #cccccc;
-  border-radius: 6px;
-  font-size: 14px;
-  background-color: #ffffff;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-input[type="text"]:focus,
-input[type="password"]:focus,
-select:focus {
-  border-color: #0078d7; /* Accent blue */
-  box-shadow: 0 0 4px rgba(0,120,215,0.3);
+  padding: 12px 16px;
+  border: 1.5px solid var(--slr-ice-blue);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  background: var(--slr-warm-ivory);
+  color: var(--slr-dark-maroon);
   outline: none;
 }
 
-/* Button styling */
-button {
-  display: inline-block;
-  padding: 10px 18px;
-  background-color: #0078d7;
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 14px;
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.cancel-btn,
+.save-user-btn {
   border: none;
-  border-radius: 6px;
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-weight: 700;
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: background-color 0.2s ease;
-  max-width: 150px; /* keep button compact */
 }
 
-button:hover {
-  background-color: #005a9e;
+.cancel-btn {
+  background: var(--slr-ice-blue);
+  color: var(--slr-dark-maroon);
 }
 
+.save-user-btn {
+  background: linear-gradient(135deg, var(--slr-crimson-maroon), var(--slr-dark-maroon));
+  color: #ffffff;
+}
+
+@media (max-width: 900px) {
+  .admin-grid-two {
+    grid-template-columns: 1fr;
+  }
+}

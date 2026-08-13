@@ -17,7 +17,7 @@ const en = {
 
     navbar: {
         orgName: "Sri Lanka Railways",
-        orgTagline: "Official Document Management System",
+        orgTagline: "Letter Management System",
         english: "English",
         sinhala: "Sinhala",
         tamil: "Tamil",
