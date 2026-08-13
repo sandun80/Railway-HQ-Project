@@ -16,9 +16,15 @@ function ByhandReceive() {
         letterDate: "",
         letterTitle: "",
         registerType: "subject",
-        subjectOrOfficer: "",
+        department: "",
+        subject: "",
         receivingConfirmation: "",
     });
+    const [roles, setRoles] = useState([]);
+    const excludedRoleNames = ["officer", "viewer", "admin"];
+    const departmentRoles = roles.filter(
+        (role) => !excludedRoleNames.includes(String(role.name).toLowerCase())
+    );
 
     const [activeSpecialRegister, setActiveSpecialRegister] = useState("publicAdministration");
     const [specialForms, setSpecialForms] = useState({
@@ -86,6 +92,19 @@ function ByhandReceive() {
     }, [routingPdfFile]);
 
     useEffect(() => {
+        const getRoles = async () => {
+            try {
+                const response = await axios.get("http://localhost:5000/api/roles/getroles");
+                setRoles(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        getRoles();
+    }, []);
+
+    useEffect(() => {
         const objectUrls = [];
         const nextPreviewUrls = {
             publicAdministration: "",
@@ -135,8 +154,8 @@ function ByhandReceive() {
                 flow: "receiving",
                 category: "byhand",
                 title: routingForm.letterTitle,
-                destination: routingForm.subjectOrOfficer,
-                subject_department_or_officer: routingForm.subjectOrOfficer,
+                destination: routingForm.department,
+                subject_department_or_officer: `Department: ${routingForm.department} | Subject: ${routingForm.subject}`,
                 letterDate: routingForm.letterDate,
                 status: "Received",
                 pdf: pdfData,
@@ -219,16 +238,34 @@ function ByhandReceive() {
 
                         <div className="field-group">
                             <label htmlFor="rec-byhand-subject-officer">
-                                Subject / Department or Officer
+                                Department
                             </label>
                             <input
                                 id="rec-byhand-subject-officer"
-                                name="subjectOrOfficer"
+                                name="department"
                                 type="text"
-                                value={routingForm.subjectOrOfficer}
+                                value={routingForm.department}
                                 onChange={handleRoutingChange}
                                 required
                             />
+                        </div>
+
+                        <div className="field-group">
+                            <label htmlFor="rec-byhand-subject">Subject</label>
+                            <select
+                                id="rec-byhand-subject"
+                                name="subject"
+                                value={routingForm.subject}
+                                onChange={handleRoutingChange}
+                                required
+                            >
+                                <option value="">Select role</option>
+                                {departmentRoles.map((role) => (
+                                    <option key={role._id} value={role.name}>
+                                        {role.name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div className="field-group">
