@@ -3,9 +3,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  width: 100%;
-  background-position: center center;
-  background-repeat: no-repeat;
+  background: url("../assets/Background.png") no-repeat center center fixed;
   background-size: cover;
   padding: 24px;
   position: relative;
@@ -32,6 +30,7 @@
     opacity: 0;
     transform: translateY(24px) scale(0.96);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -115,9 +114,19 @@
 }
 
 @keyframes shakeError {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  75% { transform: translateX(6px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-6px);
+  }
+
+  75% {
+    transform: translateX(6px);
+  }
 }
 
 .input-group {
