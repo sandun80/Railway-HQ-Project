@@ -28,6 +28,16 @@ function ByhandReceive() {
         (role) => !excludedRoleNames.includes(String(role.name).toLowerCase())
     );
     const [departments, setDepartments] = useState([]);
+    const defaultDepartmentList = [
+        { _id: "dep-1", name: "Administration" },
+        { _id: "dep-2", name: "Commercial & Traffic" },
+        { _id: "dep-3", name: "Engineering" },
+        { _id: "dep-4", name: "Finance & Accounts" },
+        { _id: "dep-5", name: "Human Resource Management" },
+        { _id: "dep-6", name: "Operations & Transportation" },
+        { _id: "dep-7", name: "Procurement & Stores" }
+    ];
+    const availableDepartments = departments.length > 0 ? departments : defaultDepartmentList;
 
     const [activeSpecialRegister, setActiveSpecialRegister] = useState("publicAdministration");
     const [specialForms, setSpecialForms] = useState({
@@ -165,13 +175,15 @@ function ByhandReceive() {
         try {
             const pdfData = routingPdfFile ? await convertPdfToBase64(routingPdfFile) : "";
 
+            const deptInfo = routingForm.department ? `Department: ${routingForm.department} | ` : "";
+
             await axios.post("http://localhost:5000/api/letters", {
                 letterNumber: routingForm.letterNumber,
                 flow: "receiving",
                 category: "byhand",
                 title: routingForm.letterTitle,
-                destination: routingForm.department,
-                subject_department_or_officer: `Department: ${routingForm.department} | Subject: ${routingForm.subject}`,
+                destination: routingForm.department || "General",
+                subject_department_or_officer: `${deptInfo}Subject: ${routingForm.subject}`,
                 letterDate: routingForm.letterDate,
                 status: "Received",
                 pdf: pdfData,
@@ -261,11 +273,10 @@ function ByhandReceive() {
                                 name="department"
                                 value={routingForm.department}
                                 onChange={handleRoutingChange}
-                                required
                             >
                                 <option value="">{t("byhandReceive.selectDepartment")}</option>
-                                {departments.map((department) => (
-                                    <option key={department._id} value={department.name}>
+                                {availableDepartments.map((department) => (
+                                    <option key={department._id || department.name} value={department.name}>
                                         {department.name}
                                     </option>
                                 ))}

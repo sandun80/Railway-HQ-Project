@@ -31,6 +31,16 @@ function Byhand() {
     );
     const departmentRoles = filteredRoles.length > 0 ? filteredRoles : roles;
     const [departments, setDepartments] = useState([]);
+    const defaultDepartmentList = [
+        { _id: "dep-1", name: "Administration" },
+        { _id: "dep-2", name: "Commercial & Traffic" },
+        { _id: "dep-3", name: "Engineering" },
+        { _id: "dep-4", name: "Finance & Accounts" },
+        { _id: "dep-5", name: "Human Resource Management" },
+        { _id: "dep-6", name: "Operations & Transportation" },
+        { _id: "dep-7", name: "Procurement & Stores" }
+    ];
+    const availableDepartments = departments.length > 0 ? departments : defaultDepartmentList;
     const [activeSpecialRegister, setActiveSpecialRegister] = useState("publicAdministration");
     const [specialForms, setSpecialForms] = useState({
         publicAdministration: {
@@ -156,13 +166,15 @@ function Byhand() {
         try {
             const pdfData = pdfFile ? await convertPdfToBase64(pdfFile) : "";
 
+            const deptInfo = formData.department ? `Department: ${formData.department} | ` : "";
+
             await axios.post("http://localhost:5000/api/letters", {
                 letterNumber: formData.letterNumber,
                 flow: "sending",
                 category: "byhand",
                 title: formData.letterTitle,
-                destination: formData.department,
-                subject_department_or_officer: `Department: ${formData.department} | Subject: ${formData.subject}`,
+                destination: formData.department || "General",
+                subject_department_or_officer: `${deptInfo}Subject: ${formData.subject}`,
                 letterDate: formData.letterDate,
                 status: "Sent",
                 sender: username,
@@ -264,11 +276,10 @@ function Byhand() {
                                 name="department"
                                 value={formData.department}
                                 onChange={handleChange}
-                                required
                             >
                                 <option value="">{t("byhandLetter.selectDepartment")}</option>
-                                {departments.map((department) => (
-                                    <option key={department._id} value={department.name}>
+                                {availableDepartments.map((department) => (
+                                    <option key={department._id || department.name} value={department.name}>
                                         {department.name}
                                     </option>
                                 ))}

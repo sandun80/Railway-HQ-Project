@@ -114,8 +114,30 @@ export const deleteDepartment = async (req, res) => {
 
 export const getDepartments = async (req, res) => {
     try {
+        let departments = await Department.find().sort({ name: 1 });
 
-        const departments = await Department.find().sort({ name: 1 });
+        if (!departments || departments.length === 0) {
+            const defaultDeptNames = [
+                "Administration",
+                "Commercial & Traffic",
+                "Engineering",
+                "Finance & Accounts",
+                "Human Resource Management",
+                "Motive Power & Rolling Stock",
+                "Operations & Transportation",
+                "Planning & Development",
+                "Procurement & Stores",
+                "Signals & Telecommunication"
+            ];
+
+            try {
+                const seedDocs = defaultDeptNames.map((name) => ({ name }));
+                departments = await Department.insertMany(seedDocs, { ordered: false });
+            } catch (seedErr) {
+                console.log("Department auto-seed notice:", seedErr.message);
+                departments = await Department.find().sort({ name: 1 });
+            }
+        }
 
         res.status(200).json(departments);
 
