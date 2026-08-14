@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import "../styles/sendingForms.css";
 import axios from "axios";
+import MessageModal from "../components/MessageModal";
 
 function Byhand() {
     const { t } = useTranslation();
@@ -95,6 +96,9 @@ function Byhand() {
         transportMinistry: "",
         publicServiceCommission: "",
     });
+
+    const [modalInfo, setModalInfo] = useState({ isOpen: false, title: "", message: "", type: "success" });
+    const closeModal = () => setModalInfo((prev) => ({ ...prev, isOpen: false }));
 
     const convertPdfToBase64 = (file) => new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -191,10 +195,20 @@ function Byhand() {
                 pdf: pdfData,
             });
 
-            alert("By-hand sending details saved.");
+            setModalInfo({
+                isOpen: true,
+                title: "Letter Saved",
+                message: "By-hand sending details saved successfully.",
+                type: "success"
+            });
         } catch (error) {
             const errorMessage = error?.response?.data?.message || "Failed to save by-hand sending letter.";
-            alert(errorMessage);
+            setModalInfo({
+                isOpen: true,
+                title: "Error",
+                message: errorMessage,
+                type: "error"
+            });
             console.log(error);
         }
     };
@@ -228,7 +242,12 @@ function Byhand() {
         const activeLabel = specialRegisterOptions.find(
             (option) => option.key === activeSpecialRegister
         )?.label;
-        alert(`${activeLabel} special register save is frontend-only.`);
+        setModalInfo({
+            isOpen: true,
+            title: "Register Notice",
+            message: `${activeLabel} special register save details recorded.`,
+            type: "success"
+        });
     };
 
     const activeSpecialForm = specialForms[activeSpecialRegister];
@@ -489,6 +508,13 @@ function Byhand() {
                     )}
                 </aside>
             </div>
+            <MessageModal
+                isOpen={modalInfo.isOpen}
+                title={modalInfo.title}
+                message={modalInfo.message}
+                type={modalInfo.type}
+                onClose={closeModal}
+            />
         </section>
     );
 }

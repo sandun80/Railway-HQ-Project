@@ -300,63 +300,62 @@ export const getAllLettersByRole = async (req, res) => {
 
 export const getDashboardCounts = async (req, res) => {
     try {
+        const letters = await Letter.find();
 
-        const counts = await Letter.aggregate([
-            {
-                $group: {
-                    _id: null,
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
 
-                    registered: {
-                        $sum: {
-                            $cond: [
-                                { $eq: ["$category", "registered"] },
-                                1,
-                                0
-                            ]
-                        }
-                    },
+        const todayEnd = new Date();
+        todayEnd.setHours(23, 59, 59, 999);
 
-                    normal: {
-                        $sum: {
-                            $cond: [
-                                { $eq: ["$category", "normal"] },
-                                1,
-                                0
-                            ]
-                        }
-                    },
+        const sendingToday = { registered: 0, normal: 0, byhand: 0, specialByhand: 0, total: 0 };
+        const sendingAllTime = { registered: 0, normal: 0, byhand: 0, specialByhand: 0, total: 0 };
+        const receivedToday = { registered: 0, normal: 0, byhand: 0, specialByhand: 0, total: 0 };
+        const receivedAllTime = { registered: 0, normal: 0, byhand: 0, specialByhand: 0, total: 0 };
 
-                    byhand: {
-                        $sum: {
-                            $cond: [
-                                { $eq: ["$category", "byhand"] },
-                                1,
-                                0
-                            ]
-                        }
-                    },
+        letters.forEach((letter) => {
+            const letterDate = letter.letterDate ? new Date(letter.letterDate) : new Date(letter.createdAt);
+            const isToday = letterDate >= todayStart && letterDate <= todayEnd;
+            const flow = (letter.flow || "").toLowerCase();
+            const cat = (letter.category || "normal").toLowerCase();
 
-                    draft: {
-                        $sum: {
-                            $cond: [
-                                { $eq: ["$status", "Draft"] },
-                                1,
-                                0
-                            ]
-                        }
-                    }
+            if (flow === "sending") {
+                sendingAllTime.total++;
+                if (cat === "registered") sendingAllTime.registered++;
+                else if (cat === "byhand") sendingAllTime.byhand++;
+                else if (cat === "specialbyhand") sendingAllTime.specialByhand++;
+                else sendingAllTime.normal++;
+
+                if (isToday) {
+                    sendingToday.total++;
+                    if (cat === "registered") sendingToday.registered++;
+                    else if (cat === "byhand") sendingToday.byhand++;
+                    else if (cat === "specialbyhand") sendingToday.specialByhand++;
+                    else sendingToday.normal++;
+                }
+            } else {
+                receivedAllTime.total++;
+                if (cat === "registered") receivedAllTime.registered++;
+                else if (cat === "byhand") receivedAllTime.byhand++;
+                else if (cat === "specialbyhand") receivedAllTime.specialByhand++;
+                else receivedAllTime.normal++;
+
+                if (isToday) {
+                    receivedToday.total++;
+                    if (cat === "registered") receivedToday.registered++;
+                    else if (cat === "byhand") receivedToday.byhand++;
+                    else if (cat === "specialbyhand") receivedToday.specialByhand++;
+                    else receivedToday.normal++;
                 }
             }
-        ]);
+        });
 
-        const result = counts[0] || {
-            registered: 0,
-            normal: 0,
-            byhand: 0,
-            draft: 0
-        };
-
-        res.status(200).json(result);
+        res.status(200).json({
+            sendingToday,
+            sendingAllTime,
+            receivedToday,
+            receivedAllTime
+        });
 
     } catch (error) {
 
