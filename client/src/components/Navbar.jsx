@@ -95,7 +95,7 @@ function Navbar() {
       return [
         { label: t("navbar.allLetters"), to: "/allletters" },
         { label: t("navbar.historyLogs", "History Logs"), to: "/logs" }
-      ];
+      ]; 0
     }
 
     if (role === "officer") {
