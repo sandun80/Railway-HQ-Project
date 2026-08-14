@@ -56,23 +56,25 @@ function Navbar() {
       ];
     }
 
-    if (role === "replyperson") {
+    if (role === "officer") {
       return [
-        { label: t("navbar.inbox"), to: "/inbox" },
+        { label: t("navbar.dashboard"), to: "/dashboard" },
+        {
+          label: t("navbar.letters"),
+          children: [
+            { label: t("navbar.sending"), to: "/letters/sending" },
+            { label: t("navbar.receiving"), to: "/letters/receiving" }
+          ]
+        },
+        { label: t("navbar.reports"), to: "/reports" },
+        { label: t("navbar.allLetters"), to: "/allletters" },
         { label: t("navbar.historyLogs", "History Logs"), to: "/logs" }
       ];
     }
 
+    // All reply/recipient roles (e.g. gmr, replyperson, staff)
     return [
-      { label: t("navbar.dashboard"), to: "/dashboard" },
-      {
-        label: t("navbar.letters"),
-        children: [
-          { label: t("navbar.sending"), to: "/letters/sending" },
-          { label: t("navbar.receiving"), to: "/letters/receiving" }
-        ]
-      },
-      { label: t("navbar.reports"), to: "/reports" },
+      { label: t("navbar.inbox", "Inbox"), to: "/inbox" },
       { label: t("navbar.allLetters"), to: "/allletters" },
       { label: t("navbar.historyLogs", "History Logs"), to: "/logs" }
     ];

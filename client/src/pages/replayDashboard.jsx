@@ -22,12 +22,14 @@ function ReplayDashboard() {
         reader.onerror = (error) => reject(error);
     });
 
+    const username = user?.username;
+
     const getLetters = async () => {
-        if (!role) return;
+        if (!role && !username) return;
 
         try {
             const response = await axios.get("http://localhost:5000/api/letters/getlettersforreply", {
-                params: { role }
+                params: { role, username }
             });
 
             setLetters(response.data);
@@ -39,7 +41,7 @@ function ReplayDashboard() {
     useEffect(() => {
         getLetters();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [role]);
+    }, [role, username]);
 
     const filteredLetters = useMemo(() => {
         if (!searchTerm.trim()) return letters;

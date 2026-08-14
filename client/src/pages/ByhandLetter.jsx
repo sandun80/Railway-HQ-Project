@@ -25,11 +25,20 @@ function Byhand() {
         subject: "",
     });
     const [roles, setRoles] = useState([]);
-    const excludedRoleNames = ["officer", "viewer", "admin"];
+    const excludedRoleNames = ["admin", "viewer"];
     const filteredRoles = roles.filter(
         (role) => !excludedRoleNames.includes(String(role.name).toLowerCase())
     );
-    const departmentRoles = filteredRoles.length > 0 ? filteredRoles : roles;
+    const defaultRolesList = [
+        { _id: "r1", name: "gmr" },
+        { _id: "r2", name: "officer" },
+        { _id: "r3", name: "additional_secretary" },
+        { _id: "r4", name: "chief_engineer" },
+        { _id: "r5", name: "senior_clerk" },
+        { _id: "r6", name: "staff" },
+        { _id: "r7", name: "replyperson" }
+    ];
+    const departmentRoles = filteredRoles.length > 0 ? filteredRoles : (roles.length > 0 ? roles : defaultRolesList);
     const [departments, setDepartments] = useState([]);
     const defaultDepartmentList = [
         { _id: "dep-1", name: "Administration" },
@@ -173,8 +182,9 @@ function Byhand() {
                 flow: "sending",
                 category: "byhand",
                 title: formData.letterTitle,
-                destination: formData.department || "General",
-                subject_department_or_officer: `${deptInfo}Subject: ${formData.subject}`,
+                destination: formData.subject || formData.department || "General",
+                receiver: formData.subject || "",
+                subject_department_or_officer: `${deptInfo}Target Role: ${formData.subject}`,
                 letterDate: formData.letterDate,
                 status: "Sent",
                 sender: username,

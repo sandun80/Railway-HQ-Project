@@ -76,7 +76,7 @@ function App(){
           
           <Route 
             path="/allletters"
-            element={<ProtectedRoute allowedRoles={['officer', 'viewer']}>
+            element={<ProtectedRoute>
                   <AllLetters />
               </ProtectedRoute>}
           />

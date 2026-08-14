@@ -156,18 +156,35 @@ export const searchLetterByNumber = async(req, res) => {
 
 export const getLettersForReply = async (req, res) => {
     try {
-
         const role = String(req.query.role || "").trim();
+        const username = String(req.query.username || "").trim();
 
-        if (!role) {
+        const searchTerms = [role, username].filter(Boolean);
+
+        if (searchTerms.length === 0) {
             return res.status(400).json({
-                message: "Role is required"
+                message: "Role or username is required"
             });
         }
 
+        // Admin & Viewer can see all non-draft letters
+        if (role.toLowerCase() === "admin" || role.toLowerCase() === "viewer") {
+            const allLetters = await Letter.find({
+                status: { $ne: "Draft" }
+            }).sort({ createdAt: -1 });
+            return res.status(200).json(allLetters);
+        }
+
+        // Build regexes for exact and partial match
+        const regexes = searchTerms.map((term) => new RegExp(term, "i"));
+
         const letters = await Letter.find({
-            destination: { $regex: `^${role}$`, $options: "i" },
-            status: { $ne: "Draft" }
+            status: { $ne: "Draft" },
+            $or: [
+                { destination: { $in: regexes } },
+                { receiver: { $in: regexes } },
+                { subject_department_or_officer: { $in: regexes } }
+            ]
         }).sort({ createdAt: -1 });
 
         res.status(200).json(letters);

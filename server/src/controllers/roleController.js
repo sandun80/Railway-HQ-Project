@@ -114,8 +114,35 @@ export const deleteRole = async (req, res) => {
 
 export const getRoles = async (req, res) => {
     try {
+        let roles = await Role.find().sort({ name: 1 });
 
-        const roles = await Role.find().sort({ name: 1 });
+        const defaultRoles = [
+            "admin",
+            "officer",
+            "viewer",
+            "gmr",
+            "additional_secretary",
+            "chief_engineer",
+            "senior_clerk",
+            "staff",
+            "replyperson"
+        ];
+
+        const existingNames = new Set((roles || []).map((r) => String(r.name).toLowerCase()));
+        const missingNames = defaultRoles.filter((name) => !existingNames.has(name));
+
+        if (missingNames.length > 0) {
+            try {
+                await Role.insertMany(
+                    missingNames.map((name) => ({ name })),
+                    { ordered: false }
+                );
+                roles = await Role.find().sort({ name: 1 });
+            } catch (seedErr) {
+                console.log("Role auto-seed notice:", seedErr.message);
+                roles = await Role.find().sort({ name: 1 });
+            }
+        }
 
         res.status(200).json(roles);
 
