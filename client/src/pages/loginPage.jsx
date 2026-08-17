@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import logo from "../assets/logo.png";
-import bgImage from "../assets/Background.png";
+import bgImage from "../assets/bg.png";
 
 function LoginPage() {
 

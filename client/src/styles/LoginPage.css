@@ -3,11 +3,25 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: url("../assets/Background.png") no-repeat center center fixed;
-  background-size: cover;
   padding: 24px;
   position: relative;
   overflow: hidden;
+}
+
+.login-container::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  background: url("../assets/bg.png") no-repeat center center;
+  background-size: cover;
+  filter: blur(3px);
+  z-index: 0;
+}
+
+/* Keep your login form above the blurred background */
+.login-container > * {
+  position: relative;
+  z-index: 1;
 }
 
 .login-card {
