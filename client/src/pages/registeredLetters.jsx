@@ -260,6 +260,7 @@ function RegisteredLetters() {
                                 value={formData.registeredPostNumber}
                                 onChange={handleChange}
                                 placeholder={t("registeredLetters.registeredPostNumberPlaceholder")}
+                                required
                             />
                         </div>
 
@@ -284,7 +285,12 @@ function RegisteredLetters() {
                         >
                             {t("registeredLetters.draftSave")}
                         </button>
-                        <button type="submit">{t("registeredLetters.saveEntry")}</button>
+                        <button
+                            type="submit"
+                            disabled={!formData.registeredPostNumber.trim()}
+                        >
+                            {t("registeredLetters.saveEntry")}
+                        </button>
                     </div>
                 </form>
 
