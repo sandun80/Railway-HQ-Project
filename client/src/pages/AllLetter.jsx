@@ -36,16 +36,12 @@ function AllLetter() {
         date: ""
     });
 
-   
-
     const convertPdfToBase64 = (file) => new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => resolve(reader.result);
         reader.onerror = (error) => reject(error);
     });
-
-    
 
     const user = JSON.parse(localStorage.getItem("user"));
     const role = user?.role;
@@ -106,19 +102,14 @@ function AllLetter() {
                     : { username: userName }
             });
 
-            console.log("Role used:", currentRole);
-            console.log("Letters received:", response.data);
-
             setLetters(response.data);
         } catch (error) {
             console.error("Failed to get letters:", error);
-            console.error("Backend response:", error.response?.data);
         }
     };
 
     const handleFilterChange = (event) => {
         const { name, value } = event.target;
-
         setFilters((prev) => ({
             ...prev,
             [name]: value
@@ -383,6 +374,7 @@ function AllLetter() {
                 </table>
             </div>
 
+            {/* Edit Modal */}
             {isEditModalOpen && (
                 <div className="letter-modal-overlay" onClick={closeEditPanel}>
                     <div className="letter-modal" onClick={(event) => event.stopPropagation()}>
@@ -542,8 +534,6 @@ function AllLetter() {
                                     />
                                 </div>
 
-                                
-
                                 <div className="field-group full-width-field">
                                     <label htmlFor="edit-pdf">{t("allLetter.replacePdf")}</label>
                                     <input
@@ -588,132 +578,146 @@ function AllLetter() {
                 </div>
             )}
 
+            {/* View Details Sheet Card Modal */}
             {isViewModalOpen && selectedLetter && (
                 <div className="letter-modal-overlay" onClick={closeViewPanel}>
-                    <div className="letter-modal readonly-modal" onClick={(event) => event.stopPropagation()}>
-                        <div className="letter-modal-header">
-                            <div>
-                                <p className="modal-kicker">{t("allLetter.letterDetails")}</p>
-                                <h3>{selectedLetter.title || selectedLetter.letterNumber || "-"}</h3>
+                    <div className="modal-card" onClick={(event) => event.stopPropagation()}>
+                        <div className="modal-header">
+                            <div className="modal-title-area">
+                                <span className="modal-badge-id">
+                                    {selectedLetter.letterNumber || "NO-REF"}
+                                </span>
+                                <h3>Letter Details Sheet</h3>
                             </div>
-                            <button type="button" className="letter-modal-close" onClick={closeViewPanel}>
+                            <button type="button" className="modal-close" onClick={closeViewPanel}>
                                 ×
                             </button>
                         </div>
 
-                        <div className="letter-modal-summary">
-                            <span className={`summary-pill flow-${selectedLetter.flow}`}>{selectedLetter.flow || "-"}</span>
-                            <span className={`summary-pill cat-${selectedLetter.category}`}>{selectedLetter.category || "-"}</span>
-                            <span className={`summary-pill status-${selectedLetter.status}`}>{selectedLetter.status || "-"}</span>
-                        </div>
-
-                        <div className="letter-modal-body">
-                            <div className="letter-readonly-grid">
-                                <div className="readonly-field">
-                                    <label>{t("allLetter.letterNumberLabel")}</label>
-                                    <div>{selectedLetter.letterNumber || "-"}</div>
+                        <div className="modal-body">
+                            <div className="detail-grid">
+                                <div className="detail-cell">
+                                    <span className="detail-label">Reference Number</span>
+                                    <span className="detail-value">{selectedLetter.letterNumber || "-"}</span>
                                 </div>
 
-                                <div className="readonly-field">
-                                    <label>{t("allLetter.flowLabel")}</label>
-                                    <div>{selectedLetter.flow || "-"}</div>
+                                <div className="detail-cell">
+                                    <span className="detail-label">Date Received / Date</span>
+                                    <span className="detail-value">{formatDate(selectedLetter.dateRecived || selectedLetter.letterDate)}</span>
                                 </div>
 
-                                <div className="readonly-field">
-                                    <label>{t("allLetter.categoryLabel")}</label>
-                                    <div>{selectedLetter.category || "-"}</div>
+                                <div className="detail-cell">
+                                    <span className="detail-label">Source Stream</span>
+                                    <span className="detail-value">
+                                        {selectedLetter.flow ? selectedLetter.flow.toUpperCase() : "N/A"} ({selectedLetter.category || "Normal"})
+                                    </span>
                                 </div>
 
-                                <div className="readonly-field">
-                                    <label>{t("allLetter.titleLabel")}</label>
-                                    <div>{selectedLetter.title || "-"}</div>
+                                <div className="detail-cell">
+                                    <span className="detail-label">Current Letter Status</span>
+                                    <span className={`detail-value badge badge-status-${(selectedLetter.status || "normal").toLowerCase()}`}>
+                                        {selectedLetter.status || "Normal"}
+                                    </span>
                                 </div>
 
-                                <div className="readonly-field">
-                                    <label>{t("allLetter.senderLabel")}</label>
-                                    <div>{selectedLetter.sender || "-"}</div>
+                                <div className="detail-cell span-2">
+                                    <span className="detail-label">Sender / Organization</span>
+                                    <span className="detail-value font-semibold">{selectedLetter.sender || "-"}</span>
                                 </div>
 
-                                <div className="readonly-field">
-                                    <label>{t("allLetter.receiverLabel")}</label>
-                                    <div>{selectedLetter.receiver || "-"}</div>
+                                <div className="detail-cell span-2">
+                                    <span className="detail-label">Subject Title / Description</span>
+                                    <span className="detail-value">{selectedLetter.title || "-"}</span>
                                 </div>
 
-                                <div className="readonly-field">
-                                    <label>{t("allLetter.destinationLabel")}</label>
-                                    <div>{selectedLetter.destination || "-"}</div>
+                                <div className="detail-cell">
+                                    <span className="detail-label">Assigned Division / Destination</span>
+                                    <span className="detail-value">{selectedLetter.destination || "-"}</span>
                                 </div>
 
-                                <div className="readonly-field">
-                                    <label>{t("allLetter.letterDateLabel")}</label>
-                                    <div>{formatDate(selectedLetter.letterDate)}</div>
+                                <div className="detail-cell">
+                                    <span className="detail-label">Receiving Office / Receiver</span>
+                                    <span className="detail-value">{selectedLetter.recivingOffice || selectedLetter.receiver || "-"}</span>
                                 </div>
 
-                                <div className="readonly-field">
-                                    <label>{t("allLetter.registeredPostNumberLabel")}</label>
-                                    <div>{selectedLetter.registeredPostNumber || "-"}</div>
+                                <div className="detail-cell span-2">
+                                    <span className="detail-label">Subject / Dept / Officer</span>
+                                    <span className="detail-value">{selectedLetter.subject_department_or_officer || "-"}</span>
                                 </div>
 
-                                <div className="readonly-field">
-                                    <label>{t("allLetter.subjectDeptOfficerLabel")}</label>
-                                    <div>{selectedLetter.subject_department_or_officer || "-"}</div>
-                                </div>
+                                {selectedLetter.registeredPostNumber && (
+                                    <div className="detail-cell">
+                                        <span className="detail-label">Registered Post Number</span>
+                                        <span className="detail-value">{selectedLetter.registeredPostNumber}</span>
+                                    </div>
+                                )}
 
-                                <div className="readonly-field">
-                                    <label>{t("allLetter.dateReceivedLabel")}</label>
-                                    <div>{formatDate(selectedLetter.dateRecived)}</div>
-                                </div>
+                                {selectedLetter.reply && (
+                                    <div className="detail-cell span-2">
+                                        <span className="detail-label">Reply Content</span>
+                                        <div className="detail-value reply-box">{getReplyText(selectedLetter.reply)}</div>
+                                    </div>
+                                )}
 
-                                <div className="readonly-field">
-                                    <label>{t("allLetter.receivingOfficeLabel")}</label>
-                                    <div>{selectedLetter.recivingOffice || "-"}</div>
+                                <div className="detail-cell span-2">
+                                    <span className="detail-label">Attached Document (PDF / Image)</span>
+                                    <div className="detail-value">
+                                        {selectedLetter.pdf ? (
+                                            <div className="attachment-box">
+                                                <div className="attachment-icon">📄</div>
+                                                <div className="attachment-info">
+                                                    <div className="attachment-title">View Attached PDF Document</div>
+                                                    <div className="attachment-sub">Format: PDF Document</div>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    className="btn-open-pdf"
+                                                    onClick={() => window.open(selectedLetter.pdf, "_blank", "noopener,noreferrer")}
+                                                >
+                                                    Open / View ↗
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <span className="no-attachment-text">No PDF document attached</span>
+                                        )}
+                                    </div>
                                 </div>
+                            </div>
 
-                                <div className="readonly-field">
-                                    <label>{t("allLetter.statusLabel")}</label>
-                                    <div>{selectedLetter.status || "-"}</div>
-                                </div>
+                            {/* Handling Timeline Section */}
+                            <div className="modal-timeline-section">
+                                <h4>Handling Timeline</h4>
+                                <ul className="modal-timeline">
+                                    <li>
+                                        <span className="timeline-dot dot-green"></span>
+                                        <div className="timeline-content">
+                                            <h5>Registered</h5>
+                                            <p>
+                                                Sender: <strong>{selectedLetter.sender || "System"}</strong> → Destination: <strong>{selectedLetter.destination || "Registry"}</strong>
+                                            </p>
+                                            <span className="timeline-time">{formatDate(selectedLetter.letterDate || selectedLetter.createdAt)}</span>
+                                        </div>
+                                    </li>
 
-                                <div className="readonly-field full-width-field reply-field">
-                                    <label>{t("allLetter.replyLabel")}</label>
-                                    <pre>{getReplyText(selectedLetter.reply)}</pre>
-                                </div>
-
-                                <div className="readonly-field full-width-field reply-pdf-field">
-                                    <label>{t("allLetter.replyPdfLabel")}</label>
-                                    {selectedLetter.replyPdf ? (
-                                        <a
-                                            className="pdf-open-btn"
-                                            href={selectedLetter.replyPdf}
-                                            download={`reply-${selectedLetter.letterNumber || "letter"}.pdf`}
-                                        >
-                                            {t("allLetter.downloadReplyPdf")}
-                                        </a>
-                                    ) : (
-                                        <div>{t("allLetter.noReplyPdf")}</div>
+                                    {selectedLetter.status === "Replied" && (
+                                        <li>
+                                            <span className="timeline-dot dot-blue"></span>
+                                            <div className="timeline-content">
+                                                <h5>Action Completed / Replied</h5>
+                                                <p>
+                                                    Assigned Handler: <strong>{selectedLetter.destination || "Officer"}</strong> replied to letter.
+                                                </p>
+                                                <span className="timeline-time">{formatDate(selectedLetter.updatedAt || new Date())}</span>
+                                            </div>
+                                        </li>
                                     )}
-                                </div>
-
-                                <div className="readonly-field full-width-field pdf-field">
-                                    <label>{t("allLetter.letterPdfLabel")}</label>
-                                    {selectedLetter.pdf ? (
-                                        <button
-                                            type="button"
-                                            className="pdf-open-btn"
-                                            onClick={() => window.open(selectedLetter.pdf, "_blank", "noopener,noreferrer")}
-                                        >
-                                            {t("allLetter.openPdf")}
-                                        </button>
-                                    ) : (
-                                        <div>{t("allLetter.noPdf")}</div>
-                                    )}
-                                </div>
+                                </ul>
                             </div>
                         </div>
 
-                        <div className="letter-modal-footer">
-                            <button type="button" className="search-btn" onClick={closeViewPanel}>
-                                {t("common.close")}
+                        <div className="modal-footer">
+                            <button type="button" className="btn-close-sheet" onClick={closeViewPanel}>
+                                Close Sheet
                             </button>
                         </div>
                     </div>

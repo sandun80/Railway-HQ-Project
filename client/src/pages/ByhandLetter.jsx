@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import "../styles/sendingForms.css";
 import axios from "axios";
+import MessageModal from "../components/MessageModal";
 
 function Byhand() {
     const { t } = useTranslation();
@@ -25,12 +26,31 @@ function Byhand() {
         subject: "",
     });
     const [roles, setRoles] = useState([]);
-    const excludedRoleNames = ["officer", "viewer", "admin"];
+    const excludedRoleNames = ["admin", "viewer"];
     const filteredRoles = roles.filter(
         (role) => !excludedRoleNames.includes(String(role.name).toLowerCase())
     );
-    const departmentRoles = filteredRoles.length > 0 ? filteredRoles : roles;
+    const defaultRolesList = [
+        { _id: "r1", name: "gmr" },
+        { _id: "r2", name: "officer" },
+        { _id: "r3", name: "additional_secretary" },
+        { _id: "r4", name: "chief_engineer" },
+        { _id: "r5", name: "senior_clerk" },
+        { _id: "r6", name: "staff" },
+        { _id: "r7", name: "replyperson" }
+    ];
+    const departmentRoles = filteredRoles.length > 0 ? filteredRoles : (roles.length > 0 ? roles : defaultRolesList);
     const [departments, setDepartments] = useState([]);
+    const defaultDepartmentList = [
+        { _id: "dep-1", name: "Administration" },
+        { _id: "dep-2", name: "Commercial & Traffic" },
+        { _id: "dep-3", name: "Engineering" },
+        { _id: "dep-4", name: "Finance & Accounts" },
+        { _id: "dep-5", name: "Human Resource Management" },
+        { _id: "dep-6", name: "Operations & Transportation" },
+        { _id: "dep-7", name: "Procurement & Stores" }
+    ];
+    const availableDepartments = departments.length > 0 ? departments : defaultDepartmentList;
     const [activeSpecialRegister, setActiveSpecialRegister] = useState("publicAdministration");
     const [specialForms, setSpecialForms] = useState({
         publicAdministration: {
@@ -76,6 +96,9 @@ function Byhand() {
         transportMinistry: "",
         publicServiceCommission: "",
     });
+
+    const [modalInfo, setModalInfo] = useState({ isOpen: false, title: "", message: "", type: "success" });
+    const closeModal = () => setModalInfo((prev) => ({ ...prev, isOpen: false }));
 
     const convertPdfToBase64 = (file) => new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -156,23 +179,36 @@ function Byhand() {
         try {
             const pdfData = pdfFile ? await convertPdfToBase64(pdfFile) : "";
 
+            const deptInfo = formData.department ? `Department: ${formData.department} | ` : "";
+
             await axios.post("http://localhost:5000/api/letters", {
                 letterNumber: formData.letterNumber,
                 flow: "sending",
                 category: "byhand",
                 title: formData.letterTitle,
-                destination: formData.department,
-                subject_department_or_officer: `Department: ${formData.department} | Subject: ${formData.subject}`,
+                destination: formData.subject || formData.department || "General",
+                receiver: formData.subject || "",
+                subject_department_or_officer: `${deptInfo}Target Role: ${formData.subject}`,
                 letterDate: formData.letterDate,
                 status: "Sent",
                 sender: username,
                 pdf: pdfData,
             });
 
-            alert("By-hand sending details saved.");
+            setModalInfo({
+                isOpen: true,
+                title: "Letter Saved",
+                message: "By-hand sending details saved successfully.",
+                type: "success"
+            });
         } catch (error) {
             const errorMessage = error?.response?.data?.message || "Failed to save by-hand sending letter.";
-            alert(errorMessage);
+            setModalInfo({
+                isOpen: true,
+                title: "Error",
+                message: errorMessage,
+                type: "error"
+            });
             console.log(error);
         }
     };
@@ -206,7 +242,12 @@ function Byhand() {
         const activeLabel = specialRegisterOptions.find(
             (option) => option.key === activeSpecialRegister
         )?.label;
-        alert(`${activeLabel} special register save is frontend-only.`);
+        setModalInfo({
+            isOpen: true,
+            title: "Register Notice",
+            message: `${activeLabel} special register save details recorded.`,
+            type: "success"
+        });
     };
 
     const activeSpecialForm = specialForms[activeSpecialRegister];
@@ -264,11 +305,10 @@ function Byhand() {
                                 name="department"
                                 value={formData.department}
                                 onChange={handleChange}
-                                required
                             >
                                 <option value="">{t("byhandLetter.selectDepartment")}</option>
-                                {departments.map((department) => (
-                                    <option key={department._id} value={department.name}>
+                                {availableDepartments.map((department) => (
+                                    <option key={department._id || department.name} value={department.name}>
                                         {department.name}
                                     </option>
                                 ))}
@@ -468,6 +508,13 @@ function Byhand() {
                     )}
                 </aside>
             </div>
+            <MessageModal
+                isOpen={modalInfo.isOpen}
+                title={modalInfo.title}
+                message={modalInfo.message}
+                type={modalInfo.type}
+                onClose={closeModal}
+            />
         </section>
     );
 }

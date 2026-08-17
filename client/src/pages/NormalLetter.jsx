@@ -2,10 +2,14 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import "../styles/sendingForms.css";
 import axios from "axios";
+import MessageModal from "../components/MessageModal";
 
 function NormalLetter() {
     const { t } = useTranslation();
     const today = new Date().toISOString().split("T")[0];
+
+    const [modalInfo, setModalInfo] = useState({ isOpen: false, title: "", message: "", type: "success" });
+    const closeModal = () => setModalInfo((prev) => ({ ...prev, isOpen: false }));
 
     const [formData, setFormData] = useState({
         letterNumber: "",
@@ -15,11 +19,20 @@ function NormalLetter() {
     });
 
     const [roles, setRoles] = useState([]);
-    const excludedRoleNames = ["officer", "viewer", "admin"];
+    const excludedRoleNames = ["admin", "viewer"];
     const filteredRoles = roles.filter(
         (role) => !excludedRoleNames.includes(String(role.name).toLowerCase())
     );
-    const departmentRoles = filteredRoles.length > 0 ? filteredRoles : roles;
+    const defaultRolesList = [
+        { _id: "r1", name: "gmr" },
+        { _id: "r2", name: "officer" },
+        { _id: "r3", name: "additional_secretary" },
+        { _id: "r4", name: "chief_engineer" },
+        { _id: "r5", name: "senior_clerk" },
+        { _id: "r6", name: "staff" },
+        { _id: "r7", name: "replyperson" }
+    ];
+    const departmentRoles = filteredRoles.length > 0 ? filteredRoles : (roles.length > 0 ? roles : defaultRolesList);
 
     const user = JSON.parse(localStorage.getItem("user"));
     const username = user?.username;
@@ -86,11 +99,21 @@ function NormalLetter() {
                 }
             )
 
-            alert("Normal post sending details saved.");
+            setModalInfo({
+                isOpen: true,
+                title: "Letter Saved",
+                message: "Normal post sending details saved successfully.",
+                type: "success"
+            });
 
         }catch(error){
             const errorMessage = error?.response?.data?.message || "Failed to save normal sending letter.";
-            alert(errorMessage);
+            setModalInfo({
+                isOpen: true,
+                title: "Error",
+                message: errorMessage,
+                type: "error"
+            });
             console.log(error);
             
         }
@@ -108,9 +131,9 @@ function NormalLetter() {
                 <form className="letter-form" onSubmit={handleSubmit}>
                     <div className="form-grid">
                         <div className="field-group">
-                            <label htmlFor="normal-letter-number">{t("normalLetter.letterNumber")}</label>
+                            <label htmlFor="reg-letter-no">{t("normalLetter.letterNo")}</label>
                             <input
-                                id="normal-letter-number"
+                                id="reg-letter-no"
                                 name="letterNumber"
                                 type="text"
                                 value={formData.letterNumber}
@@ -122,7 +145,7 @@ function NormalLetter() {
                         <div className="field-group">
                             <label htmlFor="reg-date">{t("normalLetter.date")}</label>
                             <input
-                                id="normal-letter-date"
+                                id="reg-date"
                                 name="letterDate"
                                 type="date"
                                 value={formData.letterDate}
@@ -132,9 +155,9 @@ function NormalLetter() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="normal-letter-title">{t("normalLetter.letterTitle")}</label>
+                            <label htmlFor="reg-letter-title">{t("normalLetter.letterTitle")}</label>
                             <input
-                                id="normal-letter-title"
+                                id="reg-letter-title"
                                 name="letterTitle"
                                 type="text"
                                 value={formData.letterTitle}
@@ -144,9 +167,9 @@ function NormalLetter() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="normal-destination">{t("normalLetter.destination")}</label>
+                            <label htmlFor="reg-subject">{t("normalLetter.subject")}</label>
                             <select
-                                id="normal-destination"
+                                id="reg-subject"
                                 name="destination"
                                 value={formData.destination}
                                 onChange={handleChange}
@@ -163,9 +186,9 @@ function NormalLetter() {
                         </div>
 
                         <div className="field-group">
-                            <label htmlFor="normal-pdf-upload">{t("normalLetter.uploadPdf")}</label>
+                            <label htmlFor="reg-pdf-upload">{t("normalLetter.uploadPdf")}</label>
                             <input
-                                id="normal-pdf-upload"
+                                id="reg-pdf-upload"
                                 name="pdfUpload"
                                 type="file"
                                 accept="application/pdf"
@@ -197,6 +220,13 @@ function NormalLetter() {
                     )}
                 </aside>
             </div>
+            <MessageModal
+                isOpen={modalInfo.isOpen}
+                title={modalInfo.title}
+                message={modalInfo.message}
+                type={modalInfo.type}
+                onClose={closeModal}
+            />
         </section>
     );
 }

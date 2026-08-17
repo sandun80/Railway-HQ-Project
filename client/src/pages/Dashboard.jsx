@@ -3,132 +3,259 @@ import axios from "axios";
 import { useTranslation } from "react-i18next";
 import "../styles/dashboard.css";
 
-/* ── SVG icons ── */
-const IconRegistered = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M4 4h16v16H4z" rx="2" />
-        <polyline points="22,6 12,13 2,6" />
-        <path d="M9 12l-2 2 2 2" />
-        <path d="M15 12l2 2-2 2" />
-    </svg>
-);
-
-const IconNormal = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="4" width="20" height="16" rx="2" />
-        <polyline points="22,6 12,13 2,6" />
-    </svg>
-);
-
-const IconByHand = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-        <polyline points="14 2 14 8 20 8" />
-        <line x1="9" y1="15" x2="15" y2="15" />
-        <line x1="9" y1="11" x2="13" y2="11" />
-    </svg>
-);
-
-const IconDraft = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 20h9" />
-        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-    </svg>
-);
-
 function Dashboard() {
-    const { t } = useTranslation();
-    const user = JSON.parse(localStorage.getItem("user"));
-    const username = user?.username || "User";
+  const { t } = useTranslation();
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const username = user?.username || "Officer";
 
-    const [counts, setCounts] = useState({
-        registered: 0,
-        normal: 0,
-        byhand: 0,
-        draft: 0,
-    });
+  const [stats, setStats] = useState({
+    sendingToday: { registered: 0, normal: 0, byhand: 0, specialByhand: 0, total: 0 },
+    sendingAllTime: { registered: 0, normal: 0, byhand: 0, specialByhand: 0, total: 0 },
+    receivedToday: { registered: 0, normal: 0, byhand: 0, specialByhand: 0, total: 0 },
+    receivedAllTime: { registered: 0, normal: 0, byhand: 0, specialByhand: 0, total: 0 },
+  });
 
-    useEffect(() => {
-        getDashboardCounts();
-    }, []);
+  const [selectedTimeframe, setSelectedTimeframe] = useState("all"); // "all" | "today"
 
-    const getDashboardCounts = async () => {
-        try {
-            const response = await axios.get(
-                "http://localhost:5000/api/letters/getcounts"
-            );
-            setCounts(response.data);
-        } catch (error) {
-            console.error("Failed to get dashboard counts:", error);
-        }
-    };
+  useEffect(() => {
+    getDashboardCounts();
+  }, []);
 
-    const dashboardCards = [
-        {
-            id: "registered",
-            colorClass: "card-registered",
-            title: t("dashboard.registeredTitle"),
-            count: counts.registered,
-            icon: <IconRegistered />,
-        },
-        {
-            id: "normal",
-            colorClass: "card-normal",
-            title: t("dashboard.normalTitle"),
-            count: counts.normal,
-            icon: <IconNormal />,
-        },
-        {
-            id: "byhand",
-            colorClass: "card-byhand",
-            title: t("dashboard.byhandTitle"),
-            count: counts.byhand,
-            icon: <IconByHand />,
-        },
-        {
-            id: "draft",
-            colorClass: "card-draft",
-            title: t("dashboard.draftTitle"),
-            count: counts.draft,
-            icon: <IconDraft />,
-        },
-    ];
+  const getDashboardCounts = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/letters/getcounts");
+      setStats(response.data);
+    } catch (error) {
+      console.error("Failed to get dashboard counts:", error);
+    }
+  };
 
-    /* Today's date for the subtitle */
-    const today = new Date().toLocaleDateString("en-US", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
+  const todayDate = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
-    return (
-        <section className="dashboard-page">
+  const categories = [
+    { key: "registered", name: "Registered Post" },
+    { key: "normal", name: "Normal Post" },
+    { key: "byhand", name: "By Hand Mail" },
+    { key: "specialByhand", name: "Special By-Hand" },
+  ];
 
-            <div className="dashboard-header">
-                <span className="greeting">{t("dashboard.greeting")}</span>
-                <h1>{t("dashboard.welcomeBack", { username })}</h1>
-                <p className="subtitle">{today}</p>
+  const maxSendingVal = Math.max(
+    ...categories.map((c) => Math.max(stats.sendingToday[c.key] || 0, stats.sendingAllTime[c.key] || 0)),
+    1
+  );
+
+  const maxReceivedVal = Math.max(
+    ...categories.map((c) => Math.max(stats.receivedToday[c.key] || 0, stats.receivedAllTime[c.key] || 0)),
+    1
+  );
+
+  const getBarHeight = (value, max) => {
+    if (!max || max === 0) return 6; // minimum visible base height
+    const pct = (value / max) * 100;
+    return Math.max(Math.round(pct), 6);
+  };
+
+  return (
+    <div className="dashboard-vertical-page">
+      {/* Top Banner */}
+      <header className="dashboard-header-banner">
+        <div className="banner-left">
+          <span className="banner-badge">SRI LANKA RAILWAYS • MAIL ANALYTICS</span>
+          <h1>Welcome back, {username}</h1>
+          <p className="banner-date">{todayDate}</p>
+        </div>
+
+        <div className="timeframe-segmented-control">
+          <button
+            type="button"
+            className={selectedTimeframe === "today" ? "segment-btn active" : "segment-btn"}
+            onClick={() => setSelectedTimeframe("today")}
+          >
+            Today Focus
+          </button>
+          <button
+            type="button"
+            className={selectedTimeframe === "all" ? "segment-btn active" : "segment-btn"}
+            onClick={() => setSelectedTimeframe("all")}
+          >
+            Today vs All-Time
+          </button>
+        </div>
+      </header>
+
+      {/* KPI Cards */}
+      <div className="kpi-banner-row">
+        <div className="kpi-box sending-kpi">
+          <div className="kpi-tag-indicator tag-send">SENDING</div>
+          <div>
+            <span className="kpi-label">Sending Mails (Today)</span>
+            <span className="kpi-val">{stats.sendingToday.total}</span>
+            <small>All-Time Total: {stats.sendingAllTime.total}</small>
+          </div>
+        </div>
+
+        <div className="kpi-box receiving-kpi">
+          <div className="kpi-tag-indicator tag-rec">RECEIVING</div>
+          <div>
+            <span className="kpi-label">Received Mails (Today)</span>
+            <span className="kpi-val">{stats.receivedToday.total}</span>
+            <small>All-Time Total: {stats.receivedAllTime.total}</small>
+          </div>
+        </div>
+
+        <div className="kpi-box total-kpi">
+          <div className="kpi-tag-indicator tag-total">TOTAL</div>
+          <div>
+            <span className="kpi-label">System Active Mails</span>
+            <span className="kpi-val">{stats.sendingToday.total + stats.receivedToday.total}</span>
+            <small>All-Time System Total: {stats.sendingAllTime.total + stats.receivedAllTime.total}</small>
+          </div>
+        </div>
+      </div>
+
+      {/* Dual Vertical Bar Charts Grid */}
+      <div className="vertical-charts-grid">
+        {/* 1. SENDING LETTERS VERTICAL BAR CHART */}
+        <div className="v-chart-card sending-card">
+          <div className="v-chart-header">
+            <div className="title-wrap">
+              <div>
+                <h2>Sending Letters Vertical Graph</h2>
+                <p>Categorized volume comparison of outgoing mail</p>
+              </div>
+            </div>
+            <div className="legend-pills">
+              <span className="legend-pill today-pillar">Today</span>
+              {selectedTimeframe === "all" && <span className="legend-pill all-pillar">All-Time</span>}
+            </div>
+          </div>
+
+          <div className="vertical-graph-stage">
+            {/* Y-Axis Scale Lines */}
+            <div className="y-axis-grid">
+              <div className="y-line"><span>{maxSendingVal}</span></div>
+              <div className="y-line"><span>{Math.round(maxSendingVal * 0.75)}</span></div>
+              <div className="y-line"><span>{Math.round(maxSendingVal * 0.5)}</span></div>
+              <div className="y-line"><span>{Math.round(maxSendingVal * 0.25)}</span></div>
+              <div className="y-line"><span>0</span></div>
             </div>
 
-            <div className="dashboard-grid">
-                {dashboardCards.map((item) => (
-                    <article
-                        className={`dashboard-card ${item.colorClass}`}
-                        key={item.id}
-                    >
-                        <div className="card-top">
-                            <h2>{item.title}</h2>
-                            <div className="card-icon">{item.icon}</div>
+            {/* Vertical Bar Columns Area */}
+            <div className="columns-flex-container">
+              {categories.map((cat) => {
+                const todayVal = stats.sendingToday[cat.key] || 0;
+                const allVal = stats.sendingAllTime[cat.key] || 0;
+                const hToday = getBarHeight(todayVal, maxSendingVal);
+                const hAll = getBarHeight(allVal, maxSendingVal);
+
+                return (
+                  <div className="vertical-column-group" key={cat.key}>
+                    <div className="bars-pair">
+                      {/* Today Vertical Bar */}
+                      <div className="v-bar-wrapper">
+                        <span className="v-bar-val">{todayVal}</span>
+                        <div
+                          className="v-bar-pillar pillar-sending-today"
+                          style={{ height: `${hToday}%` }}
+                        />
+                      </div>
+
+                      {/* All-Time Vertical Bar */}
+                      {selectedTimeframe === "all" && (
+                        <div className="v-bar-wrapper">
+                          <span className="v-bar-val">{allVal}</span>
+                          <div
+                            className="v-bar-pillar pillar-sending-all"
+                            style={{ height: `${hAll}%` }}
+                          />
                         </div>
-                        <p className="card-count">{item.count}</p>
-                        <p className="card-label">{t("dashboard.lettersLabel")}</p>
-                    </article>
-                ))}
+                      )}
+                    </div>
+
+                    <div className="x-axis-label">
+                      <span className="x-name">{cat.name}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* 2. RECEIVED LETTERS VERTICAL BAR CHART */}
+        <div className="v-chart-card receiving-card">
+          <div className="v-chart-header">
+            <div className="title-wrap">
+              <div>
+                <h2>Received Letters Vertical Graph</h2>
+                <p>Categorized volume comparison of incoming mail</p>
+              </div>
+            </div>
+            <div className="legend-pills">
+              <span className="legend-pill today-pillar">Today</span>
+              {selectedTimeframe === "all" && <span className="legend-pill all-pillar">All-Time</span>}
+            </div>
+          </div>
+
+          <div className="vertical-graph-stage">
+            {/* Y-Axis Scale Lines */}
+            <div className="y-axis-grid">
+              <div className="y-line"><span>{maxReceivedVal}</span></div>
+              <div className="y-line"><span>{Math.round(maxReceivedVal * 0.75)}</span></div>
+              <div className="y-line"><span>{Math.round(maxReceivedVal * 0.5)}</span></div>
+              <div className="y-line"><span>{Math.round(maxReceivedVal * 0.25)}</span></div>
+              <div className="y-line"><span>0</span></div>
             </div>
 
-        </section>
-    );
+            {/* Vertical Bar Columns Area */}
+            <div className="columns-flex-container">
+              {categories.map((cat) => {
+                const todayVal = stats.receivedToday[cat.key] || 0;
+                const allVal = stats.receivedAllTime[cat.key] || 0;
+                const hToday = getBarHeight(todayVal, maxReceivedVal);
+                const hAll = getBarHeight(allVal, maxReceivedVal);
+
+                return (
+                  <div className="vertical-column-group" key={cat.key}>
+                    <div className="bars-pair">
+                      {/* Today Vertical Bar */}
+                      <div className="v-bar-wrapper">
+                        <span className="v-bar-val">{todayVal}</span>
+                        <div
+                          className="v-bar-pillar pillar-receiving-today"
+                          style={{ height: `${hToday}%` }}
+                        />
+                      </div>
+
+                      {/* All-Time Vertical Bar */}
+                      {selectedTimeframe === "all" && (
+                        <div className="v-bar-wrapper">
+                          <span className="v-bar-val">{allVal}</span>
+                          <div
+                            className="v-bar-pillar pillar-receiving-all"
+                            style={{ height: `${hAll}%` }}
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="x-axis-label">
+                      <span className="x-name">{cat.name}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default Dashboard;
