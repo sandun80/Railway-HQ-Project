@@ -101,15 +101,6 @@ function Sidebar() {
                 </>
             )}
 
-            {/* REPLY PERSON */}
-            {role === "replyperson" && (
-                <>
-                    <Link to="/inbox">
-                        {t("navbar.inbox")}
-                    </Link>
-                </>
-            )}
-
             {/* LOGOUT */}
             <button
                 type="button"
